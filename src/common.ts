@@ -1,0 +1,1 @@
+﻿export type MergeId<A> = Omit<A, 'id'> &  { id:number }
