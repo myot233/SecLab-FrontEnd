@@ -1,5 +1,9 @@
 import type { Config } from 'tailwindcss'
 import daisyui from "daisyui";
+import  plugin from "@tailwindcss/typography";
+
+
+
 export default {
   content: [
     "./index.html",
@@ -9,10 +13,13 @@ export default {
     extend: {},
   },
   plugins: [
-      daisyui
+      daisyui,
+      plugin
+     
+      
   ],
   daisyui:{
-    themes:['dracula']
+    themes:['light']
   }
 } satisfies Config
 

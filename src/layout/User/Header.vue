@@ -11,8 +11,9 @@
       <ul class="menu menu-horizontal px-1">
         <li><a href="/user/welcome">主页</a></li>
         <li><a href="/user/courses">课程</a></li>
-        <li><a>模块</a></li>
-        <li><a>排行榜</a></li>
+        <li><a href="/user/modules">模块</a></li>
+        <li><a href="/user/scoreboard">排行榜</a></li>
+        <li><a href="/user/profile">个人中心</a></li>
         
 <!--        <li>-->
 <!--          <details>-->

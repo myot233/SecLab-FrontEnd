@@ -1,12 +1,15 @@
 ﻿<script setup lang="ts">
 
 import type {CourseOverViewType} from "./CourseOverView.ts";
-defineProps<CourseOverViewType>();
+const emit = defineEmits<{
+  startLearn:[CourseOverViewType]
+}>()
+const props = defineProps<CourseOverViewType>();
 
 </script>
 
 <template>
-  <div class="card -z-50 card-side bg-base-100 shadow-xl">
+  <div class="card  card-side bg-base-100 shadow-xl">
     <figure>
       <img
           :src="image"
@@ -16,7 +19,7 @@ defineProps<CourseOverViewType>();
       <h2 class="card-title">{{ name }}</h2>
       <p>{{description}}</p>
       <div class="card-actions justify-end">
-        <button class="btn btn-primary">开始学习</button>
+        <button type="button" class="btn btn-primary" @click='emit("startLearn",props)'>开始学习</button>
       </div>
     </div>
   </div>

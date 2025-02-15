@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import Toast from './components/Toast.vue';
 </script>
 
 <template>
   <div class="fixed w-full h-full">
     <RouterView>
-
     </RouterView>
+    <Toast />
   </div>
 </template>
 

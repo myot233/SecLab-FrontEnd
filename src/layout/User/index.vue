@@ -7,7 +7,7 @@ import Header from "./Header.vue";
 <template>
     <div class="fixed w-full h-full flex flex-col bg-base-200">
         <Header></Header>
-        <div class="w-full h-full px-8 pt-8">
+        <div class="w-full px-8 pt-8 overflow-y-auto">
           <RouterView></RouterView>
         </div>
     </div>
