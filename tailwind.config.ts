@@ -19,7 +19,7 @@ export default {
       
   ],
   daisyui:{
-    themes:['light']
+    themes:['synthwave']
   }
 } satisfies Config
 
