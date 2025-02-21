@@ -1,189 +1,125 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import type { RegisterForm } from '../../../types/auth'
 
-const emit = defineEmits<{
-  (e: 'register', form: RegisterForm): void;
-}>();
+const emit = defineEmits(['register'])
 
-const registerForm = reactive({
+const registerForm = ref<RegisterForm>({
   userStudentNumber: '',
   userPassword: '',
-  confirmPassword: '',
   userName: '',
   userEmail: '',
   userTel: '',
-  userAcademy: '',
-  classId: 0,
   userGender: 1
-});
+})
 
-const errors = reactive({
-  userStudentNumber: '',
-  userPassword: '',
-  confirmPassword: '',
-  userName: '',
-  userEmail: ''
-});
-
-// 注册处理
-const handleRegister = () => {
-  // 清空错误信息
-  errors.userStudentNumber = '';
-  errors.userPassword = '';
-  errors.confirmPassword = '';
-  errors.userName = '';
-  errors.userEmail = '';
-
-  // 表单验证
-  if (!registerForm.userStudentNumber) {
-    errors.userStudentNumber = '请输入学号';
-    return;
-  }
-  if (!registerForm.userPassword) {
-    errors.userPassword = '请输入密码';
-    return;
-  }
-  if (registerForm.userPassword !== registerForm.confirmPassword) {
-    errors.confirmPassword = '两次输入的密码不一致';
-    return;
-  }
-  if (!registerForm.userName) {
-    errors.userName = '请输入姓名';
-    return;
-  }
-  if (!registerForm.userEmail) {
-    errors.userEmail = '请输入邮箱';
-    return;
-  }
-
-  // 触发注册事件，移除 confirmPassword 字段
-  const { confirmPassword, ...registerData } = registerForm;
-  emit('register', registerData);
+const handleSubmit = () => {
+  emit('register', registerForm.value)
 }
 </script>
 
 <template>
-  <form @submit.prevent="handleRegister">
-    <!-- 必填信息 -->
-    <div class="text-sm text-base-content/60 mb-4">* 必填项</div>
+  <form @submit.prevent="handleSubmit" class="animate__animated animate__fadeIn">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="form-control">
+      <!-- 基本信息 -->
+      <div class="form-control animate__animated animate__fadeInLeft" style="--animate-delay: 0.2s">
         <label class="label">
-          <span class="label-text">学号 *</span>
+          <span class="label-text flex items-center gap-2">
+            <i class="fas fa-user text-primary"></i>
+            姓名
+          </span>
         </label>
         <input 
           type="text" 
-          class="input input-bordered" 
-          v-model="registerForm.userStudentNumber"
-          :class="{ 'input-error': errors.userStudentNumber }"
-        />
-        <label class="label" v-if="errors.userStudentNumber">
-          <span class="label-text-alt text-error">{{ errors.userStudentNumber }}</span>
-        </label>
-      </div>
-
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">姓名 *</span>
-        </label>
-        <input 
-          type="text" 
-          class="input input-bordered" 
           v-model="registerForm.userName"
-          :class="{ 'input-error': errors.userName }"
-        />
-        <label class="label" v-if="errors.userName">
-          <span class="label-text-alt text-error">{{ errors.userName }}</span>
-        </label>
+          placeholder="请输入姓名" 
+          class="input input-bordered bg-base-200/50 focus:bg-base-100 transition-all
+                 hover:input-primary focus:input-primary"
+          required
+        >
       </div>
 
-      <div class="form-control">
+      <div class="form-control animate__animated animate__fadeInRight" style="--animate-delay: 0.3s">
         <label class="label">
-          <span class="label-text">密码 *</span>
+          <span class="label-text flex items-center gap-2">
+            <i class="fas fa-id-card text-primary"></i>
+            学号
+          </span>
         </label>
         <input 
-          type="password" 
-          class="input input-bordered" 
-          v-model="registerForm.userPassword"
-          :class="{ 'input-error': errors.userPassword }"
-        />
-        <label class="label" v-if="errors.userPassword">
-          <span class="label-text-alt text-error">{{ errors.userPassword }}</span>
-        </label>
+          type="text" 
+          v-model="registerForm.userStudentNumber"
+          placeholder="请输入学号" 
+          class="input input-bordered bg-base-200/50 focus:bg-base-100 transition-all
+                 hover:input-primary focus:input-primary"
+          required
+        >
       </div>
 
-      <div class="form-control">
+      <!-- 联系方式 -->
+      <div class="form-control animate__animated animate__fadeInLeft" style="--animate-delay: 0.4s">
         <label class="label">
-          <span class="label-text">确认密码 *</span>
-        </label>
-        <input 
-          type="password" 
-          class="input input-bordered" 
-          v-model="registerForm.confirmPassword"
-          :class="{ 'input-error': errors.confirmPassword }"
-        />
-        <label class="label" v-if="errors.confirmPassword">
-          <span class="label-text-alt text-error">{{ errors.confirmPassword }}</span>
-        </label>
-      </div>
-
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">邮箱 *</span>
+          <span class="label-text flex items-center gap-2">
+            <i class="fas fa-envelope text-primary"></i>
+            邮箱
+          </span>
         </label>
         <input 
           type="email" 
-          class="input input-bordered" 
           v-model="registerForm.userEmail"
-          :class="{ 'input-error': errors.userEmail }"
-        />
-        <label class="label" v-if="errors.userEmail">
-          <span class="label-text-alt text-error">{{ errors.userEmail }}</span>
-        </label>
+          placeholder="请输入邮箱" 
+          class="input input-bordered bg-base-200/50 focus:bg-base-100 transition-all
+                 hover:input-primary focus:input-primary"
+          required
+        >
       </div>
 
-      <!-- 可选信息 -->
-      <div class="form-control">
+      <div class="form-control animate__animated animate__fadeInRight" style="--animate-delay: 0.5s">
         <label class="label">
-          <span class="label-text">电话</span>
+          <span class="label-text flex items-center gap-2">
+            <i class="fas fa-phone text-primary"></i>
+            电话
+          </span>
         </label>
         <input 
           type="tel" 
-          class="input input-bordered" 
           v-model="registerForm.userTel"
-        />
+          placeholder="请输入电话" 
+          class="input input-bordered bg-base-200/50 focus:bg-base-100 transition-all
+                 hover:input-primary focus:input-primary"
+          required
+        >
       </div>
 
-      <div class="form-control">
+      <!-- 密码和性别 -->
+      <div class="form-control animate__animated animate__fadeInLeft" style="--animate-delay: 0.6s">
         <label class="label">
-          <span class="label-text">学院</span>
+          <span class="label-text flex items-center gap-2">
+            <i class="fas fa-lock text-primary"></i>
+            密码
+          </span>
         </label>
         <input 
-          type="text" 
-          class="input input-bordered" 
-          v-model="registerForm.userAcademy"
-        />
+          type="password" 
+          v-model="registerForm.userPassword"
+          placeholder="请输入密码" 
+          class="input input-bordered bg-base-200/50 focus:bg-base-100 transition-all
+                 hover:input-primary focus:input-primary"
+          required
+        >
       </div>
 
-      <div class="form-control">
+      <div class="form-control animate__animated animate__fadeInRight" style="--animate-delay: 0.7s">
         <label class="label">
-          <span class="label-text">班级</span>
-        </label>
-        <input 
-          type="text" 
-          class="input input-bordered" 
-          v-model="registerForm.classId"
-        />
-      </div>
-
-      <div class="form-control">
-        <label class="label">
-          <span class="label-text">性别</span>
+          <span class="label-text flex items-center gap-2">
+            <i class="fas fa-venus-mars text-primary"></i>
+            性别
+          </span>
         </label>
         <select 
-          class="select select-bordered" 
           v-model="registerForm.userGender"
+          class="select select-bordered bg-base-200/50 focus:bg-base-100 transition-all
+                 hover:select-primary focus:select-primary"
         >
           <option :value="1">男</option>
           <option :value="0">女</option>
@@ -191,14 +127,35 @@ const handleRegister = () => {
       </div>
     </div>
 
-    <div class="form-control mt-8">
-      <button class="btn btn-primary">注册</button>
-    </div>
+    <!-- 注册按钮 -->
+    <button 
+      type="submit" 
+      class="btn btn-primary w-full mt-6 animate__animated animate__bounceIn"
+      style="--animate-delay: 0.8s"
+    >
+      <i class="fas fa-user-plus mr-2"></i>
+      注册
+    </button>
   </form>
 </template>
 
 <style scoped>
-.input-error {
-  border-color: #f00; /* 红色边框表示错误 */
+.input, .select {
+  transition: all 0.3s ease;
+}
+
+.input:focus, .select:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 输入框图标动画 */
+.label-text i {
+  transition: transform 0.3s ease;
+}
+
+.input:focus + .label-text i,
+.select:focus + .label-text i {
+  transform: scale(1.2);
 }
 </style> 

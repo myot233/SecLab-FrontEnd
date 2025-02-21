@@ -1,0 +1,282 @@
+  [
+    {
+      "id": 1,
+      "username": "王伟雪",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=1",
+      "totalScore": 826,
+      "completedTasks": 20,
+      "class": "信息安全1班",
+      "rank": 1,
+      "recentActivity": {
+        "date": "2025-02-19",
+        "experimentName": "日志分析实验",
+        "score": 82
+      }
+    },
+    {
+      "id": 2,
+      "username": "徐建国",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=2",
+      "totalScore": 929,
+      "completedTasks": 19,
+      "class": "网络安全1班",
+      "rank": 2,
+      "recentActivity": {
+        "date": "2025-02-15",
+        "experimentName": "SQL注入实验",
+        "score": 97
+      }
+    },
+    {
+      "id": 3,
+      "username": "赵建国",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=3",
+      "totalScore": 801,
+      "completedTasks": 12,
+      "class": "物联网安全2班",
+      "rank": 3,
+      "recentActivity": {
+        "date": "2025-02-20",
+        "experimentName": "逆向工程实验",
+        "score": 90
+      }
+    },
+    {
+      "id": 4,
+      "username": "陈敏",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=4",
+      "totalScore": 897,
+      "completedTasks": 11,
+      "class": "数据安全1班",
+      "rank": 4,
+      "recentActivity": {
+        "date": "2025-02-14",
+        "experimentName": "漏洞扫描实验",
+        "score": 91
+      }
+    },
+    {
+      "id": 5,
+      "username": "徐杰晓薇",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=5",
+      "totalScore": 820,
+      "completedTasks": 18,
+      "class": "物联网安全1班",
+      "rank": 5,
+      "recentActivity": {
+        "date": "2025-02-17",
+        "experimentName": "DDoS缓解实验",
+        "score": 100
+      }
+    },
+    {
+      "id": 6,
+      "username": "徐航娜",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=6",
+      "totalScore": 874,
+      "completedTasks": 11,
+      "class": "网络安全1班",
+      "rank": 6,
+      "recentActivity": {
+        "date": "2025-02-20",
+        "experimentName": "防火墙配置实验",
+        "score": 83
+      }
+    },
+    {
+      "id": 7,
+      "username": "周杰",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=7",
+      "totalScore": 890,
+      "completedTasks": 13,
+      "class": "数据安全1班",
+      "rank": 7,
+      "recentActivity": {
+        "date": "2025-02-16",
+        "experimentName": "DDoS缓解实验",
+        "score": 100
+      }
+    },
+    {
+      "id": 8,
+      "username": "王磊雪",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=8",
+      "totalScore": 869,
+      "completedTasks": 20,
+      "class": "信息安全2班",
+      "rank": 8,
+      "recentActivity": {
+        "date": "2025-02-17",
+        "experimentName": "日志分析实验",
+        "score": 87
+      }
+    },
+    {
+      "id": 9,
+      "username": "刘芳",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=9",
+      "totalScore": 868,
+      "completedTasks": 11,
+      "class": "网络安全2班",
+      "rank": 9,
+      "recentActivity": {
+        "date": "2025-02-17",
+        "experimentName": "防火墙配置实验",
+        "score": 98
+      }
+    },
+    {
+      "id": 10,
+      "username": "刘洋薇",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=10",
+      "totalScore": 835,
+      "completedTasks": 13,
+      "class": "云安全1班",
+      "rank": 10,
+      "recentActivity": {
+        "date": "2025-02-16",
+        "experimentName": "日志分析实验",
+        "score": 97
+      }
+    },
+    {
+      "id": 11,
+      "username": "陈建国薇",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=11",
+      "totalScore": 930,
+      "completedTasks": 17,
+      "class": "数据安全1班",
+      "rank": 11,
+      "recentActivity": {
+        "date": "2025-02-15",
+        "experimentName": "XSS攻击实验",
+        "score": 81
+      }
+    },
+    {
+      "id": 12,
+      "username": "王敏建国",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=12",
+      "totalScore": 897,
+      "completedTasks": 19,
+      "class": "物联网安全1班",
+      "rank": 12,
+      "recentActivity": {
+        "date": "2025-02-17",
+        "experimentName": "蜜罐部署实验",
+        "score": 96
+      }
+    },
+    {
+      "id": 13,
+      "username": "陈伟强",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=13",
+      "totalScore": 964,
+      "completedTasks": 15,
+      "class": "物联网安全2班",
+      "rank": 13,
+      "recentActivity": {
+        "date": "2025-02-20",
+        "experimentName": "XSS攻击实验",
+        "score": 89
+      }
+    },
+    {
+      "id": 14,
+      "username": "周磊",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=14",
+      "totalScore": 827,
+      "completedTasks": 20,
+      "class": "数据安全1班",
+      "rank": 14,
+      "recentActivity": {
+        "date": "2025-02-18",
+        "experimentName": "DDoS缓解实验",
+        "score": 100
+      }
+    },
+    {
+      "id": 15,
+      "username": "吴洋",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=15",
+      "totalScore": 882,
+      "completedTasks": 17,
+      "class": "信息安全1班",
+      "rank": 15,
+      "recentActivity": {
+        "date": "2025-02-18",
+        "experimentName": "SQL注入实验",
+        "score": 83
+      }
+    },
+    {
+      "id": 16,
+      "username": "刘琳",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=16",
+      "totalScore": 987,
+      "completedTasks": 17,
+      "class": "信息安全1班",
+      "rank": 16,
+      "recentActivity": {
+        "date": "2025-02-14",
+        "experimentName": "XSS攻击实验",
+        "score": 97
+      }
+    },
+    {
+      "id": 17,
+      "username": "李敏磊",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=17",
+      "totalScore": 938,
+      "completedTasks": 13,
+      "class": "数据安全2班",
+      "rank": 17,
+      "recentActivity": {
+        "date": "2025-02-15",
+        "experimentName": "DDoS缓解实验",
+        "score": 92
+      }
+    },
+    {
+      "id": 18,
+      "username": "刘晓薇晓",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=18",
+      "totalScore": 816,
+      "completedTasks": 15,
+      "class": "网络安全1班",
+      "rank": 18,
+      "recentActivity": {
+        "date": "2025-02-15",
+        "experimentName": "SQL注入实验",
+        "score": 98
+      }
+    },
+    {
+      "id": 19,
+      "username": "吴雪伟",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=19",
+      "totalScore": 817,
+      "completedTasks": 10,
+      "class": "网络安全1班",
+      "rank": 19,
+      "recentActivity": {
+        "date": "2025-02-15",
+        "experimentName": "漏洞扫描实验",
+        "score": 82
+      }
+    },
+    {
+      "id": 20,
+      "username": "吴雪",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=20",
+      "totalScore": 833,
+      "completedTasks": 19,
+      "class": "云安全1班",
+      "rank": 20,
+      "recentActivity": {
+        "date": "2025-02-18",
+        "experimentName": "渗透测试实验",
+        "score": 95
+      }
+    }
+  ]

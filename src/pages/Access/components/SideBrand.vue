@@ -1,61 +1,139 @@
-﻿
-<template>
-  <div class="hidden lg:flex w-1/2 bg-gradient-to-br from-neutral to-neutral-focus text-neutral-content flex-col justify-between p-12">
-    <div>
-      <h1 class="text-4xl font-bold mb-4 text-white">Sec<span class="text-yellow-300">Lab</span> 安全实验平台</h1>
-      <p class="text-xl text-neutral-content/95 mb-8">
-        提供专业的网络安全实践环境，助力网络安全人才培养
-      </p>
+﻿<template>
+  <div class="hidden lg:flex flex-col justify-center items-center w-1/2 p-8 bg-gradient-to-br 
+              from-primary/10 via-secondary/10 to-accent/10 relative overflow-hidden">
+    <!-- 背景装饰 -->
+    <div class="absolute inset-0">
+      <div class="absolute inset-0 bg-[url('/pattern.svg')] opacity-5 animate-pulse"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-base-100/10 to-transparent"></div>
+    </div>
+
+    <!-- 内容区域 -->
+    <div class="relative z-10 text-center max-w-xl mx-auto">
+      <!-- Logo -->
+      <div class="mb-8 magictime spaceInDown">
+        <div class="inline-block">
+          <h1 class="text-5xl font-bold">
+            Sec <span class="text-primary animate-pulse">Lab</span>
+          </h1>
+        </div>
+      </div>
+
+      <!-- 标语 -->
+      <div class="space-y-6 mb-12 magictime spaceInUp">
+        <h2 class="text-3xl font-bold bg-clip-text text-transparent 
+                   bg-gradient-to-r from-primary via-secondary to-accent">
+          网络安全实验平台
+        </h2>
+        <p class="text-xl text-base-content/70 leading-relaxed">
+          从基础到进阶，系统化的安全实验课程
+        </p>
+      </div>
 
       <!-- 特性列表 -->
-      <div class="space-y-6">
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 rounded-lg bg-base-100/10 backdrop-blur-sm flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
+      <div class="grid gap-6 max-w-md mx-auto">
+        <div v-for="(feature, index) in features" 
+             :key="index"
+             class="flex items-center gap-4 p-4 rounded-lg bg-base-100/50 backdrop-blur-sm
+                    border border-base-200 group magictime vanishIn hover:magic-hover"
+             :style="{ animationDelay: `${index * 0.2}s` }">
+          <div class="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center
+                      group-hover:scale-110 transition-transform duration-300">
+            <i :class="['fas', feature.icon, 'text-2xl text-primary']"></i>
           </div>
-          <div>
-            <h3 class="text-lg font-semibold text-white">实战环境</h3>
-            <p class="text-neutral-content/90">提供真实的漏洞环境，让学习更贴近实战</p>
-          </div>
-        </div>
-
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 rounded-lg bg-base-100/10 backdrop-blur-sm flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-white">系统课程</h3>
-            <p class="text-neutral-content/90">精心设计的课程体系，循序渐进的学习路径</p>
-          </div>
-        </div>
-
-        <div class="flex items-start gap-4">
-          <div class="w-12 h-12 rounded-lg bg-base-100/10 backdrop-blur-sm flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-            </svg>
-          </div>
-          <div>
-            <h3 class="text-lg font-semibold text-white">竞赛排名</h3>
-            <p class="text-neutral-content/90">实时排行榜，激励学习，展示成果</p>
+          <div class="flex-1">
+            <h3 class="font-semibold mb-1">{{ feature.title }}</h3>
+            <p class="text-sm text-base-content/70">{{ feature.description }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 底部信息 -->
-    <div class="text-sm text-neutral-content/85">
-      <p>© 2024 SecLab. All rights reserved.</p>
-      <div class="flex gap-4 mt-2 text-neutral-content/80 hover:text-neutral-content">
-        <a href="#" class="hover:underline">使用条款</a>
-        <a href="#" class="hover:underline">隐私政策</a>
-        <a href="#" class="hover:underline">帮助中心</a>
-      </div>
-    </div>
+    <!-- 底部装饰 -->
+    <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-base-100/20 to-transparent"></div>
   </div>
-
 </template>
+
+<script setup lang="ts">
+const features = [
+  {
+    icon: 'fa-graduation-cap',
+    title: '系统化学习',
+    description: '精心设计的课程体系，循序渐进的学习路径'
+  },
+  {
+    icon: 'fa-laptop-code',
+    title: '实战演练',
+    description: '真实环境模拟，动手实践提升安全技能'
+  },
+  {
+    icon: 'fa-shield-alt',
+    title: '安全保障',
+    description: '标准化的实验环境，确保学习过程安全可控'
+  }
+]
+</script>
+
+<style scoped>
+
+
+/* 渐入动画 */
+.grid > div {
+  animation: slideUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 悬浮效果 */
+.grid > div:hover {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Magic.css 自定义悬浮效果 */
+.magic-hover {
+  animation: puffIn 0.3s ease-out;
+}
+
+/* 自定义动画 */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Logo 特效 */
+.text-primary {
+  position: relative;
+  display: inline-block;
+}
+
+.text-primary::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.text-primary:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+</style>

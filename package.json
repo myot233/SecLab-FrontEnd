@@ -12,6 +12,7 @@
     "@heroicons/vue": "v1",
     "@types/markdown-it": "^14.1.2",
     "axios": "^1.7.9",
+    "magic.css": "^1.4.8",
     "markdown-it": "^14.1.0",
     "pinia": "^2.3.1",
     "vue": "^3.5.13",

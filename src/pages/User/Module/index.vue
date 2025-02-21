@@ -559,6 +559,6 @@ const submitAnswer = (questionId: number) => {
 
 <style scoped>
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
 }
 </style>
