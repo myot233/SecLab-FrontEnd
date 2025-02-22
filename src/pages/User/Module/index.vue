@@ -646,22 +646,7 @@ const submitAnswer = (questionId: number) => {
 
     <!-- noVNC 区域 -->
     <div v-if="showNoVNC" class="w-[60%] bg-base-300 transition-all duration-300 border-l border-base-300">
-      <div class="flex justify-between items-center p-4 border-b border-base-300">
-        <h3 class="font-semibold">
-          <i class="fas fa-desktop text-primary mr-2"></i>
-          操作环境
-          <span class="badge badge-sm badge-success ml-2">运行中</span>
-        </h3>
-        <button class="btn btn-sm btn-ghost" @click="showNoVNC = false">
-          <i class="fas fa-minimize"></i>
-        </button>
-      </div>
-      <div class="p-4">
-        <!-- 这里放置 noVNC 内容 -->
-        <div class="bg-base-200 h-full min-h-[600px] rounded-lg flex items-center justify-center">
-          <span class="text-gray-500">noVNC 将在此处显示</span>
-        </div>
-      </div>
+      <iframe src="http://127.0.0.1:8443" width="100%" height="100%"></iframe>
     </div>
   </div>
 </template>

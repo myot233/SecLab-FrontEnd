@@ -1,10 +1,11 @@
 ﻿<script setup lang="ts">
 // 定义课程接口
 
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import { ref, onMounted } from 'vue'
 
 const route = useRoute();
+const router = useRouter();
 const courseId = route.params.id;
 courseId;
 
@@ -115,6 +116,11 @@ const getDifficultyText = (difficulty: number) => {
 const isPageLoaded = ref(false)
 const isContentVisible = ref(false)
 
+function onButtonClick(id:number){
+  id
+  router.push("/user/module/1")
+}
+
 onMounted(() => {
   isPageLoaded.value = true
   setTimeout(() => {
@@ -219,7 +225,7 @@ onMounted(() => {
                     </div>
                   </div>
                 </div>
-                <button class="btn btn-primary btn-sm gap-2 hover:scale-105 transition-transform duration-200">
+                <button @click="onButtonClick(experiment.id)" class="btn btn-primary btn-sm gap-2 hover:scale-105 transition-transform duration-200">
                   <i class="fas fa-arrow-right text-sm"></i>
                   进入实验
                 </button>

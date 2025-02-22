@@ -47,7 +47,7 @@ hljs.registerLanguage("markdown", markdown);
 hljs.registerLanguage("css", css);
 hljs.registerLanguage("dockerfile", dockerfile);
 import "magic.css/dist/magic.min.css"
-
+import "animate.css"
 createApp(App)
     .use(hljsVuePlugin)
     .use(VueCookies,{expires:"7d"})
