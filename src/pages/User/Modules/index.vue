@@ -2,28 +2,27 @@
 import { computed, onMounted, ref } from 'vue'
 import type { ModuleOverViewType } from './components/ModuleOverView.ts'
 import ModuleOverView from './components/ModuleOverView.vue'
-import { getModuleList } from '../../../api.ts'
 
 // 模拟模块数据
 const modules = ref<ModuleOverViewType[]>([
   {
     id: 1,
-    name: 'Web安全基础',
-    description: '学习Web安全的基本概念和常见漏洞类型，包括SQL注入、XSS等。适合安全学习的入门者。',
-    difficulty: 2,
-    type: 'Web安全',
-    status: 'available',
-    estimatedTime: '2-3小时',
-  },
-  {
-    id: 2,
     name: 'SQL注入进阶',
     description: '深入学习SQL注入的各种技术和防御方法，包括盲注、时间注入等高级技巧。',
     difficulty: 4,
     type: 'Web安全',
     status: 'locked',
-    prerequisites: [1],
+    prerequisites: [2],
     estimatedTime: '4-5小时',
+  },
+  {
+    id: 2,
+    name: 'SQL注入基础实验',
+    description: '学习Web安全的基本概念和常见漏洞类型，包括SQL注入、XSS等。适合安全学习的入门者。',
+    difficulty: 2,
+    type: 'Web安全',
+    status: 'available',
+    estimatedTime: '2-3小时',
   },
   {
     id: 3,
@@ -90,7 +89,7 @@ const filters = ref({
   status: ''
 })
 
-// 类型列表
+// 类型列表 
 const types = ['Web安全', '系统安全', '密码学', '网络攻防']
 
 // 添加搜索关键词

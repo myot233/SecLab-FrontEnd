@@ -186,12 +186,12 @@ const userStats = ref({
           <!-- 个人信息表单 -->
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div v-for="(field, key) in [
-              { key: 'userName', label: '姓名', icon: 'fa-user', type: 'text' },
-              { key: 'userStudentNumber', label: '学号', icon: 'fa-id-card', type: 'text', readonly: true },
-              { key: 'userTel', label: '电话', icon: 'fa-phone', type: 'tel' },
-              { key: 'userEmail', label: '邮箱', icon: 'fa-envelope', type: 'email' },
-              { key: 'userAcademy', label: '学院', icon: 'fa-university', type: 'text' },
-              { key: 'userClass', label: '班级', icon: 'fa-users', type: 'text' }
+              { key: 'userName' as keyof User, label: '姓名', icon: 'fa-user', type: 'text' },
+              { key: 'userStudentNumber' as keyof User, label: '学号', icon: 'fa-id-card', type: 'text', readonly: true },
+              { key: 'userTel' as keyof User, label: '电话', icon: 'fa-phone', type: 'tel' },
+              { key: 'userEmail' as keyof User, label: '邮箱', icon: 'fa-envelope', type: 'email' },
+              { key: 'userAcademy' as keyof User, label: '学院', icon: 'fa-university', type: 'text' },
+              { key: 'userClass' as keyof User, label: '班级', icon: 'fa-users', type: 'text' }
             ]" :key="key"
             class="form-control">
               <label class="label">

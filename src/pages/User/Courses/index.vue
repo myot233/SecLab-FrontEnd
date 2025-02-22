@@ -1,7 +1,6 @@
 ﻿<script setup lang="ts">
 import { ref, onMounted, computed, type Ref } from 'vue';
 import CourseOverView from './components/CourseOverView.vue';
-import image from '../../../../public/1.SQL注入攻防实战.png'
 import type { CourseOverViewType } from './components/CourseOverView';
 
 function getCourseList():CourseOverViewType[] {
