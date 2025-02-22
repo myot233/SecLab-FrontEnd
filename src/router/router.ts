@@ -12,10 +12,14 @@ import Access from '../pages/Access/index.vue'
 import UserManage from  '../pages/Admin/Users/index.vue'
 import CourseManage from '../pages/Admin/Courses/index.vue'
 import LabManage from '../pages/Admin/Labs/index.vue'
+import MockTarget from '../mock/MockTarget.vue'
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
 
-    routes: [
+    routes: [{
+        path: "/container/550e8400-e29b-41d4-a716-446655440000",
+        component: MockTarget
+    },
         {
             path: "/user",
             component: UserLayout, 

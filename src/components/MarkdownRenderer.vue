@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import MarkdownIt from 'markdown-it'
+import MarkdownIt from "markdown-it";
 import { computed } from 'vue'
-
+import hljs from "highlight.js/lib/core";
 const props = defineProps<{
   content: string
 }>()
@@ -9,7 +9,16 @@ const props = defineProps<{
 const md = new MarkdownIt({
   html: true,
   linkify: true,
-  typographer: true
+  typographer: true,
+  highlight(str, lang, _attrs) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(str, { language: lang }).value;
+      } catch (__) {}
+    }
+
+    return ''; // use external default escaping
+  },
 })
 
 const renderedContent = computed(() => {
@@ -49,4 +58,7 @@ const renderedContent = computed(() => {
 .markdown-body :deep(pre) {
   @apply bg-base-200 p-4 rounded mb-4;
 }
+
+
+
 </style> 
