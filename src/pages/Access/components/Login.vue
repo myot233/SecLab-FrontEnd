@@ -4,6 +4,7 @@ import type { LoginForm } from "../../../types/auth.ts";
 
 const emit = defineEmits<{
   (e: 'login', form: LoginForm): void;
+  (e: 'forgotPassword'): void;
 }>();
 
 const loginForm = ref<LoginForm>({
@@ -35,6 +36,11 @@ const handleSubmit = () => {
   
   // 触发登录事件
   emit('login', loginForm.value);
+}
+
+// 忘记密码处理
+const handleForgotPassword = () => {
+  emit('forgotPassword');
 }
 </script>
 
@@ -88,7 +94,7 @@ const handleSubmit = () => {
         <input type="checkbox" class="checkbox checkbox-primary checkbox-sm" v-model="loginForm.remember">
         <span class="label-text">记住我</span>
       </label>
-      <a href="#" class="text-sm link link-primary">忘记密码？</a>
+      <a @click.prevent="handleForgotPassword" class="text-sm link link-primary">忘记密码？</a>
     </div>
 
     <button 

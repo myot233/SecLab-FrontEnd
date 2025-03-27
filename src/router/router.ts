@@ -1,4 +1,4 @@
-﻿import {createRouter, createWebHistory} from "vue-router";
+﻿import {createRouter, createWebHashHistory} from "vue-router";
 import UserLayout from "../layout/User/index.vue"
 import AdminLayout from "../layout/Admin/index.vue"
 import Courses from "../pages/User/Courses/index.vue"
@@ -13,8 +13,11 @@ import UserManage from  '../pages/Admin/Users/index.vue'
 import CourseManage from '../pages/Admin/Courses/index.vue'
 import LabManage from '../pages/Admin/Labs/index.vue'
 import MockTarget from '../mock/MockTarget.vue'
+import DashBoard from '../pages/Admin/DashBoard/index.vue'
+import Chat from '../pages/User/Chat/index.vue'
+import FloatingChatDemo from '../pages/User/Chat/FloatingChatDemo.vue'
 export const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
 
     routes: [{
         path: "/container/550e8400-e29b-41d4-a716-446655440000",
@@ -50,6 +53,14 @@ export const router = createRouter({
                 },{
                     path:"profile",
                     component:Profile
+                },
+                {
+                    path:"chat",
+                    component:Chat
+                },
+                {
+                    path:"floating-chat-demo",
+                    component:FloatingChatDemo
                 }]
         },
         {
@@ -72,6 +83,9 @@ export const router = createRouter({
                 },{
                     path:"lab",
                     component:LabManage
+                },{
+                    path:"dashboard",
+                    component:DashBoard
                 }
             ]
         },{

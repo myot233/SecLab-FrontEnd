@@ -3,39 +3,15 @@ import { useRoute } from 'vue-router'
 import MarkdownRenderer from "../../../components/MarkdownRenderer.vue";
 import type { DisplayQuestionType } from '../../../types/Question';
 import { ref, watch } from 'vue';
+import type {Experiment} from "../../../types/experiment.ts";
+import type { Module } from './index.ts';
 
 const route = useRoute();
-// const moduleId = route.params.id;
-route.params;
-interface TaskPoint {
-  id: number
-  name: string
-  description: string
-  score: number
-  document: string // Markdown格式的任务说明文档
-  questions: DisplayQuestionType[]
-}
+const moduleId = route.params.id;
 
-interface Experiment {
-  id: number
-  name: string
-  introduction: string
-  difficulty: 1 | 2 | 3 | 4 | 5
-  taskPoints: TaskPoint[]
-  targetMachine?: {
-    id: string
-
-  }
-  // operationMachine?: {
-  //   id: string
-  //   name: string
-  //   status: 'running' | 'stopped' | 'failed'
-  //   novncUrl?: string
-  // }
-}
 
 // 模拟实验数据
-const experiment: Experiment = {
+const experiment: Module = {
   id: 1,
   name: 'SQL注入基础实验',
   introduction: '本实验将帮助你理解SQL注入漏洞的原理和基本利用方法',
@@ -644,7 +620,7 @@ const submitAnswer = (questionId: number) => {
       </div>
     </div>
 
-    <!-- noVNC 区域 -->
+    <!-- code-server -->
     <div v-if="showNoVNC" class="w-[60%] bg-base-300 transition-all duration-300 border-l border-base-300">
       <iframe src="http://127.0.0.1:8443" width="100%" height="100%"></iframe>
     </div>

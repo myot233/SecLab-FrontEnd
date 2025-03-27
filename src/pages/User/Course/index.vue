@@ -2,106 +2,69 @@
 // 定义课程接口
 
 import {useRoute, useRouter} from "vue-router";
-import { ref, onMounted } from 'vue'
+import {ref, onMounted, type Ref} from 'vue'
+import { CourseStatus } from "./index";
+import type { Course } from "./index";
+import {getCourseDetail} from "../../../api.ts";
 
 const route = useRoute();
 const router = useRouter();
 const courseId = route.params.id;
-courseId;
-
-
-interface Course {
-  id: number
-  name: string
-  description: string
-  schedule: string
-  status: 'active' | 'upcoming' | 'completed'
-  instructor: {
-    name: string
-    title: string
-  }
-  experiments: Array<{
-    id: number
-    title: string
-    deadline: string
-    difficulty: 1 | 2 | 3 | 4 | 5  // 1-5 stars difficulty rating
-    introduction: string
-  }>
-}
 
 // 模拟课程数据
-const course: Course =  {
-  id: 1,
-  name: "SQL注入攻防实战",
-  description: `本课程系统解析6大SQL注入类型与8种防御绕过技术，配套DVWA、SQLi-Labs等实验环境。
-  核心内容：
-  - 注入原理：字符型/数值型注入差异分析
-  - 攻击手法：联合查询/报错注入/布尔盲注/时间盲注/堆叠注入/二阶注入
-  - 绕过技术：空格替代/HEX编码/注释符过滤/特殊字符绕过
-  - 防御方案：预编译原理/输入过滤策略/SQL监控日志分析`,
-  schedule: '每周三 19:00-21:00（理论） / 每周六 14:00-17:00（靶场实战）',
-  status: 'active',
-  instructor: {
-    name: '王安全',
-    title: '网络安全高级研究员',
-  },
-  experiments: [
-    {
-      id: 101,
-      title: '字符型注入突破',
-      deadline: '2024-06-15',
-      difficulty: 2,
-      introduction: '通过DVWA环境实践单引号闭合技巧，掌握order by判断字段数、union select数据回显等基础注入方法'
-    },
-    {
-      id: 102,
-      title: '布尔盲注实战',
-      deadline: '2024-06-22',
-      difficulty: 3,
-      introduction: '使用二分法逐字符爆破数据库信息，编写Python脚本实现自动化盲注攻击'
-    },
-    {
-      id: 103,
-      title: 'WAF绕过挑战',
-      deadline: '2024-06-29',
-      difficulty: 4,
-      introduction: '利用特殊字符（/*!*/）、HEX编码、参数污染等技术突破安全狗/WAF防护规则'
-    },
-    {
-      id: 104,
-      title: '二阶注入攻击',
-      deadline: '2024-07-06',
-      difficulty: 4,
-      introduction: '分析用户注册场景下的存储型注入漏洞，通过恶意数据存储触发二次查询攻击'
-    }
-  ]
-}
+let course:Ref<Course> = ref({
+  id: null,
+  name: "",
+  description: null,
+  difficulty: null,
+  type: null,
+  tags: null,
+  imageUrl: null,
+  costTime: null,
+  schedule: null,
+  status: null,
+  instructor: null,
+  modules: []
+})
+
+onMounted( async ()=>{
+  let result = await getCourseDetail(Number(courseId));
+  if (result.message == "success"){
+    course.value = result.data;
+  }
+})
 
 // 获取课程状态对应的标签样式
-const getStatusBadgeClass = (status: Course['status']) => {
+const getStatusBadgeClass = (status: CourseStatus | null) => {
+  if (!status) return 'badge-neutral';
   const classes = {
-    active: 'badge-success',
-    upcoming: 'badge-warning',
-    completed: 'badge-neutral'
+    [CourseStatus.ACTIVE]: 'badge-success',
+    [CourseStatus.UPCOMING]: 'badge-warning',
+    [CourseStatus.COMPLETED]: 'badge-neutral'
   }
-  return classes[status]
+  return classes[status];
 }
 
 // 获取状态的中文描述
-const getStatusText = (status: Course['status']) => {
+const getStatusText = (status: CourseStatus | null) => {
+  if (!status) return '未知';
   const text = {
-    active: '进行中',
-    upcoming: '即将开始',
-    completed: '已结束'
+    [CourseStatus.ACTIVE]: '进行中',
+    [CourseStatus.UPCOMING]: '即将开始',
+    [CourseStatus.COMPLETED]: '已结束'
   }
-  return text[status]
+  return text[status];
 }
 
 // Add a helper function to render stars
-const getDifficultyStars = (difficulty: number) => '★'.repeat(difficulty) + '☆'.repeat(5 - difficulty)
+const getDifficultyStars = (difficulty: number | null) => {
+  if (difficulty === null) return '未知';
+  return '★'.repeat(difficulty) + '☆'.repeat(5 - difficulty);
+}
 
 // 添加难度等级描述
-const getDifficultyText = (difficulty: number) => {
+const getDifficultyText = (difficulty: number | null) => {
+  if (difficulty === null) return '未知';
   const levels = {
     1: '入门',
     2: '基础',
@@ -109,16 +72,16 @@ const getDifficultyText = (difficulty: number) => {
     4: '困难',
     5: '专家'
   }
-  return levels[difficulty as keyof typeof levels]
+  return levels[difficulty as keyof typeof levels];
 }
 
 // 添加动画控制状态
 const isPageLoaded = ref(false)
 const isContentVisible = ref(false)
 
-function onButtonClick(id:number){
-  id
-  router.push("/user/module/1")
+function onButtonClick(id:number | null){
+  if (id === null) return;
+  router.push(`/user/module/${id}`);
 }
 
 onMounted(() => {
@@ -160,32 +123,41 @@ onMounted(() => {
 
         <!-- 课程详情 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- 授课时间 -->
+          <!-- 课程属性信息 -->
           <div class="flex items-start gap-3">
-            <i class="fas fa-clock text-xl text-primary mt-1"></i>
+            <i class="fas fa-clipboard-list text-xl text-primary mt-1"></i>
             <div>
-              <h3 class="font-semibold mb-2">授课时间</h3>
+              <h3 class="font-semibold mb-2">课程信息</h3>
               <div class="text-gray-600">
                 <div class="flex items-center gap-2 mb-1">
-                  <i class="fas fa-chalkboard-teacher text-sm"></i>
-                  <span>理论课：每周三 19:00-21:00</span>
+                  <i class="fas fa-tag text-sm"></i>
+                  <span>类型：{{ course.type }}</span>
                 </div>
-                <div class="flex items-center gap-2">
-                  <i class="fas fa-laptop-code text-sm"></i>
-                  <span>实战课：每周六 14:00-17:00</span>
+                <div class="flex items-center gap-2 mb-1">
+                  <i class="fas fa-signal text-sm"></i>
+                  <span>难度：{{ getDifficultyText(course.difficulty) }} {{ getDifficultyStars(course.difficulty) }}</span>
+                </div>
+                <div class="flex items-center gap-2 mb-1">
+                  <i class="fas fa-clock text-sm"></i>
+                  <span>预计学时：{{ course.costTime }}小时</span>
+                </div>
+                <div v-if="course.tags && course.tags.length > 0" class="flex items-center gap-2 flex-wrap mt-2">
+                  <span v-for="tag in course.tags" :key="tag" class="badge badge-primary badge-outline">{{ tag }}</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- 授课教师 -->
+          <!-- 授课时间 -->
           <div class="flex items-start gap-3">
-            <i class="fas fa-user-tie text-xl text-primary mt-1"></i>
+            <i class="fas fa-calendar-alt text-xl text-primary mt-1"></i>
             <div>
-              <h3 class="font-semibold mb-2">授课教师</h3>
-              <div class="flex items-center gap-2 text-gray-600">
-                <span>{{ course.instructor.name }}</span>
-                <span class="text-sm badge badge-outline">{{ course.instructor.title }}</span>
+              <h3 class="font-semibold mb-2">授课安排</h3>
+              <div class="text-gray-600">
+                <div class="flex items-center gap-2 mb-1">
+                  <i class="fas fa-chalkboard-teacher text-sm"></i>
+                  <span>{{ course.schedule }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -193,17 +165,17 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- 实验列表 -->
+    <!-- 模块列表 -->
     <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300"
          :class="{ 'slide-in-right': isContentVisible }">
       <div class="card-body">
         <div class="flex items-center gap-2 mb-4">
           <i class="fas fa-flask text-xl text-primary"></i>
-          <h2 class="text-xl font-semibold">相关实验</h2>
+          <h2 class="text-xl font-semibold">课程模块</h2>
         </div>
         <div class="grid gap-4">
-          <div v-for="(experiment, index) in course.experiments" 
-               :key="experiment.id"
+          <div v-for="(module, index) in course.modules" 
+               :key="module.moduleId"
                class="card bg-base-200 hover:bg-base-300 transition-all duration-200 fade-in-row"
                :style="{ animationDelay: `${index * 0.1}s` }">
             <div class="card-body p-4">
@@ -211,23 +183,23 @@ onMounted(() => {
                 <div class="space-y-2">
                   <h3 class="text-lg font-medium flex items-center gap-2">
                     <i class="fas fa-terminal text-primary"></i>
-                    {{ experiment.title }}
+                    {{ module.moduleName }}
                   </h3>
-                  <p class="text-sm text-gray-500">{{ experiment.introduction }}</p>
-                  <div class="flex items-center gap-4 text-sm">
-                    <div class="flex items-center gap-1">
-                      <i class="fas fa-calendar-alt text-primary"></i>
-                      <span>{{ experiment.deadline }}</span>
+                  <p class="text-sm text-gray-500">{{ module.introduction }}</p>
+                  <div class="flex items-center gap-4 text-sm flex-wrap">
+                    <div v-if="module.type && module.type.length > 0" class="flex items-center gap-1">
+                      <i class="fas fa-bookmark text-primary"></i>
+                      <span>{{ module.type.join(', ') }}</span>
                     </div>
-                    <div class="flex items-center gap-1" :title="getDifficultyText(experiment.difficulty)">
+                    <div class="flex items-center gap-1" :title="getDifficultyText(module.difficulty)">
                       <i class="fas fa-signal text-primary"></i>
-                      <span class="text-yellow-500">{{ getDifficultyStars(experiment.difficulty) }}</span>
+                      <span class="text-yellow-500">{{ getDifficultyStars(module.difficulty) }}</span>
                     </div>
                   </div>
                 </div>
-                <button @click="onButtonClick(experiment.id)" class="btn btn-primary btn-sm gap-2 hover:scale-105 transition-transform duration-200">
+                <button @click="onButtonClick(module.moduleId)" class="btn btn-primary btn-sm gap-2 hover:scale-105 transition-transform duration-200">
                   <i class="fas fa-arrow-right text-sm"></i>
-                  进入实验
+                  进入模块
                 </button>
               </div>
             </div>

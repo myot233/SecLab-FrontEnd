@@ -7,11 +7,12 @@ const isLoaded = ref(false);
 
 // 导航项配置
 const navItems = [
-  { path: '/user/welcome', label: '主页', icon: 'fa-home' },
-  { path: '/user/courses', label: '课程', icon: 'fa-book-open' },
-  { path: '/user/modules', label: '模块', icon: 'fa-cube' },
-  { path: '/user/scoreboard', label: '排行榜', icon: 'fa-trophy' },
-  { path: '/user/profile', label: '个人中心', icon: 'fa-user' }
+  { path: '/#?user/welcome', label: '主页', icon: 'fa-home' },
+  { path: '/#/user/courses', label: '课程', icon: 'fa-book-open' },
+  { path: '/#/user/modules', label: '模块', icon: 'fa-cube' },
+  { path: '/#/user/scoreboard', label: '排行榜', icon: 'fa-trophy' },
+  { path: '/#/user/chat', label: 'AI助手', icon: 'fa-robot' },
+  { path: '/#/user/profile', label: '个人中心', icon: 'fa-user' }
 ];
 
 onMounted(() => {

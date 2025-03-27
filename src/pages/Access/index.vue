@@ -5,11 +5,16 @@ import type { LoginForm, RegisterForm } from '../../types/auth'
 import SideBrand from "./components/SideBrand.vue";
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
+import ForgotPassword from "./components/ForgotPassword.vue";
+import ResetPassword from "./components/ResetPassword.vue";
 import { login, register } from '../../api';
 import { useCookie, showToast } from '../../common';   
 
 const router = useRouter()
 const isLogin = ref(true)
+const isForgotPassword = ref(false)
+const isResetPassword = ref(false)
+const verifiedPhone = ref('')
 const cookie = useCookie();
 
 // 添加动画状态控制
@@ -28,6 +33,52 @@ const toggleMode = () => {
   formVisible.value = false
   setTimeout(() => {
     isLogin.value = !isLogin.value
+    isForgotPassword.value = false
+    isResetPassword.value = false
+    formVisible.value = true
+  }, 300)
+}
+
+// 处理忘记密码
+const handleForgotPassword = () => {
+  formVisible.value = false
+  setTimeout(() => {
+    isForgotPassword.value = true
+    isLogin.value = false
+    isResetPassword.value = false
+    formVisible.value = true
+  }, 300)
+}
+
+// 处理验证码验证并转到重置密码
+const handleVerifyCode = (phone: string) => {
+  formVisible.value = false
+  setTimeout(() => {
+    verifiedPhone.value = phone
+    isForgotPassword.value = false
+    isResetPassword.value = true
+    formVisible.value = true
+  }, 300)
+}
+
+// 密码重置成功处理
+const handlePasswordReset = () => {
+  formVisible.value = false
+  setTimeout(() => {
+    isResetPassword.value = false
+    isLogin.value = true
+    formVisible.value = true
+    showToast('密码重置成功，请使用新密码登录')
+  }, 300)
+}
+
+// 返回登录页面
+const backToLogin = () => {
+  formVisible.value = false
+  setTimeout(() => {
+    isForgotPassword.value = false
+    isResetPassword.value = false
+    isLogin.value = true
     formVisible.value = true
   }, 300)
 }
@@ -99,10 +150,13 @@ const handleRegister = async (registerForm: RegisterForm) => {
             <div class="flex flex-col items-center gap-2">
               <span class="text-3xl font-bold bg-clip-text text-transparent 
                          bg-gradient-to-r from-primary via-secondary to-accent">
-                {{ isLogin ? '欢迎回来' : '加入我们' }}
+                {{ isLogin ? '欢迎回来' : isForgotPassword ? '找回密码' : isResetPassword ? '重置密码' : '加入我们' }}
               </span>
               <span class="text-base font-normal text-base-content/60">
-                {{ isLogin ? '登录以继续你的安全之旅' : '创建账号开启你的安全学习' }}
+                {{ isLogin ? '登录以继续你的安全之旅' : 
+                   isForgotPassword ? '通过手机验证码重置密码' : 
+                   isResetPassword ? '设置新的安全密码' : 
+                   '创建账号开启你的安全学习' }}
               </span>
             </div>
           </h2>
@@ -110,8 +164,10 @@ const handleRegister = async (registerForm: RegisterForm) => {
           <!-- 表单切换动画 -->
           <Transition name="form-switch" mode="out-in">
             <div v-if="formVisible" class="animate-fade-in">
-              <Login v-if="isLogin" @login="handleLogin" />
-              <Register v-else @register="handleRegister" />
+              <Login v-if="isLogin" @login="handleLogin" @forgot-password="handleForgotPassword" />
+              <Register v-else-if="!isForgotPassword && !isResetPassword" @register="handleRegister" />
+              <ForgotPassword v-else-if="isForgotPassword" @verify="handleVerifyCode" @back="backToLogin" />
+              <ResetPassword v-else-if="isResetPassword" :phone="verifiedPhone" @reset="handlePasswordReset" @back="backToLogin" />
             </div>
           </Transition>
 
@@ -128,7 +184,7 @@ const handleRegister = async (registerForm: RegisterForm) => {
           </div>
 
           <!-- 切换按钮 -->
-          <div class="text-center mt-6">
+          <div v-if="!isForgotPassword && !isResetPassword" class="text-center mt-6">
             <button 
               class="btn btn-link gap-2 transition-all duration-300 hover:gap-4"
               @click="toggleMode"
@@ -139,8 +195,8 @@ const handleRegister = async (registerForm: RegisterForm) => {
           </div>
 
           <!-- 帮助链接 -->
-          <div class="text-center mt-4 text-sm text-base-content/60 space-x-4">
-            <a href="#" class="link link-hover">忘记密码</a>
+          <div v-if="isLogin" class="text-center mt-4 text-sm text-base-content/60 space-x-4">
+            <a href="#" class="link link-hover" @click.prevent="handleForgotPassword">忘记密码</a>
             <a href="#" class="link link-hover">帮助中心</a>
             <a href="#" class="link link-hover">联系我们</a>
           </div>

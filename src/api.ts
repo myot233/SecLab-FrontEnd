@@ -2,8 +2,11 @@
 import type { RegisterForm } from "./types/auth";
 import type { User } from "./types/user";
 import type { ModuleOverViewType } from "./pages/User/Modules/components/ModuleOverView";
+import type { Course } from "./pages/User/Course/index.ts";
+import type { Module } from "./pages/User/Module/index.ts";
 
-const BASE_URL: string = "http://localhost:8081/docker";
+const BASE_URL: string = "http://localhost:8083";
+const IMAGE_URL = `${BASE_URL}/images/view/`;
 
 type Result<T> = {
     isSuccess:number,
@@ -12,7 +15,19 @@ type Result<T> = {
     data:T
 }
 
-// Start of Selection
+// 定义后端返回的课程数据类型
+export interface CourseSummaryDto {
+    id: number;
+    name: string;
+    description: string;
+    difficulty: number;
+    imageUrl: string;
+    type: string;
+    tags: string[];
+    status: string;
+}
+
+export let image = (imageName: string) => IMAGE_URL + imageName;
 export async function login(loginRequest: { userStudentNumber: string; userPassword: string; }): Promise<Result<{ 
     loginData: {
         userId: number; 
@@ -87,6 +102,33 @@ export async function getModuleList(): Promise<Result<ModuleOverViewType[]>> {
         return response.data;
     } else {
         // Handle unexpected response status
+        throw new Error(`Unexpected response status: ${response.status}`);
+    }
+}
+
+export async function getCourseList(): Promise<Result<CourseSummaryDto[]>> {
+    const response = await axios.get(`${BASE_URL}/course/overview-list`);
+    if (response.status === 200) {
+        return response.data;
+    } else {
+        throw new Error(`Unexpected response status: ${response.status}`);
+    }
+}   
+
+export async function getCourseDetail(id:number): Promise<Result<Course>> {
+    const response = await axios.get(`${BASE_URL}/course/detail?id=${id}`);
+    if (response.status === 200) {
+        return response.data;
+    } else {
+        throw new Error(`Unexpected response status: ${response.status}`);
+    }
+}
+
+export async function getModuleDetail(id:number): Promise<Result<Module>> {
+    const response = await axios.get(`${BASE_URL}/course/module/detail?id=${id}`);
+    if (response.status === 200) {
+        return response.data;
+    } else {
         throw new Error(`Unexpected response status: ${response.status}`);
     }
 }   
