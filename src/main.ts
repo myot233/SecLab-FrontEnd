@@ -27,6 +27,8 @@ import typescript from "highlight.js/lib/languages/typescript";
 import markdown from "highlight.js/lib/languages/markdown";
 import css from "highlight.js/lib/languages/css";
 import dockerfile from "highlight.js/lib/languages/dockerfile";
+import '@vue-flow/core/dist/style.css';
+import '@vue-flow/core/dist/theme-default.css';
 hljs.registerLanguage("javascript", javascript);
 hljs.registerLanguage("java", java);
 hljs.registerLanguage("yaml", yaml);
@@ -48,8 +50,11 @@ hljs.registerLanguage("css", css);
 hljs.registerLanguage("dockerfile", dockerfile);
 import "magic.css/dist/magic.min.css"
 import "animate.css"
+import VueLuckyCanvas from '@lucky-canvas/vue'
 createApp(App)
     .use(hljsVuePlugin)
     .use(VueCookies,{expires:"7d"})
     .use(router)
+    // .use(VueFlow)
+    .use(VueLuckyCanvas)
     .mount('#app')

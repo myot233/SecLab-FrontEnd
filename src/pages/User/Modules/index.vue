@@ -3,6 +3,15 @@ import { computed, onMounted, ref } from 'vue'
 import type { ModuleOverViewType } from './components/ModuleOverView.ts'
 import ModuleOverView from './components/ModuleOverView.vue'
 
+// 修改模块数据，添加分数计算
+const calculateScore = (difficulty: number, time: string): number => {
+  // 解析预计用时，提取小时数
+  const hours = parseFloat(time.split('-')[1]?.split('小时')[0] || time.split('小时')[0])
+  // 计算总分：难度基础分 + 时间加成，上限100分
+  const score = Math.min(difficulty * 15 + hours * 5, 100)
+  return Math.round(score)
+}
+
 // 模拟模块数据
 const modules = ref<ModuleOverViewType[]>([
   {
@@ -14,6 +23,7 @@ const modules = ref<ModuleOverViewType[]>([
     status: 'locked',
     prerequisites: [2],
     estimatedTime: '4-5小时',
+    score: calculateScore(4, '4-5小时') // 85分：难度4×15 + 5小时×5
   },
   {
     id: 2,
@@ -23,6 +33,7 @@ const modules = ref<ModuleOverViewType[]>([
     type: 'Web安全',
     status: 'available',
     estimatedTime: '2-3小时',
+    score: calculateScore(2, '2-3小时') // 45分：难度2×15 + 3小时×5
   },
   {
     id: 3,
@@ -32,7 +43,7 @@ const modules = ref<ModuleOverViewType[]>([
     type: '密码学',
     status: 'completed',
     estimatedTime: '3-4小时',
-    score: 95
+    score: calculateScore(3, '3-4小时') // 65分：难度3×15 + 4小时×5
   },  {
     id: 101,
     name: '字符型注入突破',
@@ -40,7 +51,8 @@ const modules = ref<ModuleOverViewType[]>([
     difficulty: 2,
     type: 'sql-injection',
     status: 'available',
-    estimatedTime: '2小时'
+    estimatedTime: '2小时',
+    score: calculateScore(2, '2小时') // 40分：难度2×15 + 2小时×5
   },
   {
     id: 102,
@@ -50,7 +62,8 @@ const modules = ref<ModuleOverViewType[]>([
     type: 'sql-injection',
     status: 'available',
     prerequisites: [101],
-    estimatedTime: '2小时'
+    estimatedTime: '2小时',
+    score: calculateScore(3, '2小时') // 55分：难度3×15 + 2小时×5
   },
   {
     id: 103,
@@ -60,7 +73,8 @@ const modules = ref<ModuleOverViewType[]>([
     type: 'sql-injection',
     status: 'available',
     prerequisites: [102],
-    estimatedTime: '2小时'
+    estimatedTime: '2小时',
+    score: calculateScore(4, '2小时') // 70分：难度4×15 + 2小时×5
   },
   {
     id: 104,
@@ -70,7 +84,8 @@ const modules = ref<ModuleOverViewType[]>([
     type: 'sql-injection',
     status: 'available',
     prerequisites: [103],
-    estimatedTime: '2小时'
+    estimatedTime: '2小时',
+    score: calculateScore(4, '2小时') // 70分：难度4×15 + 2小时×5
   }
 ])
 
@@ -96,8 +111,10 @@ const types = ['Web安全', '系统安全', '密码学', '网络攻防']
 const searchQuery = ref('')
 
 // 更新筛选逻辑
+// 更新筛选逻辑
 const filteredModules = computed(() => {
-  return modules.value.filter(module => {
+  // 首先进行筛选
+  const filtered = modules.value.filter(module => {
     // 搜索过滤
     if (searchQuery.value && !module.name.toLowerCase().includes(searchQuery.value.toLowerCase()) &&
         !module.description.toLowerCase().includes(searchQuery.value.toLowerCase())) {
@@ -108,6 +125,16 @@ const filteredModules = computed(() => {
     if (filters.value.status && module.status !== filters.value.status) return false
     if (filters.value.difficulty && module.difficulty !== parseInt(filters.value.difficulty)) return false
     return true
+  })
+
+  // 然后按照状态排序
+  return filtered.sort((a, b) => {
+    const statusOrder = {
+      'available': 0,  // 可开始 排第一
+      'locked': 1,     // 未解锁 排第二
+      'completed': 2   // 可进行 排第三
+    }
+    return statusOrder[a.status] - statusOrder[b.status]
   })
 })
 

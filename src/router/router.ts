@@ -1,4 +1,4 @@
-﻿import {createRouter, createWebHistory} from "vue-router";
+﻿import {createRouter, createWebHashHistory} from "vue-router";
 import UserLayout from "../layout/User/index.vue"
 import AdminLayout from "../layout/Admin/index.vue"
 import Courses from "../pages/User/Courses/index.vue"
@@ -8,13 +8,17 @@ import Module from "../pages/User/Module/index.vue"
 import ScoreBoard from '../pages/User/Scoreboard/index.vue'
 import Modules from '../pages/User/Modules/index.vue'
 import Profile from '../pages/User/Profile/index.vue'
+import Community from '../pages/User/Community/index.vue'
+import Points from '../pages/User/Points/index.vue'
 import Access from '../pages/Access/index.vue'
 import UserManage from  '../pages/Admin/Users/index.vue'
 import CourseManage from '../pages/Admin/Courses/index.vue'
 import LabManage from '../pages/Admin/Labs/index.vue'
 import MockTarget from '../mock/MockTarget.vue'
+import DashBoard from '../pages/Admin/DashBoard/index.vue'
+import CourseCreate from '../pages/Admin/Courses/create/create.vue'
 export const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHashHistory(import.meta.env.BASE_URL),
 
     routes: [{
         path: "/container/550e8400-e29b-41d4-a716-446655440000",
@@ -42,6 +46,9 @@ export const router = createRouter({
                     path:"module/:id",
                     component:Module
                 },{
+                    path:"community",
+                    component:Community
+                },{
                     path:"scoreboard",
                     component:ScoreBoard
                 },{
@@ -50,6 +57,9 @@ export const router = createRouter({
                 },{
                     path:"profile",
                     component:Profile
+                },{
+                    path:"points",
+                    component:Points
                 }]
         },
         {
@@ -60,7 +70,11 @@ export const router = createRouter({
                     path:"",
                     redirect:"/admin/welcome"
                 },
+                // 在admin路径下
                 {
+                    path:"course/create",
+                    component:CourseCreate
+                },{
                     path:"welcome",
                     component:Welcome
                 },{
@@ -72,6 +86,9 @@ export const router = createRouter({
                 },{
                     path:"lab",
                     component:LabManage
+                },{
+                    path:"dashboard",
+                    component:DashBoard
                 }
             ]
         },{

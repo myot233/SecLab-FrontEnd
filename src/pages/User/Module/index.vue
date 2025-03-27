@@ -2,7 +2,7 @@
 import { useRoute } from 'vue-router'
 import MarkdownRenderer from "../../../components/MarkdownRenderer.vue";
 import type { DisplayQuestionType } from '../../../types/Question';
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 const route = useRoute();
 // const moduleId = route.params.id;
@@ -454,182 +454,287 @@ const submitAnswer = (questionId: number) => {
   console.log('提交答案:', questionId, answers.value[questionId])
   // TODO: 实现答案提交逻辑
 }
+
+// 修改计算积分的方法
+const calculatePoints = computed(() => {
+  // 难度基础分：每星30分（5星最高150分）
+  const difficultyPoints = experiment.difficulty * 30
+  
+  // 时间加成：每小时10分（最长5小时，最高50分）
+  const totalHours = experiment.taskPoints.reduce((total, task) => {
+    return total + task.score / 10  // 假设每10分的任务需要1小时
+  }, 0)
+  // 限制最大计算时长为5小时
+  const timePoints = Math.min(Math.round(totalHours * 10), 50)
+  
+  // 总分 = 难度分 + 时间分（自然限制在200分以内）
+  return difficultyPoints + timePoints
+})
+
+// 控制题解讨论弹窗的显示状态
+const showDiscussionModal = ref(false)
+
+// 计算查看题解所需积分
+const getSolutionCost = (difficulty: number) => {
+  const costs = {
+    1: 0,    // 1星免费
+    2: 40,   // 2星40分
+    3: 80,   // 3星80分
+    4: 120,  // 4星120分
+    5: 180   // 5星180分
+  }
+  return costs[difficulty as keyof typeof costs]
+}
+
+// 显示积分确认弹窗
+const showCostModal = ref(false)
+const solutionCost = computed(() => getSolutionCost(experiment.difficulty))
+
+// 模拟用户积分余额
+const userPoints = ref(1000)
+
+const handleViewDiscussion = () => {
+  if (solutionCost.value > userPoints.value) {
+    alert('积分不足，快去完成任务获得更多积分吧！')
+    return
+  }
+  showCostModal.value = true
+}
+
+const confirmViewDiscussion = () => {
+  userPoints.value -= solutionCost.value
+  showCostModal.value = false
+  showDiscussionModal.value = true
+}
+
+// 模拟题解讨论数据
+const discussions = [
+  {
+    id: 1,
+    author: {
+      name: "张安全",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=1"
+    },
+    content: "这道题的关键在于理解SQL注入的原理，我的解题思路是：\n1. 首先尝试最基本的单引号闭合\n2. 然后使用UNION SELECT语句\n3. 最后获取flag值",
+    createdAt: "2024-03-20 14:30",
+    likes: 15
+  },
+  {
+    id: 2,
+    author: {
+      name: "李渗透",
+      avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=2"
+    },
+    content: "补充一下，在做这道题时要注意以下几点：\n- 字符型注入需要注意闭合\n- 使用注释符号抵消后面的SQL语句\n- 可以使用order by判断字段数",
+    createdAt: "2024-03-21 09:15",
+    likes: 8
+  }
+]
 </script>
 
 <template>
   <div class="flex">
     <div class="flex-1 flex flex-col">
-      <!-- 顶部区域 -->
-      <div class="bg-base-200 p-4 shadow-lg space-y-4">
-        <!-- 标题和难度行 -->
-        <div class="flex justify-between items-center">
-          <div class="flex items-center gap-2">
-            <i class="fas fa-flask text-primary text-2xl"></i>
-            <h1 class="text-2xl font-bold">{{ experiment.name }}</h1>
+      <!-- 导航栏 -->
+      <div class="bg-base-100 border-b border-base-300">
+        <div class="flex items-center gap-6 px-6 py-3">
+          <div class="flex items-center gap-2 text-primary cursor-pointer">
+            <i class="fas fa-code"></i>
+            <span class="font-semibold">做题</span>
           </div>
-          <div class="text-yellow-500">
-            <i class="fas fa-star mr-2"></i>
-            难度: {{ getDifficultyStars(experiment.difficulty) }}
-          </div>
-        </div>
-
-        <!-- 环境控制行 -->
-        <div class="flex justify-between items-center">
-          <!-- 靶机控制 -->
-          <div class="flex items-center gap-4">
-            <i class="fas fa-server text-info"></i>
-            <span>靶机环境</span>
-            <span class="badge badge-sm" :class="isTargetLoading ? 'badge-info' : 'badge-warning'">
-              {{ isTargetLoading ? '启动中' : '未启动' }}
+          <div class="flex items-center gap-2 cursor-pointer hover:text-primary transition-colors"
+               @click="handleViewDiscussion">
+            <i class="fas fa-comments"></i>
+            <span>题解讨论</span>
+            <span v-if="solutionCost > 0" class="badge badge-xs badge-primary ml-1">
+              {{ solutionCost }}分
             </span>
-            <button class="btn btn-sm btn-primary" @click="startTargetMachine"
-              :disabled="!experiment.targetMachine?.id || isTargetLoading">
-              <span class="loading loading-spinner loading-xs" v-if="isTargetLoading"></span>
-              <i class="fas fa-play mr-1" v-else></i>
-              {{ isTargetLoading ? '正在启动靶机...' : '启动靶机' }}
-            </button>
-            <div v-if="isTargetLoading" class="text-sm text-info">
-              靶机环境正在准备中，请稍候...
-            </div>
-          </div>
-
-          <!-- 操作环境控制 -->
-          <div class="flex items-center gap-4">
-            <i class="fas fa-desktop text-info"></i>
-            <span>操作环境</span>
-            <span class="badge badge-sm"
-              :class="isOperationLoading ? 'badge-info' : isOperationMachineRunning ? 'badge-success' : 'badge-warning'">
-              {{ isOperationLoading ? '启动中' : isOperationMachineRunning ? '运行中' : '未启动' }}
-            </span>
-            <button class="btn btn-sm" :class="isOperationMachineRunning ? 'btn-error' : 'btn-primary'"
-              @click="toggleOperationMachine" :disabled="isOperationLoading">
-              <span class="loading loading-spinner loading-xs" v-if="isOperationLoading"></span>
-              <i :class="isOperationMachineRunning ? 'fas fa-stop' : 'fas fa-play'" class="mr-1" v-else></i>
-              {{ isOperationLoading ? '正在启动...' : isOperationMachineRunning ? '关闭操作环境' : '启动操作环境' }}
-            </button>
-            <div v-if="isOperationLoading" class="text-sm text-info">
-              操作环境正在准备中，请稍候...
-            </div>
           </div>
         </div>
       </div>
 
-      <!-- 主要内容区域 -->
-      <div class="transition-all duration-300 p-4 overflow-y-auto flex-1 w-full">
-        <!-- 实验介绍 -->
-        <div class="card bg-base-100 shadow-xl mb-6">
-          <div class="card-body">
-            <h2 class="text-xl font-semibold mb-2">
-              <i class="fas fa-info-circle text-primary mr-2"></i>
-              实验介绍
-            </h2>
-            <p>{{ experiment.introduction }}</p>
+      <!-- 原有内容 -->
+      <div class="flex-1 flex flex-col">
+        <!-- 顶部区域 -->
+        <div class="bg-base-200 p-4 shadow-lg space-y-4">
+          <!-- 标题和难度行 -->
+          <div class="flex justify-between items-center">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-flask text-primary text-2xl"></i>
+              <h1 class="text-2xl font-bold">{{ experiment.name }}</h1>
+            </div>
+            <div class="flex items-center gap-4">
+              <!-- 添加积分显示 -->
+              <div class="flex items-center gap-2 text-secondary">
+                <i class="fas fa-coins"></i>
+                <span class="font-semibold">{{ calculatePoints }}积分</span>
+              </div>
+              <!-- 原有的难度显示 -->
+              <div class="text-yellow-500">
+                <i class="fas fa-star mr-2"></i>
+                难度: {{ getDifficultyStars(experiment.difficulty) }}
+              </div>
+            </div>
+          </div>
+
+          <!-- 环境控制行 -->
+          <div class="flex justify-between items-center">
+            <!-- 靶机控制 -->
+            <div class="flex items-center gap-4">
+              <i class="fas fa-server text-info"></i>
+              <span>靶机环境</span>
+              <span class="badge badge-sm" :class="isTargetLoading ? 'badge-info' : 'badge-warning'">
+                {{ isTargetLoading ? '启动中' : '未启动' }}
+              </span>
+              <button class="btn btn-sm btn-primary" @click="startTargetMachine"
+                :disabled="!experiment.targetMachine?.id || isTargetLoading">
+                <span class="loading loading-spinner loading-xs" v-if="isTargetLoading"></span>
+                <i class="fas fa-play mr-1" v-else></i>
+                {{ isTargetLoading ? '正在启动靶机...' : '启动靶机' }}
+              </button>
+              <div v-if="isTargetLoading" class="text-sm text-info">
+                靶机环境正在准备中，请稍候...
+              </div>
+            </div>
+
+            <!-- 操作环境控制 -->
+            <div class="flex items-center gap-4">
+              <i class="fas fa-desktop text-info"></i>
+              <span>操作环境</span>
+              <span class="badge badge-sm"
+                :class="isOperationLoading ? 'badge-info' : isOperationMachineRunning ? 'badge-success' : 'badge-warning'">
+                {{ isOperationLoading ? '启动中' : isOperationMachineRunning ? '运行中' : '未启动' }}
+              </span>
+              <button class="btn btn-sm" :class="isOperationMachineRunning ? 'btn-error' : 'btn-primary'"
+                @click="toggleOperationMachine" :disabled="isOperationLoading">
+                <span class="loading loading-spinner loading-xs" v-if="isOperationLoading"></span>
+                <i :class="isOperationMachineRunning ? 'fas fa-stop' : 'fas fa-play'" class="mr-1" v-else></i>
+                {{ isOperationLoading ? '正在启动...' : isOperationMachineRunning ? '关闭操作环境' : '启动操作环境' }}
+              </button>
+              <div v-if="isOperationLoading" class="text-sm text-info">
+                操作环境正在准备中，请稍候...
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- 任务点列表 -->
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h2 class="text-xl font-semibold mb-4">
-              <i class="fas fa-tasks text-primary mr-2"></i>
-              任务点
-            </h2>
-            <div class="space-y-4">
-              <div v-for="task in experiment.taskPoints" :key="task.id"
-                class="collapse collapse-arrow border-base-300 bg-base-200 border">
-                <input type="checkbox" />
-                <div class="collapse-title text-xl font-semibold flex items-center gap-2">
-                  <i class="fas fa-tasks"></i>
-                  {{ task.name }}
-                  <div class="badge badge-primary badge-lg">
-                    <span class="font-bold">{{ task.score }}</span>分
-                  </div>
-                </div>
-                <div class="collapse-content">
-                  <p>{{ task.description }}</p>
+        <!-- 主要内容区域 -->
+        <div class="transition-all duration-300 p-4 overflow-y-auto flex-1 w-full">
+          <!-- 实验介绍 -->
+          <div class="card bg-base-100 shadow-xl mb-6">
+            <div class="card-body">
+              <h2 class="text-xl font-semibold mb-2">
+                <i class="fas fa-info-circle text-primary mr-2"></i>
+                实验介绍
+              </h2>
+              <p>{{ experiment.introduction }}</p>
+            </div>
+          </div>
 
-                  <!-- 添加Markdown文档渲染 -->
-                  <div class="mt-4">
-                    <h4 class="font-semibold mb-2">任务说明</h4>
-                    <div class="card bg-base-100 p-4">
-                      <MarkdownRenderer :content="task.document" />
+          <!-- 任务点列表 -->
+          <div class="card bg-base-100 shadow-xl">
+            <div class="card-body">
+              <h2 class="text-xl font-semibold mb-4">
+                <i class="fas fa-tasks text-primary mr-2"></i>
+                任务点
+              </h2>
+              <div class="space-y-4">
+                <div v-for="task in experiment.taskPoints" :key="task.id"
+                  class="collapse collapse-arrow border-base-300 bg-base-200 border">
+                  <input type="checkbox" />
+                  <div class="collapse-title text-xl font-semibold flex items-center gap-2">
+                    <i class="fas fa-tasks"></i>
+                    {{ task.name }}
+                    <div class="badge badge-primary badge-lg">
+                      <span class="font-bold">{{ task.score }}</span>分
                     </div>
                   </div>
+                  <div class="collapse-content">
+                    <p>{{ task.description }}</p>
 
-                  <!-- 任务问题列表 -->
-                  <div class="mt-4 space-y-2">
-                    <div v-for="question in task.questions" :key="question.id" class="card bg-base-300">
-                      <div class="card-body">
-                        <div class="flex justify-between items-center">
-                          <p>{{ question.content }}</p>
-                          <span class="badge">{{ question.score }}分</span>
-                        </div>
-                        <div class="mt-2">
-                          <!-- 带答案的开放题 -->
-                          <div v-if="question.type === 'open-ended-with-answer'" class="space-y-2">
-                            <textarea v-model="answers[task.id][question.id]" placeholder="请输入答案"
-                              class="textarea textarea-bordered w-full h-24" />
-                            <div class="flex items-center gap-2">
-                              <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
-                                检查答案
-                              </button>
-                              <span v-if="answerStatus[task.id][question.id] !== null" 
-                                :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
-                                class="flex items-center">
-                                <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
-                                {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
-                              </span>
-                            </div>
+                    <!-- 添加Markdown文档渲染 -->
+                    <div class="mt-4">
+                      <h4 class="font-semibold mb-2">任务说明</h4>
+                      <div class="card bg-base-100 p-4">
+                        <MarkdownRenderer :content="task.document" />
+                      </div>
+                    </div>
+
+                    <!-- 任务问题列表 -->
+                    <div class="mt-4 space-y-2">
+                      <div v-for="question in task.questions" :key="question.id" class="card bg-base-300">
+                        <div class="card-body">
+                          <div class="flex justify-between items-center">
+                            <p>{{ question.content }}</p>
+                            <span class="badge">{{ question.score }}分</span>
                           </div>
-
-                          <!-- 无答案的开放题 -->
-                          <div v-else-if="question.type === 'open-ended-without-answer'" class="space-y-2">
-                            <textarea v-model="answers[task.id][question.id]" placeholder="请输入答案"
-                              class="textarea textarea-bordered w-full h-24" />
-                            <button @click="submitAnswer(question.id)" class="btn btn-primary">
-                              提交答案
-                            </button>
-                          </div>
-
-                          <!-- 单选题 -->
-                          <div v-else-if="question.type === 'single-choice'" class="space-y-2">
-                            <div v-for="(option, index) in question.options" :key="index"
-                              class="flex items-center gap-2">
-                              <input type="radio" v-model="answers[task.id][question.id]" :name="'q' + question.id"
-                                :value="option" class="radio radio-primary" />
-                              <span>{{ option }}</span>
+                          <div class="mt-2">
+                            <!-- 带答案的开放题 -->
+                            <div v-if="question.type === 'open-ended-with-answer'" class="space-y-2">
+                              <textarea v-model="answers[task.id][question.id]" placeholder="请输入答案"
+                                class="textarea textarea-bordered w-full h-24" />
+                              <div class="flex items-center gap-2">
+                                <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
+                                  检查答案
+                                </button>
+                                <span v-if="answerStatus[task.id][question.id] !== null" 
+                                  :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
+                                  class="flex items-center">
+                                  <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
+                                  {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
+                                </span>
+                              </div>
                             </div>
-                            <div class="flex items-center gap-2 mt-2">
-                              <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
-                                检查答案
+
+                            <!-- 无答案的开放题 -->
+                            <div v-else-if="question.type === 'open-ended-without-answer'" class="space-y-2">
+                              <textarea v-model="answers[task.id][question.id]" placeholder="请输入答案"
+                                class="textarea textarea-bordered w-full h-24" />
+                              <button @click="submitAnswer(question.id)" class="btn btn-primary">
+                                提交答案
                               </button>
-                              <span v-if="answerStatus[task.id][question.id] !== null" 
-                                :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
-                                class="flex items-center">
-                                <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
-                                {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
-                              </span>
                             </div>
-                          </div>
 
-                          <!-- 多选题 -->
-                          <div v-else-if="question.type === 'multiple-choice'" class="space-y-2">
-                            <div v-for="(option, index) in question.options" :key="index"
-                              class="flex items-center gap-2">
-                              <input type="checkbox" v-model="answers[task.id][question.id]" :value="option"
-                                class="checkbox checkbox-primary" />
-                              <span>{{ option }}</span>
+                            <!-- 单选题 -->
+                            <div v-else-if="question.type === 'single-choice'" class="space-y-2">
+                              <div v-for="(option, index) in question.options" :key="index"
+                                class="flex items-center gap-2">
+                                <input type="radio" v-model="answers[task.id][question.id]" :name="'q' + question.id"
+                                  :value="option" class="radio radio-primary" />
+                                <span>{{ option }}</span>
+                              </div>
+                              <div class="flex items-center gap-2 mt-2">
+                                <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
+                                  检查答案
+                                </button>
+                                <span v-if="answerStatus[task.id][question.id] !== null" 
+                                  :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
+                                  class="flex items-center">
+                                  <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
+                                  {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
+                                </span>
+                              </div>
                             </div>
-                            <div class="flex items-center gap-2 mt-2">
-                              <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
-                                检查答案
-                              </button>
-                              <span v-if="answerStatus[task.id][question.id] !== null" 
-                                :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
-                                class="flex items-center">
-                                <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
-                                {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
-                              </span>
+
+                            <!-- 多选题 -->
+                            <div v-else-if="question.type === 'multiple-choice'" class="space-y-2">
+                              <div v-for="(option, index) in question.options" :key="index"
+                                class="flex items-center gap-2">
+                                <input type="checkbox" v-model="answers[task.id][question.id]" :value="option"
+                                  class="checkbox checkbox-primary" />
+                                <span>{{ option }}</span>
+                              </div>
+                              <div class="flex items-center gap-2 mt-2">
+                                <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
+                                  检查答案
+                                </button>
+                                <span v-if="answerStatus[task.id][question.id] !== null" 
+                                  :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
+                                  class="flex items-center">
+                                  <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
+                                  {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -648,11 +753,105 @@ const submitAnswer = (questionId: number) => {
     <div v-if="showNoVNC" class="w-[60%] bg-base-300 transition-all duration-300 border-l border-base-300">
       <iframe src="http://127.0.0.1:8443" width="100%" height="100%"></iframe>
     </div>
+
+    <!-- 题解讨论弹窗 -->
+    <dialog :class="{'modal': true, 'modal-open': showDiscussionModal}">
+      <div class="modal-box w-11/12 max-w-4xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="font-bold text-lg">题解讨论</h3>
+          <button class="btn btn-sm btn-circle btn-ghost" @click="showDiscussionModal = false">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        
+        <!-- 讨论列表 -->
+        <div class="space-y-4">
+          <div v-for="discussion in discussions" :key="discussion.id" 
+               class="card bg-base-200">
+            <div class="card-body">
+              <div class="flex items-start gap-4">
+                <!-- 用户头像 -->
+                <div class="avatar">
+                  <div class="w-12 h-12 rounded-full">
+                    <img :src="discussion.author.avatar" alt="avatar" />
+                  </div>
+                </div>
+                
+                <!-- 讨论内容 -->
+                <div class="flex-1">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="font-semibold">{{ discussion.author.name }}</span>
+                    <span class="text-sm text-base-content/70">{{ discussion.createdAt }}</span>
+                  </div>
+                  <div class="whitespace-pre-line">{{ discussion.content }}</div>
+                  
+                  <!-- 点赞按钮 -->
+                  <div class="flex items-center gap-2 mt-3">
+                    <button class="btn btn-sm btn-ghost gap-2">
+                      <i class="fas fa-thumbs-up"></i>
+                      <span>{{ discussion.likes }}</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 添加讨论输入框 -->
+        <div class="mt-6">
+          <textarea class="textarea textarea-bordered w-full h-24" 
+                    placeholder="分享你的解题思路..."></textarea>
+          <div class="flex justify-end mt-2">
+            <button class="btn btn-primary">
+              <i class="fas fa-paper-plane mr-2"></i>
+              发布讨论
+            </button>
+          </div>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button @click="showDiscussionModal = false">关闭</button>
+      </form>
+    </dialog>
+
+    <!-- 积分确认弹窗 -->
+    <dialog :class="{'modal': true, 'modal-open': showCostModal}">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">确认查看题解</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span>所需积分：</span>
+            <span class="text-primary font-bold">{{ solutionCost }}分</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span>当前积分：</span>
+            <span class="text-success font-bold">{{ userPoints }}分</span>
+          </div>
+          <div class="text-sm text-base-content/70">
+            查看题解后将扣除相应积分，是否继续？
+          </div>
+        </div>
+        <div class="modal-action">
+          <button class="btn btn-ghost" @click="showCostModal = false">取消</button>
+          <button class="btn btn-primary" @click="confirmViewDiscussion">确认查看</button>
+        </div>
+      </div>
+    </dialog>
   </div>
 </template>
 
 <style scoped>
 .container {
   max-width: 1400px;
+}
+
+.modal-box {
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.whitespace-pre-line {
+  white-space: pre-line;
 }
 </style>

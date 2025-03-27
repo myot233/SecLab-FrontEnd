@@ -1,41 +1,65 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import type { UserScore, ScoreboardFilters } from './types.ts'
 import a from "./test_users.json"
-// 模拟用户数据
-const scores = ref<UserScore[]>(a)
 
-// 筛选条件
+// 模拟用户数据 - 按照总分由高到低排序
+const initialScores = ref(a.sort((a, b) => b.totalScore - a.totalScore))
+const scores = ref<UserScore[]>([...initialScores.value])
+
+// 重新计算排名
+const recalculateRanks = (userList: UserScore[]) => {
+  return userList.map((user, index) => {
+    return {
+      ...user,
+      rank: index + 1
+    }
+  })
+}
+
+// 初始排序
+scores.value = recalculateRanks(scores.value)
+
+// 筛选条件 - 默认设置为"全部"
 const filters = ref<ScoreboardFilters>({
   timeRange: 'all',
-  experimentType: undefined,
-  className: undefined
+  experimentType: '',
+  className: ''
 })
 
-// 当前用户（模拟数据）
+// 当前用户（与个人中心页面同步）
 const currentUser = ref<UserScore>({
-  id: 2,
-  username: "当前用户",
-  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=2",
-  totalScore: 850,
-  completedTasks: 12,
-  class: "网络安全1班",
-  rank: 3
+  id: 3,
+  username: "林宗恒",
+  avatar: "/example.png",
+  totalScore: 874,
+  completedTasks: 18,
+  class: "网络安全232班",
+  rank: 3,
+  recentActivity: {
+    date: "2025-03-20",
+    experimentName: "逆向工程实验",
+    score: 90
+  }
 })
 
-// 实验类型列表（模拟数据）
+// 实验类型列表
 const experimentTypes = [
   "Web安全",
   "系统安全",
   "密码学",
-  "网络攻防"
+  "网络攻防",
+  "漏洞扫描",
+  "逆向工程"
 ]
 
-// 班级列表（模拟数据）
+// 班级列表
 const classes = [
-  "网络安全1班",
-  "网络安全2班",
-  "信息安全1班"
+  "网络安全232班",
+  "网络安全231班",
+  "信息安全231班",
+  "信息安全232班",
+  "物联网安全231班"
 ]
 
 // 过滤后的排行榜数据
@@ -43,21 +67,31 @@ const filteredScores = computed(() => {
   let result = [...scores.value]
   
   if (filters.value.experimentType) {
-    // 按实验类型筛选的逻辑
+    // 在真实情况下，这里会根据实验类型进行过滤
+    // 模拟过滤
+    result = result.filter(score => 
+      score.recentActivity && 
+      score.recentActivity.experimentName.includes(filters.value.experimentType || '')
+    )
   }
   
   if (filters.value.className) {
     result = result.filter(score => score.class === filters.value.className)
   }
   
-  return result
+  // 根据过滤后的结果重新计算排名
+  return recalculateRanks(result)
 })
+
+// 监听筛选条件变化，更新排名
+watch(filters, () => {
+  console.log('过滤条件变化，重新计算排名')
+}, { deep: true })
 
 // 更新筛选条件
 const updateFilters = (newFilters: Partial<ScoreboardFilters>) => {
   filters.value = { ...filters.value, ...newFilters }
 }
-updateFilters;
 
 // 添加动画控制
 const isLoaded = ref(false)
@@ -88,7 +122,7 @@ const getRankStyle = (rank: number) => {
         <div class="flex items-center gap-6">
           <div class="relative">
             <img :src="currentUser.avatar" alt="avatar" 
-                 class="w-20 h-20 rounded-full ring-2 ring-primary/20">
+                 class="w-20 h-20 rounded-full ring-2 ring-primary/20 object-cover">
             <div class="absolute -bottom-2 -right-2 bg-base-100 rounded-full p-1 shadow-lg">
               <div class="badge badge-primary">Lv.{{ Math.floor(currentUser.totalScore / 100) }}</div>
             </div>
@@ -179,93 +213,88 @@ const getRankStyle = (rank: number) => {
     <!-- 排行榜 -->
     <div class="card bg-base-100 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
          :class="{ 'translate-y-0 opacity-100': isLoaded, 'translate-y-4 opacity-0': !isLoaded }">
-      <div class="card-body p-0">
-        <div class="p-6 border-b border-base-200">
-          <h2 class="card-title flex items-center gap-3">
-            <i class="fas fa-trophy text-primary"></i>
-            排行榜
-          </h2>
-        </div>
-        
-        <div class="overflow-x-auto">
-          <table class="table table-zebra">
-            <thead class="bg-base-200/50">
-              <tr>
-                <th class="text-center">排名</th>
-                <th>用户</th>
-                <th>班级</th>
-                <th class="text-center">总分</th>
-                <th class="text-center">完成任务数</th>
-                <th>最近活动</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(score, index) in filteredScores" 
-                  :key="score.id"
-                  class="transition-colors hover:bg-base-200"
-                  :class="{ 
-                    'bg-primary/5': score.id === currentUser.id,
-                    'animate-slide-in': isLoaded
-                  }"
-                  :style="{ 
-                    animationDelay: `${index * 0.1}s`,
-                    borderLeft: score.rank <= 3 ? '4px solid' : '',
-                    borderLeftColor: score.rank === 1 ? '#fbbf24' : 
-                                    score.rank === 2 ? '#94a3b8' : 
-                                    score.rank === 3 ? '#d97706' : ''
-                  }">
-                <td class="text-center">
-                  <div v-if="score.rank <= 3" 
-                       class="w-8 h-8 rounded-full flex items-center justify-center mx-auto text-white font-bold"
-                       :class="getRankStyle(score.rank)">
-                    {{ score.rank }}
-                  </div>
-                  <div v-else class="font-mono">{{ score.rank }}</div>
-                </td>
-                <td>
-                  <div class="flex items-center gap-3">
-                    <div class="relative">
-                      <img :src="score.avatar" alt="avatar" class="w-10 h-10 rounded-full">
-                      <div v-if="score.rank <= 3" 
-                           class="absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center">
-                        <i class="fas" :class="{
-                          'fa-crown text-yellow-500': score.rank === 1,
-                          'fa-medal text-gray-400': score.rank === 2,
-                          'fa-award text-amber-600': score.rank === 3
-                        }"></i>
-                      </div>
-                    </div>
-                    <div>
-                      <div class="font-medium">{{ score.username }}</div>
-                      <div class="text-sm text-base-content/70">
-                        Lv.{{ Math.floor(score.totalScore / 100) }}
-                      </div>
+      <div class="p-6 border-b border-base-200">
+        <h2 class="card-title flex items-center gap-3">
+          <i class="fas fa-trophy text-primary"></i>
+          排行榜
+          <span v-if="filters.className" class="badge badge-primary">{{ filters.className }}</span>
+          <span v-if="filters.experimentType" class="badge badge-secondary">{{ filters.experimentType }}</span>
+        </h2>
+      </div>
+      
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead class="bg-base-200/50">
+            <tr>
+              <th class="text-center">排名</th>
+              <th>用户</th>
+              <th>班级</th>
+              <th class="text-center">总分</th>
+              <th class="text-center">完成任务数</th>
+              <th>最近活动</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(score, index) in filteredScores" 
+                :key="score.id"
+                class="transition-colors hover:bg-base-200"
+                :class="{ 
+                  'bg-primary/5': score.username === currentUser.username,
+                  'animate-slide-in': isLoaded
+                }"
+                :style="{ 
+                  animationDelay: `${index * 0.1}s`,
+                  borderLeft: score.rank <= 3 ? '4px solid' : '',
+                  borderLeftColor: score.rank === 1 ? '#fbbf24' : 
+                                  score.rank === 2 ? '#94a3b8' : 
+                                  score.rank === 3 ? '#d97706' : ''
+                }">
+              <td class="text-center">
+                <div v-if="score.rank <= 3" 
+                     class="w-8 h-8 rounded-full flex items-center justify-center mx-auto text-white font-bold"
+                     :class="getRankStyle(score.rank)">
+                  {{ score.rank }}
+                </div>
+                <div v-else class="font-mono">{{ score.rank }}</div>
+              </td>
+              <td>
+                <div class="flex items-center gap-3">
+                  <div class="avatar">
+                    <div class="w-12 h-12 rounded-full">
+                      <img :src="score.avatar" alt="Avatar" class="object-cover" />
                     </div>
                   </div>
-                </td>
-                <td>
-                  <span class="badge badge-ghost">{{ score.class }}</span>
-                </td>
-                <td class="text-center font-mono font-bold">{{ score.totalScore }}</td>
-                <td class="text-center">
-                  <div class="badge badge-primary">{{ score.completedTasks }}</div>
-                </td>
-                <td v-if="score.recentActivity">
-                  <div class="text-sm">
-                    <div class="font-medium">{{ score.recentActivity.experimentName }}</div>
-                    <div class="text-base-content/50 flex items-center gap-1">
-                      <i class="fas fa-calendar-alt text-xs"></i>
-                      {{ score.recentActivity.date }}
-                      <i class="fas fa-star text-yellow-500 text-xs ml-2"></i>
-                      {{ score.recentActivity.score }}
-                    </div>
+                  <div>
+                    <div class="font-bold">{{ score.username }}</div>
+                    <div v-if="score.username === currentUser.username" 
+                         class="text-xs opacity-70">(我)</div>
                   </div>
-                </td>
-                <td v-else>-</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+                </div>
+              </td>
+              <td>
+                <span class="badge badge-ghost">{{ score.class }}</span>
+              </td>
+              <td class="text-center font-bold">
+                {{ score.totalScore }}
+              </td>
+              <td class="text-center">
+                <div class="badge badge-primary">{{ score.completedTasks }}</div>
+              </td>
+              <td v-if="score.recentActivity">
+                <div class="text-sm">
+                  <div class="font-medium">{{ score.recentActivity.experimentName }}</div>
+                  <div class="text-base-content/50 flex items-center gap-1">
+                    <i class="fas fa-calendar-alt text-xs"></i>
+                    {{ score.recentActivity.date }}
+                    <i class="fas fa-star text-yellow-500 text-xs ml-2"></i>
+                    {{ score.recentActivity.score }}
+                  </div>
+                </div>
+              </td>
+              <td v-else>-</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

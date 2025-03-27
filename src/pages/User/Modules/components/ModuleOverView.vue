@@ -1,6 +1,6 @@
 ﻿<script setup lang="ts">
 import type { ModuleOverViewType } from './ModuleOverView.ts'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
@@ -53,11 +53,44 @@ const formatPrerequisites = computed(() => {
     status: 'completed' // 这里可以根据实际情况判断前置模块的状态
   }))
 })
+
+// 计算查看题解所需积分
+const getSolutionCost = (difficulty: number) => {
+  const costs = {
+    1: 0,    // 1星免费
+    2: 40,   // 2星40分
+    3: 80,   // 3星80分
+    4: 120,  // 4星120分
+    5: 180   // 5星180分
+  }
+  return costs[difficulty as keyof typeof costs]
+}
+
+// 显示积分确认弹窗
+const showCostModal = ref(false)
+const solutionCost = computed(() => getSolutionCost(props.module.difficulty))
+
+// 模拟用户积分余额
+const userPoints = ref(1000)
+
+const handleViewSolution = () => {
+  if (solutionCost.value > userPoints.value) {
+    alert('积分不足，快去完成任务获得更多积分吧！')
+    return
+  }
+  showCostModal.value = true
+}
+
+const confirmViewSolution = () => {
+  userPoints.value -= solutionCost.value
+  showCostModal.value = false
+  // TODO: 跳转到题解页面
+  router.push(`/user/module/${props.module.id}/solution`)
+}
 </script>
 
 <template>
-  <div 
-    class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer"
+  <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer"
     :class="{ 
       'opacity-75 hover:opacity-85': module.status === 'locked',
       'transform hover:-translate-y-1': module.status !== 'locked'
@@ -67,82 +100,108 @@ const formatPrerequisites = computed(() => {
     <div class="card-body p-5">
       <!-- 标题栏 -->
       <div class="flex justify-between items-start mb-3">
-        <div class="flex items-center gap-3">
-          <div class="relative">
-            <i class="fas fa-cube text-2xl text-primary"></i>
-            <span class="absolute -top-2 -right-2 text-xs font-mono bg-base-200 rounded-full px-1.5 py-0.5 
-                       border border-base-300 text-base-content/70">
-              #{{ module.id }}
-            </span>
+        <!-- 左侧：标题和ID -->
+        <div class="flex items-center gap-2 max-w-[75%]">
+          <div class="flex items-center gap-1">
+            <i class="fas fa-cube text-base text-primary"></i>
+            <span class="text-xs font-mono text-base-content/70">#{{ module.id }}</span>
           </div>
-          <div>
-            <h2 class="card-title flex items-center gap-2">
-              {{ module.name }}
-              <div class="badge badge-lg" :class="statusClass">
-                <i :class="['fas', statusIcon, 'mr-1']"></i>
-                {{ statusText }}
-              </div>
-            </h2>
-            <div class="flex items-center gap-3 mt-1 text-sm text-base-content/70">
-              <div class="flex items-center gap-1">
-                <i class="fas fa-signal text-primary"></i>
-                <span :title="getDifficultyText(module.difficulty)" class="text-yellow-500">
-                  {{ getDifficultyStars(module.difficulty) }}
-                </span>
-              </div>
-              <div class="flex items-center gap-1">
-                <i class="fas fa-clock text-primary"></i>
-                <span>{{ module.estimatedTime }}</span>
-              </div>
-              <div class="badge badge-outline">{{ module.type }}</div>
-            </div>
-          </div>
+          <h2 class="card-title text-xl truncate">{{ module.name }}</h2>
         </div>
         
-        <div v-if="module.score" class="badge badge-primary badge-lg">
-          <i class="fas fa-star mr-1"></i>
-          {{ module.score }} 分
+        <!-- 右侧：只保留状态 -->
+        <div class="flex items-center shrink-0">
+          <div class="badge badge-sm px-2" :class="statusClass">
+            <i :class="['fas', statusIcon]" class="text-xs mr-0.5"></i>
+            <span class="text-xs">{{ statusText }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 信息栏：难度、时间、类型、分数 -->
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <!-- 难度 -->
+          <div class="flex items-center gap-1 whitespace-nowrap">
+            <i class="fas fa-signal text-xs text-primary"></i>
+            <span :title="getDifficultyText(module.difficulty)" class="text-yellow-500 text-xs">
+              {{ getDifficultyStars(module.difficulty) }}
+            </span>
+          </div>
+          <!-- 用时 -->
+          <div class="flex items-center gap-1 whitespace-nowrap">
+            <i class="fas fa-clock text-xs text-primary"></i>
+            <span class="text-xs text-base-content/70">{{ module.estimatedTime }}</span>
+          </div>
+          <!-- 类型标签 -->
+          <div class="badge badge-sm badge-outline text-xs whitespace-nowrap max-w-[80px] truncate px-1.5">
+            {{ module.type }}
+          </div>
+        </div>
+        <!-- 分数移到这里 -->
+        <div v-if="module.score" class="badge badge-primary badge-sm whitespace-nowrap px-1.5 ml-2">
+          <i class="fas fa-star text-xs mr-0.5"></i>
+          <span class="text-xs">{{ module.score }}分</span>
         </div>
       </div>
 
       <!-- 描述 -->
-      <p class="text-base-content/70 leading-relaxed">{{ module.description }}</p>
+      <p class="text-sm text-base-content/70 leading-relaxed line-clamp-2">{{ module.description }}</p>
 
-      <!-- 前置要求 - 重新设计 -->
+      <!-- 前置要求 -->
       <div v-if="module.prerequisites?.length" 
-           class="mt-4 border-t border-base-200 pt-3">
-        <div class="flex items-center gap-2 mb-2">
-          <i class="fas fa-diagram-project text-primary"></i>
-          <span class="text-sm font-medium">前置模块</span>
+           class="mt-3 border-t border-base-200 pt-2">
+        <div class="flex items-center gap-1 mb-1">
+          <i class="fas fa-diagram-project text-xs text-primary"></i>
+          <span class="text-xs font-medium">前置模块</span>
         </div>
-        <div class="flex flex-wrap gap-2">
+        <div class="flex flex-wrap gap-1">
           <div v-for="prereq in formatPrerequisites" 
                :key="prereq.id"
-               class="badge badge-outline gap-1 py-3 px-3 hover:badge-primary transition-colors duration-200
-                      cursor-help"
-               :title="'查看模块 #' + prereq.id"
+               class="badge badge-outline badge-sm gap-1 px-2 py-0.5"
           >
             <i class="fas fa-cube text-xs"></i>
-            <span class="font-mono">#{{ prereq.id }}</span>
+            <span class="font-mono text-xs">#{{ prereq.id }}</span>
             <i class="fas fa-check-circle text-xs text-success"></i>
-          </div>
-          <div class="tooltip tooltip-right" data-tip="完成所有前置模块后解锁">
-            <i class="fas fa-circle-info text-base-content/50 hover:text-primary transition-colors"></i>
           </div>
         </div>
       </div>
 
       <!-- 操作按钮 -->
-      <div class="card-actions justify-end mt-4">
+      <div class="card-actions justify-end mt-3">
         <button 
-          class="btn btn-primary btn-sm gap-2"
+          class="btn btn-sm btn-primary gap-1 px-3"
           :class="{ 'btn-disabled': module.status === 'locked' }"
         >
-          <i class="fas" :class="module.status === 'locked' ? 'fa-lock' : 'fa-arrow-right'"></i>
-          {{ module.status === 'locked' ? '未解锁' : '开始学习' }}
+          <i class="fas text-xs" :class="module.status === 'locked' ? 'fa-lock' : 'fa-arrow-right'"></i>
+          <span class="text-xs">{{ module.status === 'locked' ? '未解锁' : '开始学习' }}</span>
         </button>
       </div>
     </div>
+
+    <!-- 积分确认弹窗 -->
+    <dialog :class="{'modal': true, 'modal-open': showCostModal}">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg mb-4">确认查看题解</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span>所需积分：</span>
+            <span class="text-primary font-bold">{{ solutionCost }}分</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span>当前积分：</span>
+            <span class="text-success font-bold">{{ userPoints }}分</span>
+          </div>
+          <div class="text-sm text-base-content/70">
+            查看题解后将扣除相应积分，是否继续？
+          </div>
+        </div>
+        <div class="modal-action">
+          <button class="btn btn-ghost" @click="showCostModal = false">取消</button>
+          <button class="btn btn-primary" @click="confirmViewSolution">确认查看</button>
+        </div>
+      </div>
+    </dialog>
   </div>
 </template>
 
@@ -177,6 +236,10 @@ const formatPrerequisites = computed(() => {
 /* 徽章动画 */
 .badge {
   transition: all 0.3s ease;
+  height: 1.5rem;
+  min-height: 1.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .card:hover .badge {
@@ -205,10 +268,6 @@ const formatPrerequisites = computed(() => {
 }
 
 /* 前置模块徽章动画 */
-.badge {
-  transition: all 0.3s ease;
-}
-
 .badge:hover {
   transform: translateY(-2px);
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -238,5 +297,81 @@ const formatPrerequisites = computed(() => {
 
 .tooltip::after {
   border-color: var(--color-base-300) transparent transparent transparent;
+}
+
+/* 文本截断相关样式 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
+
+/* 调整卡片内容最大宽度 */
+.card-body {
+  max-width: 100%;
+}
+
+/* 确保标题最大 */
+.card-title {
+  font-size: 1.25rem;
+  line-height: 1.5rem;
+}
+
+/* 调整徽章大小 */
+.badge {
+  height: 1.5rem;
+  min-height: 1.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* 调整按钮大小 */
+.btn-sm {
+  height: 1.75rem;
+  min-height: 1.75rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+/* 导航栏样式 */
+.tabs {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.tab {
+  transition: all 0.3s ease;
+}
+
+.tab:hover {
+  background-color: var(--color-base-100);
+}
+
+.tab-active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* 弹窗样式 */
+.modal-box {
+  max-width: 400px;
+  padding: 1.5rem;
+}
+
+.modal-action {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 </style>
