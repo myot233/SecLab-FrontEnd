@@ -2,8 +2,62 @@
 import { ref, onMounted, computed, type Ref } from 'vue';
 import CourseOverView from './components/CourseOverView.vue';
 import type { CourseOverViewType } from './components/CourseOverView';
+import { getCourseList as fetchCourseList, image, type CourseSummaryDto } from '../../../api';
 
-function getCourseList():CourseOverViewType[] {
+// 将后端数据转换为前端使用的格式
+function mapApiDataToViewData(apiData: CourseSummaryDto[]): CourseOverViewType[] {
+  return apiData.map(course => ({
+    id: course.id,
+    name: course.name,
+    image: `${image(course.imageUrl)}`,
+    description: course.description || '',
+    status: mapStatus(course.status),
+    category: course.type || 'web',
+    difficulty: mapDifficulty(course.difficulty),
+    estimatedHours: 8, // 默认值
+    tags: course.tags || []
+  }));
+}
+
+// 状态映射
+function mapStatus(status: string | null | undefined): 'in-progress' | 'completed' | 'available' {
+  if (!status) return 'available';
+  
+  switch(status.toLowerCase()) {
+    case 'in_progress':
+    case 'in-progress':
+      return 'in-progress';
+    case 'completed':
+      return 'completed';
+    default:
+      return 'available';
+  }
+}
+
+// 难度级别映射
+function mapDifficulty(difficulty: number | null | undefined): 1 | 2 | 3 | 4 | 5 {
+  if (!difficulty) return 3;
+  return (Math.min(Math.max(difficulty, 1), 5) as 1 | 2 | 3 | 4 | 5);
+}
+
+async function getCourseList(): Promise<CourseOverViewType[]> {
+  try {
+    const response = await fetchCourseList();
+    
+    if (response.message == "success") {
+      return mapApiDataToViewData(response.data);
+    } else {
+      console.error('Failed to fetch courses:', response.message);
+      return getFallbackCourseList(); // 调用失败时返回硬编码数据作为备份
+    }
+  } catch (error) {
+    console.error('API request failed:', error);
+    return getFallbackCourseList();
+  }
+}
+
+// 原来的硬编码数据作为备份
+function getFallbackCourseList(): CourseOverViewType[] {
   return [
     {
       id: 1,
@@ -129,10 +183,6 @@ function getCourseList():CourseOverViewType[] {
     }
   ];
 }
-
-
-
-
 
 const isLoaded = ref(false);
 const searchQuery = ref('');

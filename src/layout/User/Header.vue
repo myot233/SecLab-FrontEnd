@@ -13,7 +13,9 @@ const navItems = [
   { path: '/#/user/community', label: '社区', icon: 'fa-comments' },
   { path: '/#/user/scoreboard', label: '排行榜', icon: 'fa-trophy' },
   { path: '/#/user/points', label: '积分商城', icon: 'fa-coins' },
-  { path: '/#/user/profile', label: '个人中心', icon: 'fa-user' }
+  { path: '/#/user/profile', label: '个人中心', icon: 'fa-user' },
+  { path: '/#/user/chat', label: 'AI助手', icon: 'fa-robot' }
+
 ];
 
 onMounted(() => {
@@ -34,7 +36,6 @@ const isActive = (path: string) => route.path === path;
            class="btn btn-ghost gap-2 text-2xl font-bold normal-case transition-all duration-300
                  hover:scale-105 group">
           <div class="relative">
-            <!-- 改1：用户端主页左上logo -->
             <i class="fas fa-shield-alt text-primary"></i>
             <div class="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full 
                         opacity-0 group-hover:opacity-100 transition-opacity"></div>

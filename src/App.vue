@@ -1,5 +1,16 @@
 <script setup lang="ts">
 import Toast from './components/Toast.vue';
+import FloatingChatButton from './components/FloatingChatButton.vue';
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+
+const route = useRoute();
+
+// 在特定页面不显示悬浮聊天按钮
+const shouldShowChatButton = computed(() => {
+  const path = route.path;
+  return !path.includes('/user/chat') && !path.includes('/user/floating-chat-demo');
+});
 </script>
 
 <template>
@@ -7,6 +18,8 @@ import Toast from './components/Toast.vue';
     <RouterView>
     </RouterView>
     <Toast />
+    <!-- 全局悬浮聊天按钮 -->
+    <FloatingChatButton v-if="shouldShowChatButton" />
   </div>
 </template>
 

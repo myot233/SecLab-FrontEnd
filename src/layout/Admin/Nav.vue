@@ -1,6 +1,13 @@
 <script setup lang="ts">
 import NavMenuItem from '../../components/NavMenuItem.vue'
-import { HomeIcon, UsersIcon, BookOpenIcon, ChartBarIcon, CogIcon, ShieldCheckIcon } from '../../components/icons'
+import { 
+  HomeIcon,
+  UsersIcon,
+  BookOpenIcon,
+  ChartBarIcon,
+  CogIcon,
+  ShieldCheckIcon 
+} from '../../components/icons'
 
 // 定义菜单项配置
 const menuItems = [
@@ -54,13 +61,25 @@ const menuItems = [
     <!-- Logo -->
     <div class="px-6 py-4 border-b border-base-200">
       <div class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary transition-colors duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center
+                    transform transition-all duration-300 group-hover:scale-110
+                    group-hover:rotate-12">
+          <svg xmlns="http://www.w3.org/2000/svg" 
+               class="h-6 w-6 text-primary transition-colors duration-300" 
+               fill="none" 
+               viewBox="0 0 24 24" 
+               stroke="currentColor">
+            <path stroke-linecap="round" 
+                  stroke-linejoin="round" 
+                  stroke-width="2" 
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
           </svg>
         </div>
         <div class="flex flex-col">
-          <span class="text-lg font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"> SecLab Admin </span>
+          <span class="text-lg font-bold bg-gradient-to-r from-primary to-secondary 
+                       bg-clip-text text-transparent">
+            SecLab Admin
+          </span>
           <span class="text-xs text-base-content/60">安全实验管理系统</span>
         </div>
       </div>
@@ -69,29 +88,44 @@ const menuItems = [
     <!-- 菜单分组 -->
     <div class="flex-1 p-4 overflow-y-auto custom-scrollbar">
       <div class="mb-6">
-        <h3 class="px-4 text-xs font-semibold text-base-content/60 uppercase mb-3 flex items-center gap-2">
+        <h3 class="px-4 text-xs font-semibold text-base-content/60 uppercase mb-3
+                   flex items-center gap-2">
           <div class="w-1.5 h-1.5 rounded-full bg-primary"></div>
           主要功能
         </h3>
         <nav class="space-y-1">
-          <NavMenuItem v-for="item in menuItems.slice(0, 4)" :key="item.to" v-bind="item" class="animate-fade-in" :style="{ animationDelay: `${menuItems.indexOf(item) * 0.1}s` }" />
+          <NavMenuItem 
+            v-for="item in menuItems.slice(0, 4)" 
+            :key="item.to"
+            v-bind="item"
+            class="animate-fade-in"
+            :style="{ animationDelay: `${menuItems.indexOf(item) * 0.1}s` }"
+          />
         </nav>
       </div>
 
       <div class="mb-6">
-        <h3 class="px-4 text-xs font-semibold text-base-content/60 uppercase mb-3 flex items-center gap-2">
+        <h3 class="px-4 text-xs font-semibold text-base-content/60 uppercase mb-3
+                   flex items-center gap-2">
           <div class="w-1.5 h-1.5 rounded-full bg-secondary"></div>
           系统管理
         </h3>
         <nav class="space-y-1">
-          <NavMenuItem v-for="item in menuItems.slice(4)" :key="item.to" v-bind="item" class="animate-fade-in" :style="{ animationDelay: `${(menuItems.indexOf(item) + 4) * 0.1}s` }" />
+          <NavMenuItem 
+            v-for="item in menuItems.slice(4)" 
+            :key="item.to"
+            v-bind="item"
+            class="animate-fade-in"
+            :style="{ animationDelay: `${(menuItems.indexOf(item) + 4) * 0.1}s` }"
+          />
         </nav>
       </div>
     </div>
 
     <!-- 底部信息 -->
     <div class="p-4 border-t border-base-200 bg-base-200/50 backdrop-blur-sm">
-      <div class="flex items-center gap-3 px-4 py-3 bg-base-100 rounded-xl hover:shadow-md transition-all duration-300">
+      <div class="flex items-center gap-3 px-4 py-3 bg-base-100 rounded-xl
+                  hover:shadow-md transition-all duration-300">
         <div class="flex items-center gap-2">
           <div class="w-2 h-2 rounded-full bg-success animate-pulse"></div>
           <span class="text-sm text-base-content/70">系统运行正常</span>

@@ -1,13 +1,16 @@
 ﻿<script setup lang="ts">
-
 import Header from "./Header.vue";
+import { useRoute } from "vue-router";
+import { computed } from "vue";
 
+const route = useRoute();
+const isChatPage = computed(() => route.path === '/user/chat' || route.path === '/user/chat/');
 </script>
 
 <template>
     <div class="fixed w-full h-full flex flex-col bg-base-200">
         <Header></Header>
-        <div class="w-full px-8 pt-8 overflow-y-auto relative">
+        <div class="w-full relative"  :class="{ 'overflow-y-auto': !isChatPage,'px-8 pt-8': !isChatPage }">
           <RouterView v-slot="{ Component }">
             <transition 
               name="page" 
