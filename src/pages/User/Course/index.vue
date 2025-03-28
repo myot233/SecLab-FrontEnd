@@ -2,9 +2,8 @@
 // 定义课程接口
 
 import {useRoute, useRouter} from "vue-router";
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, type Ref } from 'vue'
 import ModuleDependencyGraph from "../../../components/ModuleDependencyGraph.vue";
-import {ref, onMounted, type Ref} from 'vue'
 import { CourseStatus } from "./index";
 import type { Course } from "./index";
 import {getCourseDetail} from "../../../api.ts";
@@ -29,24 +28,26 @@ let course:Ref<Course> = ref({
   modules: []
 })
 
+// 用于模块依赖图的数据
+const moduleItems = ref<any[]>([]);
+
 onMounted( async ()=>{
   let result = await getCourseDetail(Number(courseId));
   if (result.message == "success"){
     course.value = result.data;
+    // 更新模块依赖图数据
+    moduleItems.value = course.value.modules.map(module => ({
+      id: module.moduleId,
+      name: module.moduleName,
+      description: module.introduction,
+      difficulty: module.difficulty,
+      type: module.type ? module.type.join(', ') : "",
+      status: 'available' as 'available' | 'completed' | 'locked',
+      prerequisites: [], // 假设模块没有prerequisites属性
+      estimatedTime: "2-3小时"
+    }));
   }
 })
-
-// 将课程实验数据转换为模块依赖图需要的格式
-const moduleItems = ref(course.experiments.map(exp => ({
-  id: exp.id,
-  name: exp.title,
-  description: exp.introduction,
-  difficulty: exp.difficulty,
-  type: "SQL注入",
-  status: 'available' as 'available' | 'completed' | 'locked', // 修改这里，限制类型
-  prerequisites: exp.prerequisites,
-  estimatedTime: "2-3小时"
-})));
 
 // 选择模块时的跳转处理
 const handleSelectModule = (moduleId: number) => {
@@ -159,47 +160,54 @@ onMounted(() => {
               </div>
             </div>
 
-        <!-- 课程详情 -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- 课程属性信息 -->
-          <div class="flex items-start gap-3">
-            <i class="fas fa-clipboard-list text-xl text-primary mt-1"></i>
-            <div>
-              <h3 class="font-semibold mb-2">课程信息</h3>
-              <div class="text-gray-600">
-                <div class="flex items-center gap-2 mb-1">
-                  <i class="fas fa-tag text-sm"></i>
-                  <span>类型：{{ course.type }}</span>
-                </div>
-                <div class="flex items-center gap-2 mb-1">
-                  <i class="fas fa-signal text-sm"></i>
-                  <span>难度：{{ getDifficultyText(course.difficulty) }} {{ getDifficultyStars(course.difficulty) }}</span>
-                </div>
-                <div class="flex items-center gap-2 mb-1">
-                  <i class="fas fa-clock text-sm"></i>
-                  <span>预计学时：{{ course.costTime }}小时</span>
-                </div>
-                <div v-if="course.tags && course.tags.length > 0" class="flex items-center gap-2 flex-wrap mt-2">
-                  <span v-for="tag in course.tags" :key="tag" class="badge badge-primary badge-outline">{{ tag }}</span>
+            <!-- 课程详情 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <!-- 课程属性信息 -->
+              <div class="flex items-start gap-3">
+                <i class="fas fa-clipboard-list text-xl text-primary mt-1"></i>
+                <div>
+                  <h3 class="font-semibold mb-2">课程信息</h3>
+                  <div class="text-gray-600">
+                    <div class="flex items-center gap-2 mb-1">
+                      <i class="fas fa-tag text-sm"></i>
+                      <span>类型：{{ course.type }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <i class="fas fa-signal text-sm"></i>
+                      <span>难度：{{ getDifficultyText(course.difficulty) }} {{ getDifficultyStars(course.difficulty) }}</span>
+                    </div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <i class="fas fa-clock text-sm"></i>
+                      <span>预计学时：{{ course.costTime }}小时</span>
+                    </div>
+                    <div v-if="course.tags && course.tags.length > 0" class="flex items-center gap-2 flex-wrap mt-2">
+                      <span v-for="tag in course.tags" :key="tag" class="badge badge-primary badge-outline">{{ tag }}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- 授课时间 -->
-          <div class="flex items-start gap-3">
-            <i class="fas fa-calendar-alt text-xl text-primary mt-1"></i>
-            <div>
-              <h3 class="font-semibold mb-2">授课安排</h3>
-              <div class="text-gray-600">
-                <div class="flex items-center gap-2 mb-1">
-                  <i class="fas fa-chalkboard-teacher text-sm"></i>
-                  <span>{{ course.schedule }}</span>
+              <!-- 授课时间 -->
+              <div class="flex items-start gap-3">
+                <i class="fas fa-calendar-alt text-xl text-primary mt-1"></i>
+                <div>
+                  <h3 class="font-semibold mb-2">授课安排</h3>
+                  <div class="text-gray-600">
+                    <div class="flex items-center gap-2 mb-1">
+                      <i class="fas fa-chalkboard-teacher text-sm"></i>
+                      <span>{{ course.schedule }}</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- 右侧信息卡片（目前没有内容，可以后续扩展）-->
+      <div class="lg:col-span-1">
+        <!-- 可以添加教师信息等右侧内容 -->
       </div>
     </div>
 

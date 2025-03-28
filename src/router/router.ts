@@ -1,4 +1,4 @@
-﻿import {createRouter, createWebHistory} from "vue-router";
+﻿import {createRouter, createWebHashHistory} from "vue-router";
 import UserLayout from "../layout/User/index.vue"
 import AdminLayout from "../layout/Admin/index.vue"
 import Courses from "../pages/User/Courses/index.vue"
