@@ -111,8 +111,8 @@ const luckyConfig = ref({
       borderWidth: '10px',
       imgs: [{ 
         src: wheelPrizes[0].imgUrl,
-        width: '60%',
-        height: '60%',
+        width: '58%',
+        height: '58%',
         rotate: true,
         clip: true
       }]
@@ -124,8 +124,8 @@ const luckyConfig = ref({
       borderWidth: '3px',
       imgs: [{ 
         src: wheelPrizes[1].imgUrl,
-        width: '60%',
-        height: '60%',
+        width: '58%',
+        height: '58%',
 
         rotate: true,
         clip: true
@@ -138,8 +138,8 @@ const luckyConfig = ref({
       borderWidth: '3px',
       imgs: [{ 
         src: wheelPrizes[2].imgUrl,
-        width: '60%',
-        height: '60%',
+        width: '58%',
+        height: '58%',
 
         rotate: true,
         clip: true
@@ -152,8 +152,8 @@ const luckyConfig = ref({
       borderWidth: '3px',
       imgs: [{ 
         src: wheelPrizes[3].imgUrl,
-        width: '60%',
-        height: '60%',
+        width: '58%',
+        height: '58%',
 
         rotate: true,
         clip: true
@@ -166,8 +166,8 @@ const luckyConfig = ref({
       borderWidth: '3px',
       imgs: [{ 
         src: wheelPrizes[4].imgUrl,
-        width: '60%',
-        height: '60%',
+        width: '58%',
+        height: '58%',
 
         rotate: true,
         clip: true
