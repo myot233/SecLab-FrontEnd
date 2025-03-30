@@ -19,9 +19,114 @@ const experiment: Module = {
   taskPoints: [
     {
       id: 1,
+      name: '基础SQL语法',
+      description: '学习基本SQL查询语句结构和语法，为理解注入打下基础',
+      score: 5,
+      document: '## SQL基础语法\n\n在开始学习SQL注入之前，首先需要理解基本的SQL语法结构。SQL(Structured Query Language)是一种用于管理关系型数据库的标准化语言。\n\n### 基本SQL语句\n\n1. **SELECT语句** - 用于从数据库中检索数据\n```sql\nSELECT 列名 FROM 表名 WHERE 条件;\n```\n\n2. **INSERT语句** - 用于向数据库添加新记录\n```sql\nINSERT INTO 表名 (列1, 列2) VALUES (值1, 值2);\n```\n\n3. **UPDATE语句** - 用于修改数据库中的记录\n```sql\nUPDATE 表名 SET 列名=新值 WHERE 条件;\n```\n\n4. **DELETE语句** - 用于删除数据库中的记录\n```sql\nDELETE FROM 表名 WHERE 条件;\n```\n\n了解这些基础语法对于理解SQL注入的工作原理至关重要。',
+      questions: [
+        {
+          "id": 1,
+          "content": "以下哪个是用于从数据库获取数据的SQL语句？",
+          "score": 2,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "INSERT",
+            "SELECT",
+            "UPDATE",
+            "DELETE"
+          ]
+        },
+        {
+          "id": 2,
+          "content": "WHERE子句在SQL查询中的作用是什么？",
+          "score": 3,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "指定要检索的列",
+            "指定要查询的表",
+            "过滤满足特定条件的行",
+            "对结果进行排序"
+          ]
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: '数据库类型识别',
+      description: '学习如何识别不同类型数据库的特征和指纹信息',
+      score: 7,
+      document: '## 数据库类型识别\n\n在进行SQL注入之前，识别目标系统使用的数据库类型是非常重要的，因为不同类型的数据库有不同的语法和特性。\n\n### 常见数据库类型识别方法\n\n1. **错误信息分析**\n当网站显示数据库错误时，错误信息中通常包含数据库类型的线索。\n\n2. **版本注释语法**\n不同数据库的注释语法不同：\n- MySQL: `-- 注释` 或 `#注释`\n- SQL Server: `-- 注释` 或 `/*注释*/`\n- Oracle: `-- 注释`\n- PostgreSQL: `-- 注释` 或 `/*注释*/`\n\n3. **内置函数差异**\n不同数据库的函数名不同：\n- MySQL: `version()`, `user()`\n- SQL Server: `@@version`, `system_user`\n- Oracle: `v$version`, `user`\n- PostgreSQL: `version()`, `current_user`\n\n通过测试这些函数，可以确定数据库类型。',
+      questions: [
+        {
+          "id": 1,
+          "content": "MySQL数据库中获取版本信息的函数是？",
+          "score": 3,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "@@version",
+            "version()",
+            "getVersion()",
+            "v$version"
+          ]
+        },
+        {
+          "id": 2,
+          "content": "以下哪种注释语法是MySQL特有的？",
+          "score": 4,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "-- 注释",
+            "/* 注释 */",
+            "# 注释",
+            "// 注释"
+          ]
+        }
+      ]
+    },
+    {
+      id: 3,
+      name: '注入点检测方法',
+      description: '掌握常见注入点检测技术和错误信息分析方法',
+      score: 8,
+      document: '## 注入点检测方法\n\n找到可能存在SQL注入漏洞的输入点是成功利用该漏洞的第一步。\n\n### 常用检测方法\n\n1. **单引号测试**\n在输入中添加单引号`\'`，如果返回数据库错误，则可能存在注入点。\n\n2. **逻辑测试**\n使用`AND 1=1`和`AND 1=2`进行测试。如果前者返回正常结果而后者返回异常或无结果，则可能存在注入点。\n\n3. **时间延迟测试**\n使用`SLEEP()`或`pg_sleep()`等函数测试是否可以控制响应时间，尤其适用于盲注场景。\n\n4. **错误信息分析**\n仔细分析错误信息中的数据库类型、表名、列名等信息，为后续注入提供线索。',
+      questions: [
+        {
+          "id": 1,
+          "content": "以下哪种方法最适合用来初步判断是否存在SQL注入漏洞？",
+          "score": 4,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "输入大量随机字符",
+            "尝试输入单引号",
+            "使用JavaScript代码",
+            "修改HTTP头信息"
+          ]
+        },
+        {
+          "id": 2,
+          "content": "使用`AND 1=2`进行注入测试，预期的结果是什么？",
+          "score": 4,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "返回所有记录",
+            "返回第一条记录",
+            "返回错误信息",
+            "不返回任何记录"
+          ]
+        }
+      ]
+    },
+    {
+      id: 4,
       name: '理解SQL注入原理',
-      description: '学习SQL注入的基本概念和原理',
-      score: 20,
+      description: '学习SQL注入的基本概念和攻击原理',
+      score: 10,
       document: '## SQL注入的背景和基本操作\n' +
         '\n' +
         '### 背景\n' +
@@ -104,7 +209,7 @@ const experiment: Module = {
         {
           "id": 1,
           "content": "SQL注入漏洞产生的根本原因是？",
-          "score": 10,
+          "score": 2,
           "requiresTarget": false,
           "type": "multiple-choice",
           "options": [
@@ -117,7 +222,7 @@ const experiment: Module = {
         {
           "id": 2,
           "content": "以下哪个是SQL注入攻击的主要目标？",
-          "score": 5,
+          "score": 1,
           "requiresTarget": false,
           "type": "multiple-choice",
           "options": [
@@ -130,7 +235,7 @@ const experiment: Module = {
         {
           "id": 3,
           "content": "攻击者通过SQL注入可以实现以下哪些目的？",
-          "score": 5,
+          "score": 1,
           "requiresTarget": false,
           "type": "multiple-choice",
           "options": [
@@ -143,7 +248,7 @@ const experiment: Module = {
         {
           "id": 4,
           "content": "在URL参数 `http://example.com/products.php?id=1` 中，哪个部分最有可能成为SQL注入的注入点？",
-          "score": 5,
+          "score": 1,
           "requiresTarget": false,
           "type": "multiple-choice",
           "options": [
@@ -156,7 +261,7 @@ const experiment: Module = {
         {
           "id": 5,
           "content": "为了有效防止SQL注入，开发者应该采取的主要措施是？",
-          "score": 10,
+          "score": 2,
           "requiresTarget": false,
           "type": "multiple-choice",
           "options": [
@@ -169,7 +274,7 @@ const experiment: Module = {
         {
           "id": 6,
           "content": "以下哪种SQL注入类型是利用 `UNION` 关键字来合并查询结果的？",
-          "score": 5,
+          "score": 1,
           "requiresTarget": false,
           "type": "multiple-choice",
           "options": [
@@ -182,7 +287,7 @@ const experiment: Module = {
         {
           "id": 7,
           "content": "在SQL注入语句中，`--` 的作用是？",
-          "score": 5,
+          "score": 1,
           "requiresTarget": false,
           "type": "multiple-choice",
           "options": [
@@ -195,7 +300,7 @@ const experiment: Module = {
         {
           "id": 8,
           "content": "如果在一个登录表单的用户名输入框中输入 `' OR '1'='1 --`，最有可能发生的情况是？",
-          "score": 10,
+          "score": 1,
           "requiresTarget": false,
           "type": "multiple-choice",
           "options": [
@@ -204,41 +309,85 @@ const experiment: Module = {
             "账号被锁定",
             "输入被视为普通的用户名"
           ]
-        },
-        {
-          "id": 9,
-          "content": "以下哪个选项是SQL注入攻击的常见注入点之一？",
-          "score": 5,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "Web表单的输入框",
-            "网站的logo图片",
-            "网站的静态HTML文件",
-            "服务器的CPU型号"
-          ]
-        },
-        {
-          "id": 10,
-          "content": "以下哪个选项 *不是* SQL注入攻击的常见后果？",
-          "score": 5,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "数据泄露",
-            "网站被篡改",
-            "服务器被控制",
-            "客户端电脑中毒"
-          ]
         }
-      ],
+      ]
     },
     {
-      "id": 100,
-      "name": "SQL注入实验环境",
-      "description": "本实验提供了一个安全的环境，帮助你理解和实践SQL注入技术。实验环境仅用于学习目的，所有操作都在受控环境中进行，不会对实际系统造成影响。",
-      "score": 30,
-      "document": `# SQL注入实验环境
+      id: 5,
+      name: 'SQL注入防御技术',
+      description: '了解参数化查询、ORM和输入验证等防御SQL注入的方法',
+      score: 10,
+      document: '## SQL注入防御技术\n\n防御SQL注入攻击是web应用安全中的重要环节。以下是几种主要的防御技术：\n\n### 1. 参数化查询 (预编译语句)\n\n参数化查询是防御SQL注入的最有效方法之一。它将SQL语句与数据分开处理：\n\n```php\n// 不安全的方式\n$query = "SELECT * FROM users WHERE username = \'" + $username + "\'"; \n\n// 安全的方式（PHP PDO示例）\n$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");\n$stmt->execute([$username]);\n```\n\n### 2. ORM框架\n\nORM(Object-Relational Mapping)框架可以自动处理SQL查询，并实现参数化：\n\n```javascript\n// Node.js Sequelize示例\nUser.findOne({ where: { username: username } });\n```\n\n### 3. 输入验证与转义\n\n对用户输入进行验证和转义：\n\n```php\n// PHP示例\n$username = mysqli_real_escape_string($conn, $username);\n```\n\n### 4. 最小权限原则\n\n数据库账户应遵循最小权限原则，仅分配必要的权限。\n\n### 5. WAF (Web应用防火墙)\n\nWAF可以识别并拦截SQL注入攻击。',
+      questions: [
+        {
+          "id": 1,
+          "content": "防御SQL注入的最佳方法是什么？",
+          "score": 5,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "使用正则表达式过滤用户输入",
+            "使用参数化查询（预编译语句）",
+            "禁用错误显示",
+            "限制数据库连接数"
+          ]
+        },
+        {
+          "id": 2,
+          "content": "以下哪个不是有效的SQL注入防御措施？",
+          "score": 5,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "使用ORM框架",
+            "对用户输入进行白名单验证",
+            "简单地用replace()函数删除单引号",
+            "实施最小权限原则"
+          ]
+        }
+      ]
+    },
+    {
+      id: 6,
+      name: '绕过WAF技术',
+      description: '学习常见SQL注入过滤器绕过技术和编码绕过方法',
+      score: 10,
+      document: '## WAF绕过技术\n\nWeb应用防火墙(WAF)通常会检测和阻止SQL注入攻击，但攻击者可能使用多种技术绕过这些防护机制。\n\n### 常见绕过技术\n\n1. **大小写混合**\n许多WAF只检查特定关键词的小写形式，使用大小写混合可能绕过检测：\n```sql\nSeLeCt * FrOm users\n```\n\n2. **注释符嵌入**\n在SQL关键词中插入注释：\n```sql\nSE/**/LECT * FR/**/OM users\n```\n\n3. **编码绕过**\n使用URL编码、十六进制编码或Unicode编码：\n```sql\nSELECT CHAR(0x73, 0x65, 0x63, 0x72, 0x65, 0x74)\n```\n\n4. **空白字符替代**\n使用制表符、换行符等替代空格：\n```sql\nSELECT*FROM[users]WHERE[id]=1\n```\n\n5. **等价函数替换**\n使用同等功能的不同表达方式：\n```sql\n\'1\'=\'1\' 可替换为 \'1\'LIKE\'1\'\n```\n\n了解这些技术有助于构建更强大的防御策略。',
+      questions: [
+        {
+          "id": 1,
+          "content": "以下哪种技术不能用于绕过WAF对SQL注入的检测？",
+          "score": 5,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "使用大小写混合",
+            "在关键词中插入注释",
+            "使用十六进制编码",
+            "直接清除浏览器缓存"
+          ]
+        },
+        {
+          "id": 2,
+          "content": "以下哪个SQL语句可能用于绕过WAF检测？",
+          "score": 5,
+          "requiresTarget": false,
+          "type": "multiple-choice",
+          "options": [
+            "SELECT * FROM users",
+            "SE/**/LECT * FROM users",
+            "select * from users",
+            "SELECT FROM users *"
+          ]
+        }
+      ]
+    },
+    {
+      id: 7,
+      name: 'SQL注入实验环境',
+      description: '在靶机环境中实践SQL注入攻击和数据提取',
+      score: 10,
+      document: `# SQL注入实验环境
 
 ## 实验简介
 
@@ -303,9 +452,9 @@ const experiment: Module = {
 ## 实验评分标准
 
 实验评分基于以下几个方面：
-1. 对注入原理的理解（10分）
-2. 成功绕过验证（10分）
-3. 成功获取 flag（10分）
+1. 对注入原理的理解（3分）
+2. 成功绕过验证（3分）
+3. 成功获取 flag（4分）
 
 ## 安全提醒
 
@@ -319,14 +468,14 @@ const experiment: Module = {
         {
           "id": 1,
           "content": "请描述SQL注入的基本原理 (在本前端模拟实验的上下文中)",
-          "score": 10,
+          "score": 3,
           "requiresTarget": false,
           "type": "open-ended-without-answer"
         },
         {
           "id": 2,
           "content": "以下哪个payload可以成功绕过前端模拟的用户名验证，并至少显示 '用户存在!' 的结果？",
-          "score": 10,
+          "score": 3,
           "requiresTarget": false,
           "type": "single-choice",
           "options": [
@@ -339,7 +488,7 @@ const experiment: Module = {
         {
           "id": 3,
           "content": "请使用 `UNION SELECT` 类型的 payload，尝试获取模拟的 flag 值。请写出你使用的 payload 和最终获取的 flag 值。",
-          "score": 10,
+          "score": 4,
           "requiresTarget": false,
           "type": "open-ended-with-answer"
         }
@@ -455,11 +604,11 @@ const currentTab = ref('practice') // 'practice'或'discussion'
 // 计算查看题解所需积分
 const getSolutionCost = (difficulty: number) => {
   const costs = {
-    1: 0,    // 1星免费
-    2: 40,   // 2星40分
-    3: 80,   // 3星80分
-    4: 120,  // 4星120分
-    5: 180   // 5星180分
+    1: 40,   // 1星40分
+    2: 80,   // 2星80分
+    3: 140,  // 3星140分
+    4: 180,  // 4星180分
+    5: 250   // 5星250分
   }
   return costs[difficulty as keyof typeof costs]
 }
