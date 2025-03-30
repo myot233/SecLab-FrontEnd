@@ -29,7 +29,7 @@ const modules = ref<ModuleOverViewType[]>([
     id: 2,
     name: 'SQL注入基础实验',
     description: '学习Web安全的基本概念和常见漏洞类型，包括SQL注入、XSS等。适合安全学习的入门者。',
-    difficulty: 2,
+    difficulty: 3,
     type: 'Web安全',
     status: 'available',
     estimatedTime: '2-3小时',

@@ -87,6 +87,21 @@ const confirmViewSolution = () => {
   // TODO: 跳转到题解页面
   router.push(`/user/module/${props.module.id}/solution`)
 }
+
+// 计算模块对应的积分值
+const getModulePoints = (difficulty: number) => {
+  const points = {
+    1: 40,   // 1星40分
+    2: 80,   // 2星80分
+    3: 140,  // 3星140分
+    4: 180,  // 4星180分
+    5: 250   // 5星250分
+  }
+  return points[difficulty as keyof typeof points]
+}
+
+// 用于显示的积分值
+const modulePoints = computed(() => getModulePoints(props.module.difficulty))
 </script>
 
 <template>
@@ -138,10 +153,17 @@ const confirmViewSolution = () => {
             {{ module.type }}
           </div>
         </div>
-        <!-- 分数移到这里 -->
-        <div v-if="module.score" class="badge badge-primary badge-sm whitespace-nowrap px-1.5 ml-2">
-          <i class="fas fa-star text-xs mr-0.5"></i>
-          <span class="text-xs">{{ module.score }}分</span>
+        <div class="flex items-center gap-2">
+          <!-- 积分标签 -->
+          <div class="badge badge-secondary badge-sm whitespace-nowrap px-1.5">
+            <i class="fas fa-coins text-xs mr-0.5"></i>
+            <span class="text-xs">{{ modulePoints }}积分</span>
+          </div>
+          <!-- 分数标签 -->
+          <div v-if="module.score" class="badge badge-primary badge-sm whitespace-nowrap px-1.5">
+            <i class="fas fa-star text-xs mr-0.5"></i>
+            <span class="text-xs">{{ module.score }}分</span>
+          </div>
         </div>
       </div>
 
