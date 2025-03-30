@@ -12,8 +12,14 @@ const toastMessage = ref('');
 const toastVisible = ref(false);
 
 export const showToast = (message: string) => {
-    toastMessage.value = message;
-    toastVisible.value = true;
+    // 立即重置之前的计时器，以确保新消息能立即显示
+    toastVisible.value = false;
+    
+    // 小延迟后显示新消息，避免闪烁
+    setTimeout(() => {
+        toastMessage.value = message;
+        toastVisible.value = true;
+    }, 10);
 
     // 自动隐藏
     setTimeout(() => {
