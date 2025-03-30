@@ -10,20 +10,52 @@ const navItems = [
   { path: '/#/user/welcome', label: '主页', icon: 'fa-home' },
   { path: '/#/user/courses', label: '课程', icon: 'fa-book-open' },
   { path: '/#/user/modules', label: '模块', icon: 'fa-cube' },
-  { path: '/#/user/community', label: '社区', icon: 'fa-comments' },
-  { path: '/#/user/scoreboard', label: '排行榜', icon: 'fa-trophy' },
-  { path: '/#/user/points', label: '积分商城', icon: 'fa-coins' },
+  { 
+    path: '/#/user/community', 
+    label: '社区', 
+    icon: 'fa-comments',
+    hasDropdown: true,
+    dropdownItems: [
+      { path: '/#/user/community', label: '社区', icon: 'fa-comments' },
+      { path: '/#/user/scoreboard', label: '排行榜', icon: 'fa-trophy' },
+      { path: '/#/user/points', label: '积分商城', icon: 'fa-coins' }
+    ]
+  },
   { path: '/#/user/profile', label: '个人中心', icon: 'fa-user' },
   { path: '/#/user/chat', label: 'AI助手', icon: 'fa-robot' }
-
 ];
+
+// 下拉菜单控制
+const openDropdown = ref<string | null>(null);
+
+// 切换下拉菜单
+const toggleDropdown = (path: string) => {
+  if (openDropdown.value === path) {
+    openDropdown.value = null;
+  } else {
+    openDropdown.value = path;
+  }
+};
+
+// 关闭下拉菜单
+const closeDropdown = () => {
+  openDropdown.value = null;
+};
 
 onMounted(() => {
   isLoaded.value = true;
 });
 
-// 判断当前路由
-const isActive = (path: string) => route.path === path;
+// 判断当前路由也包括子路由判断
+const isActive = (path: string) => {
+  const dropdownItem = navItems.find(item => item.hasDropdown && item.dropdownItems?.some(subItem => subItem.path === route.path));
+  
+  if (dropdownItem && path === dropdownItem.path) {
+    return true;
+  }
+  
+  return route.path === path;
+};
 </script>
 
 <template>
@@ -48,8 +80,9 @@ const isActive = (path: string) => route.path === path;
       <!-- 导航菜单 -->
       <div class="flex-none">
         <ul class="menu menu-horizontal px-1 gap-1">
-          <li v-for="item in navItems" :key="item.path">
-            <a :href="item.path"
+          <li v-for="item in navItems" :key="item.path" class="relative">
+            <a :href="!item.hasDropdown ? item.path : undefined"
+               @click="item.hasDropdown ? toggleDropdown(item.path) : undefined"
                class="group relative px-4 py-2 transition-all duration-300"
                :class="{ 'text-primary font-medium': isActive(item.path) }">
               <!-- 背景效果 -->
@@ -63,8 +96,26 @@ const isActive = (path: string) => route.path === path;
               <div class="relative flex items-center gap-2">
                 <i :class="['fas', item.icon, 'group-hover:scale-110 transition-transform']"></i>
                 <span>{{ item.label }}</span>
+                <!-- 三角形图标 -->
+                <i v-if="item.hasDropdown" 
+                   :class="['fas', openDropdown === item.path ? 'fa-caret-up' : 'fa-caret-down', 
+                            'text-xs transition-transform']"></i>
               </div>
             </a>
+            
+            <!-- 下拉菜单 -->
+            <ul v-if="item.hasDropdown && openDropdown === item.path" 
+                class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 absolute top-full left-0 z-20">
+              <li v-for="subItem in item.dropdownItems" :key="subItem.path">
+                <a :href="subItem.path" 
+                   class="flex items-center gap-2" 
+                   :class="{ 'bg-primary/10': route.path === subItem.path }"
+                   @click="closeDropdown">
+                  <i :class="['fas', subItem.icon]"></i>
+                  <span>{{ subItem.label }}</span>
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -143,6 +194,25 @@ const isActive = (path: string) => route.path === path;
   
   .menu-horizontal > li > a i {
     font-size: 1.2rem;
+  }
+}
+
+/* 下拉菜单样式 */
+.dropdown-content {
+  animation: dropdownFadeIn 0.2s ease-out;
+  transform-origin: top center;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(var(--color-base-content), 0.1);
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 </style>

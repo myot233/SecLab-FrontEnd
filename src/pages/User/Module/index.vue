@@ -455,11 +455,11 @@ const currentTab = ref('practice') // 'practice'或'discussion'
 // 计算查看题解所需积分
 const getSolutionCost = (difficulty: number) => {
   const costs = {
-    1: 40,   // 1星40分
-    2: 80,   // 2星80分
-    3: 140,  // 3星140分
-    4: 180,  // 4星180分
-    5: 250   // 5星250分
+    1: 0,    // 1星免费
+    2: 40,   // 2星40分
+    3: 80,   // 3星80分
+    4: 120,  // 4星120分
+    5: 180   // 5星180分
   }
   return costs[difficulty as keyof typeof costs]
 }
@@ -469,7 +469,7 @@ const showCostModal = ref(false)
 const solutionCost = computed(() => getSolutionCost(experiment.difficulty))
 
 // 模拟用户积分余额
-const userPoints = ref(5000)
+const userPoints = ref(1000)
 
 // 添加已付费查看标记
 const hasViewedDiscussion = ref(false)
@@ -493,12 +493,13 @@ const viewDiscussion = () => {
 
 // 修改已有的确认查看题解的函数
 const confirmViewDiscussion = () => {
+  // 如果已查看过，不再扣费
   if (!hasViewedDiscussion.value) {
-    userPoints.value -= solutionCost.value
+  userPoints.value -= solutionCost.value
+    hasViewedDiscussion.value = true // 标记为已查看
   }
-  hasViewedDiscussion.value = true
-  showCostModal.value = false
   currentTab.value = 'discussion'
+  showCostModal.value = false
 }
 
 // 模拟题解讨论数据
@@ -1189,30 +1190,18 @@ const discussions = [
       <dialog :class="{'modal': true, 'modal-open': showCostModal}">
         <div class="modal-box">
           <h3 class="font-bold text-lg">确认查看题解</h3>
-          <div class="py-4 space-y-4">
-            <div class="flex justify-between items-center">
-              <span>查看题解所需积分：</span>
-              <span class="text-primary font-bold">{{ solutionCost }}分</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span>当前剩余积分：</span>
-              <span class="text-success font-bold">{{ userPoints }}分</span>
-            </div>
-            <div class="text-sm text-base-content/70">
-              <span v-if="hasViewedDiscussion" class="text-success block">
-                您已经查看过题解，无需再次支付积分。
-              </span>
-              <span v-else>
-                确认后将从您的账户中扣除相应积分，首次查看后再次访问不会重复扣除积分。
-              </span>
-            </div>
-          </div>
-          <div class="modal-action">
+          <p class="py-4">
+            确认使用 {{ solutionCost }} 积分查看题解讨论吗？
+            <span v-if="hasViewedDiscussion" class="text-success">
+              (您已经支付过，无需再次支付)
+            </span>
+          </p>
+        <div class="modal-action">
             <button class="btn" @click="showCostModal = false">取消</button>
             <button class="btn btn-primary" @click="confirmViewDiscussion">确认</button>
-          </div>
         </div>
-      </dialog>
+      </div>
+    </dialog>
     </div>
   </div>
 </template>
