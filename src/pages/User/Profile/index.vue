@@ -138,7 +138,7 @@ const userStats = ref({
         <!-- 主要内容 -->
         <div class="px-6 pb-6 -mt-16">
           <!-- 头像和基本信息 -->
-          <div class="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8">
+          <div class="flex flex-col md:flex-row items-start md:items-end gap-6 mb-8">
             <div class="relative group">
               <div class="avatar">
                 <div class="w-32 h-32 md:w-36 md:h-36 rounded-full ring-4 ring-primary shadow-lg">
@@ -174,13 +174,13 @@ const userStats = ref({
 
             <button 
               v-if="!isEditing"
-              class="btn btn-primary gap-2 btn-lg"
+              class="btn btn-primary gap-2 btn-lg self-end"
               @click="startEdit"
             >
               <i class="fas fa-edit"></i>
               编辑资料
             </button>
-            <div v-else class="space-x-2">
+            <div v-else class="space-x-2 self-end">
               <button 
                 class="btn btn-primary btn-lg" 
                 @click="saveEdit" 
@@ -294,7 +294,7 @@ const userStats = ref({
                 </span>
               </label>
               <select 
-                class="select select-bordered bg-base-200/50 shadow-sm"
+                class="select select-bordered h-12 bg-base-200/50 shadow-sm text-left py-0 leading-normal"
                 :disabled="!isEditing"
                 v-model="editedUser.userGender"
               >
