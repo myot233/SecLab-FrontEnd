@@ -12,6 +12,9 @@ const route = useRoute();
 const router = useRouter();
 const courseId = route.params.id;
 
+// 添加错误提示状态
+const errorMessage = ref<string | null>(null);
+
 // 模拟课程数据
 let course:Ref<Course> = ref({
   id: null,
@@ -113,7 +116,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container mx-auto px-4 py-6 max-w-6xl" :class="{ 'fade-in': isPageLoaded }">
+  <div class="container-fluid px-4 py-6 overflow-x-hidden" :class="{ 'fade-in': isPageLoaded }">
+    <!-- 错误提示 -->
+    <div v-if="errorMessage" class="alert alert-error mb-4">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+    
     <!-- 页面顶部：课程标题和状态 -->
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 slide-in-top">
       <div class="flex items-center gap-4">
@@ -221,7 +230,7 @@ onMounted(() => {
         </div>
         <div class="grid gap-4">
           <div v-for="(module, index) in course.modules" 
-               :key="module.moduleId"
+               :key="module.moduleId || index"
                class="card bg-base-200 hover:bg-base-300 transition-all duration-200 fade-in-row"
                :style="{ animationDelay: `${index * 0.1}s` }">
             <div class="card-body p-4">
@@ -257,8 +266,17 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
-  max-width: 1200px;
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 /* 基础淡入动画 */

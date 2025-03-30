@@ -276,7 +276,7 @@ const pointHistory = ref([
 </script>
 
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container-fluid px-4 py-6 overflow-x-hidden">
     <!-- 积分余额 -->
     <div class="card bg-base-100 shadow-xl mb-6">
       <div class="card-body">
@@ -445,11 +445,18 @@ const pointHistory = ref([
 </template>
 
 <style scoped>
-.container {
-  max-width: 1200px;
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
-
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
 
 /* 商品卡片悬停效果 */
 .card:hover {

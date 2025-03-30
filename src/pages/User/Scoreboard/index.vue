@@ -113,7 +113,7 @@ const getRankStyle = (rank: number) => {
 </script>
 
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container-fluid px-4 py-6 overflow-x-hidden">
     <!-- 个人得分卡片 -->
     <div class="card bg-gradient-to-br from-primary/10 to-transparent shadow-xl mb-6 backdrop-blur-sm
                 transition-all duration-500 hover:shadow-2xl"
@@ -301,8 +301,17 @@ const getRankStyle = (rank: number) => {
 </template>
 
 <style scoped>
-.container {
-  max-width: 1400px;
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 .animate-slide-in {

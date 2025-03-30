@@ -121,7 +121,7 @@ const userStats = ref({
 </script>
 
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container-fluid px-4 py-6 overflow-x-hidden">
     <!-- 个人资料卡片 -->
     <div class="card bg-base-100 shadow-xl backdrop-blur-sm border border-base-200 
                 transition-all duration-500 overflow-hidden"
@@ -310,8 +310,17 @@ const userStats = ref({
 </template>
 
 <style scoped>
-.container {
-  max-width: 1400px;
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 /* 输入框动画 */

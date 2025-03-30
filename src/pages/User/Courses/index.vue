@@ -233,7 +233,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container mx-auto p-4 min-h-screen">
+  <div class="container-fluid px-4 py-6 overflow-x-hidden min-h-screen">
     <!-- 页面标题 -->
     <div class="text-center mb-8" :class="{ 'animate-fade-in': isLoaded }">
       <h1 class="text-4xl font-bold mb-2 bg-clip-text text-transparent 
@@ -336,6 +336,20 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+/* 容器样式 */
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 .animate-fade-in {
   animation: fadeIn 0.8s ease-out forwards;
 }

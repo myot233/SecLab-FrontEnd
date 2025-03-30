@@ -158,7 +158,7 @@ const stats = computed(() => ({
 </script>
 
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container-fluid px-4 py-6 overflow-x-hidden">
     <!-- 统计信息 -->
     <div class="stats shadow w-full mb-6">
       <div class="stat">
@@ -300,8 +300,17 @@ const stats = computed(() => ({
 </template>
 
 <style scoped>
-.container {
-  max-width: 1400px;
+.container-fluid {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+html, body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 .input-group > span {
