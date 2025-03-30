@@ -175,10 +175,10 @@ const luckyConfig = ref({
     }
   ],
   buttons: [{
-    radius: '25%',
+    radius: '15%',
     background: '#617df2',
     pointer: true,
-    fonts: [{ text: '开始\n抽奖', top: '-10px' }]
+    fonts: [{ text: '开始\n抽奖', top: '-20px' }]
   }],
   defaultConfig: {
     gutter: '1%',
