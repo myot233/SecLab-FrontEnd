@@ -469,7 +469,7 @@ const showCostModal = ref(false)
 const solutionCost = computed(() => getSolutionCost(experiment.difficulty))
 
 // 模拟用户积分余额
-const userPoints = ref(1000)
+const userPoints = ref(5000)
 
 // 添加已付费查看标记
 const hasViewedDiscussion = ref(false)
@@ -1196,12 +1196,16 @@ const discussions = [
               (您已经支付过，无需再次支付)
             </span>
           </p>
-        <div class="modal-action">
+          <div class="flex justify-between items-center mb-4 border-t border-b py-2 mt-2">
+            <span class="font-medium">当前积分余额:</span>
+            <span class="text-success font-bold">{{ userPoints }} 积分</span>
+          </div>
+          <div class="modal-action">
             <button class="btn" @click="showCostModal = false">取消</button>
             <button class="btn btn-primary" @click="confirmViewDiscussion">确认</button>
+          </div>
         </div>
-      </div>
-    </dialog>
+      </dialog>
     </div>
   </div>
 </template>

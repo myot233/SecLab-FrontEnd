@@ -71,7 +71,7 @@ const showCostModal = ref(false)
 const solutionCost = computed(() => getSolutionCost(props.module.difficulty))
 
 // 模拟用户积分余额
-const userPoints = ref(1000)
+const userPoints = ref(5000)
 
 const handleViewSolution = () => {
   if (solutionCost.value > userPoints.value) {

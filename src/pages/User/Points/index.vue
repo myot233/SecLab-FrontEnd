@@ -542,6 +542,10 @@ const pointHistory = ref([
         </div>
         <div class="confirm-dialog-body">
           {{ confirmDialog.message }}
+          <div class="flex justify-between items-center mt-4 pb-2 border-t pt-2">
+            <span class="font-medium">当前积分余额:</span>
+            <span class="text-success font-bold">{{ userPoints }} 积分</span>
+          </div>
         </div>
         <div class="confirm-dialog-footer">
           <button class="btn" @click="confirmDialog.cancelCallback">取消</button>
