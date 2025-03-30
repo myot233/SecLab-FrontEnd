@@ -38,7 +38,7 @@ const products = ref([
     id: 4,
     name: '显示器',
     price: 66666,
-    image: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&h=500&fit=crop',
+    image: 'https://img2.baidu.com/it/u=2684254800,3703445430&fm=253&fmt=auto&app=120&f=JPEG?w=667&h=500',
     description: '27寸2K高清显示器',
     stock: 1,
     sales: 12
@@ -60,32 +60,138 @@ const isSpinning = ref(false)
 
 // 转盘奖品配置
 const wheelPrizes = [
-  { name: '文具套装', probability: 0.4, price: 400, background: '#FFE4E1' },
-  { name: '无线鼠标', probability: 0.3, price: 1500, background: '#E0FFFF' },
-  { name: '蓝牙耳机', probability: 0.2, price: 2000, background: '#F0FFF0' },
-  { name: '机械键盘', probability: 0.08, price: 3000, background: '#FFF0F5' },
-  { name: '显示器', probability: 0.02, price: 66666, background: '#FFE4B5' }
+  { 
+    name: '文具套装', 
+    probability: 0.4, 
+    price: 400, 
+    
+    imgUrl: 'https://img0.baidu.com/it/u=291407898,4159006597&fm=253&app=138&f=JPEG?w=800&h=1067'
+  },
+  { 
+    name: '无线鼠标', 
+    probability: 0.3, 
+    price: 1500, 
+    
+    imgUrl: 'https://images.unsplash.com/photo-1527814050087-3793815479db?w=500&h=500&fit=crop'
+  },
+  { 
+    name: '蓝牙耳机', 
+    probability: 0.2, 
+    price: 2000, 
+    
+    imgUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=500&fit=crop'
+  },
+  { 
+    name: '机械键盘', 
+    probability: 0.08, 
+    price: 3000, 
+    
+    imgUrl: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=500&h=500&fit=crop'
+  },
+  { 
+    name: '显示器', 
+    probability: 0.02, 
+    price: 66666, 
+    
+    imgUrl: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&h=500&fit=crop'
+  }
 ]
 
 // 初始化转盘
 let myLucky: any = null
 const luckyConfig = ref({
-  width: 300,
-  height: 300,
-  blocks: [{ padding: '18px', background: '#869cfa' }],
-  prizes: wheelPrizes.map(prize => ({
-    name: prize.name,
-    background: prize.background,
-    fonts: [{ text: prize.name, top: '10%' }]
-  })),
+  width: 400,
+  height: 400,
+  blocks: [{ padding: '1px', background: '#869cfa' }],
+  prizes: [
+    {
+      name: wheelPrizes[0].name,
+      background: '#FFE4E1',  // 浅粉红色
+      borderColor: '#333333',
+      borderWidth: '10px',
+      imgs: [{ 
+        src: wheelPrizes[0].imgUrl,
+        width: '60%',
+        height: '60%',
+        rotate: true,
+        clip: true
+      }]
+    },
+    {
+      name: wheelPrizes[1].name,
+      background: '#FFE4C4',  // 淡青色
+      borderColor: '#333333',
+      borderWidth: '3px',
+      imgs: [{ 
+        src: wheelPrizes[1].imgUrl,
+        width: '60%',
+        height: '60%',
+
+        rotate: true,
+        clip: true
+      }]
+    },
+    {
+      name: wheelPrizes[2].name,
+      background: '#ADD8E6',  // 淡绿色
+      borderColor: '#333333',
+      borderWidth: '3px',
+      imgs: [{ 
+        src: wheelPrizes[2].imgUrl,
+        width: '60%',
+        height: '60%',
+
+        rotate: true,
+        clip: true
+      }]
+    },
+    {
+      name: wheelPrizes[3].name,
+      background: '#E6E6FA',  // 淡紫色
+      borderColor: '#333333',
+      borderWidth: '3px',
+      imgs: [{ 
+        src: wheelPrizes[3].imgUrl,
+        width: '60%',
+        height: '60%',
+
+        rotate: true,
+        clip: true
+      }]
+    },
+    {
+      name: wheelPrizes[4].name,
+      background: '#FFE4B5',  // 淡黄色
+      borderColor: '#333333',
+      borderWidth: '3px',
+      imgs: [{ 
+        src: wheelPrizes[4].imgUrl,
+        width: '60%',
+        height: '60%',
+
+        rotate: true,
+        clip: true
+      }]
+    }
+  ],
   buttons: [{
-    radius: '35%',
+    radius: '25%',
     background: '#617df2',
     pointer: true,
     fonts: [{ text: '开始\n抽奖', top: '-10px' }]
   }],
   defaultConfig: {
-    gutter: '8px'
+    gutter: '1%',
+    stopRange: 0.8,
+    speed: 15,
+    accelerationTime: 2500,
+    decelerationTime: 2500,
+    startCallback: () => {
+      console.log('开始旋转')
+    },
+    endCallback: (prize: any) => {
+      console.log(`恭喜获得：${prize.name}`)
+    }
   },
   defaultStyle: {
     fontSize: '14px',
@@ -93,7 +199,9 @@ const luckyConfig = ref({
     fontWeight: '500',
     lineHeight: '18px',
     background: '#fff',
-    shadow: '0 5px 10px rgba(0,0,0,0.1)'
+    shadow: '0 5px 10px rgba(0,0,0,0.1)',
+    fontStyle: 'normal',
+    fontVertical: false
   }
 })
 onMounted(() => {
@@ -317,18 +425,18 @@ const pointHistory = ref([
       <div class="card-body">
         <h3 class="card-title mb-4">积分转盘</h3>
         <div class="flex flex-col items-center">
-          <LuckyWheel
-              ref="myLucky"
-              width="300px"
-              height="300px"
-              :prizes="luckyConfig.prizes"
-              :blocks="luckyConfig.blocks"
-              
-              :buttons="luckyConfig.buttons"></LuckyWheel>
-<!--              @start="@"-->
-<!--              @end="endCallback"-->
+          <div class="lucky-wheel-wrapper">
+            <LuckyWheel
+                ref="myLucky"
+                width="400px"
+                height="400px"
+                :prizes="luckyConfig.prizes"
+                :blocks="luckyConfig.blocks"
+                :buttons="luckyConfig.buttons"
+                :default-config="luckyConfig.defaultConfig"></LuckyWheel>
+          </div>
           
-          <button class="btn btn-primary mt-4" 
+          <button class="btn btn-primary mt-6"
                   :disabled="isSpinning"
                   @click="startSpin">
             <i class="fas fa-sync-alt mr-2"></i>
@@ -525,17 +633,21 @@ canvas {
   pointer-events: none;
 }
 
-.lucky-wheel-container {
-  width: 300px;
-  height: 300px;
+.lucky-wheel-wrapper {
+  width: 400px;
+  height: 400px;
   position: relative;
   margin: 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-.lucky-wheel-container canvas {
-  width: 100%;
-  height: 100%;
-  pointer-events: auto;
+.lucky-wheel-container {
+  width: 400px;
+  height: 400px;
+  position: relative;
+  margin: 0 auto;
 }
 
 /* 自定义提示框样式 */
