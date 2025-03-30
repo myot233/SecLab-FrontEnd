@@ -47,7 +47,7 @@ const products = ref([
     id: 5,
     name: '文具套装',
     price: 400,
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=500&h=500&fit=crop',
+    image: 'https://img0.baidu.com/it/u=291407898,4159006597&fm=253&app=138&f=JPEG?w=800&h=1067',
     description: '精美文具套装，包含钢笔、笔记本等',
     stock: 20,
     sales: 512
@@ -106,56 +106,122 @@ onMounted(() => {
   }
 })
 
+// 添加提示框状态管理
+const notification = ref({
+  show: false,
+  message: '',
+  type: 'info', // 'success', 'error', 'info', 'warning'
+  timeout: 3000
+})
+
+// 添加确认框状态
+const confirmDialog = ref({
+  show: false,
+  title: '',
+  message: '',
+  confirmCallback: () => {},
+  cancelCallback: () => {}
+})
+
+// 显示提示框
+const showNotification = (message: string, type: string = 'info', timeout: number = 3000) => {
+  notification.value = {
+    show: true,
+    message,
+    type,
+    timeout
+  }
+  
+  // 自动关闭
+  if (timeout > 0) {
+    setTimeout(() => {
+      notification.value.show = false
+    }, timeout)
+  }
+}
+
+// 显示确认对话框
+const showConfirmDialog = (title: string, message: string, onConfirm: () => void, onCancel?: () => void) => {
+  confirmDialog.value = {
+    show: true,
+    title,
+    message,
+    confirmCallback: () => {
+      onConfirm();
+      confirmDialog.value.show = false;
+    },
+    cancelCallback: () => {
+      if (onCancel) onCancel();
+      confirmDialog.value.show = false;
+    }
+  }
+}
+
 // 开始抽奖
 const startSpin = () => {
   if (isSpinning.value || !myLucky) return
   if (userPoints.value < 888) {
-    alert('积分不足，快去完成任务获得更多积分吧！')
+    // 积分不足提示
+    showNotification('积分不足，快去完成任务获得更多积分吧！', 'error')
     return
   }
 
-  isSpinning.value = true
-  
-  // 随机选择奖品
-  const random = Math.random()
-  let sum = 0
-  let selectedIndex = 0
-  
-  for (let i = 0; i < wheelPrizes.length; i++) {
-    sum += wheelPrizes[i].probability
-    if (random <= sum) {
-      selectedIndex = i
-      break
-    }
-  }
+  // 添加抽奖前的确认对话框
+  showConfirmDialog(
+    '确认抽奖',
+    `确认花费 888 积分参与幸运抽奖？`,
+    () => {
+      isSpinning.value = true
+      
+      // 随机选择奖品
+      const random = Math.random()
+      let sum = 0
+      let selectedIndex = 0
+      
+      for (let i = 0; i < wheelPrizes.length; i++) {
+        sum += wheelPrizes[i].probability
+        if (random <= sum) {
+          selectedIndex = i
+          break
+        }
+      }
 
-  // 开始抽奖动画
-  myLucky.play()
-  
-  // 设置中奖索引
-  setTimeout(() => {
-    myLucky?.stop(selectedIndex)
-    
-    // 动画结束后扣除积分
-    setTimeout(() => {
-      isSpinning.value = false
-      userPoints.value -= 888
-      alert(`恭喜获得 ${wheelPrizes[selectedIndex].name}！`)
-    }, 800)
-  }, 2500)
+      // 开始抽奖动画
+      myLucky.play()
+      
+      // 设置中奖索引
+      setTimeout(() => {
+        myLucky?.stop(selectedIndex)
+        
+        // 动画结束后扣除积分
+        setTimeout(() => {
+          isSpinning.value = false
+          userPoints.value -= 888
+          // 替换 alert
+          showNotification(`恭喜获得 ${wheelPrizes[selectedIndex].name}！`, 'success')
+        }, 800)
+      }, 2500)
+    }
+  )
 }
 
 // 兑换商品
 const exchangeProduct = (product: typeof products.value[0]) => {
   if (userPoints.value < product.price) {
-    alert('积分不足，快去完成任务获得更多积分吧！')
+    // 替换 alert
+    showNotification('积分不足，快去完成任务获得更多积分吧！', 'error')
     return
   }
   
-  if (confirm(`确认使用 ${product.price} 积分兑换 ${product.name}？`)) {
-    userPoints.value -= product.price
-    alert('兑换成功！')
-  }
+  // 使用自定义确认对话框替代 confirm
+  showConfirmDialog(
+    '确认兑换',
+    `确认使用 ${product.price} 积分兑换 ${product.name}？`,
+    () => {
+      userPoints.value -= product.price
+      showNotification('兑换成功！', 'success')
+    }
+  )
 }
 
 // 积分获取方式
@@ -336,6 +402,45 @@ const pointHistory = ref([
         </div>
       </div>
     </div>
+
+    <!-- 自定义提示框 -->
+    <div v-if="notification.show" 
+         class="notification-container"
+         :class="notification.type">
+      <div class="notification-content">
+        <div class="notification-icon">
+          <i class="fas" :class="{
+            'fa-check-circle': notification.type === 'success',
+            'fa-exclamation-circle': notification.type === 'error',
+            'fa-info-circle': notification.type === 'info',
+            'fa-exclamation-triangle': notification.type === 'warning'
+          }"></i>
+        </div>
+        <div class="notification-message">{{ notification.message }}</div>
+        <div class="notification-close" @click="notification.show = false">
+          <i class="fas fa-times"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 确认对话框 -->
+    <div v-if="confirmDialog.show" class="confirm-dialog-overlay">
+      <div class="confirm-dialog-container">
+        <div class="confirm-dialog-header">
+          <h3 class="confirm-dialog-title">{{ confirmDialog.title }}</h3>
+          <div class="confirm-dialog-close" @click="confirmDialog.cancelCallback">
+            <i class="fas fa-times"></i>
+          </div>
+        </div>
+        <div class="confirm-dialog-body">
+          {{ confirmDialog.message }}
+        </div>
+        <div class="confirm-dialog-footer">
+          <button class="btn" @click="confirmDialog.cancelCallback">取消</button>
+          <button class="btn btn-primary" @click="confirmDialog.confirmCallback">确认</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -424,5 +529,165 @@ canvas {
   width: 100%;
   height: 100%;
   pointer-events: auto;
+}
+
+/* 自定义提示框样式 */
+.notification-container {
+  position: fixed;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  min-width: 300px;
+  max-width: 80%;
+  padding: 1.2rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  animation: slideInDown 0.3s ease-out;
+}
+
+.notification-container.success {
+  background-color: rgba(72, 187, 120, 0.85);
+  color: white;
+  background-color: rgba(52, 152, 219, 0.85);
+}
+
+.notification-container.error {
+  background-color: rgba(245, 101, 101, 0.85);
+  color: white;
+  background-color: rgba(231, 76, 60, 0.85);
+}
+
+.notification-container.info {
+  background-color: rgba(66, 153, 225, 0.85);
+  color: white;
+}
+
+.notification-container.warning {
+  background-color: rgba(237, 137, 54, 0.85);
+  color: white;
+  background-color: rgba(243, 156, 18, 0.85);
+}
+
+.notification-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.notification-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.notification-message {
+  flex-grow: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.notification-close {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+
+.notification-close:hover {
+  opacity: 1;
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+}
+
+/* 确认对话框样式 */
+.confirm-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-dialog-container {
+  width: 90%;
+  max-width: 400px;
+  background-color: var(--color-base-100, white);
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  animation: scaleIn 0.3s ease-out;
+}
+
+.confirm-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.confirm-dialog-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-primary, #4a5568);
+}
+
+.confirm-dialog-close {
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.confirm-dialog-close:hover {
+  opacity: 1;
+}
+
+.confirm-dialog-body {
+  padding: 1.5rem;
+  line-height: 1.5;
+  color: var(--color-base-content, #2d3748);
+  font-weight: 500;
+}
+
+.confirm-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 </style> 
