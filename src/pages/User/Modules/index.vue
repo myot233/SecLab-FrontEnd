@@ -33,7 +33,7 @@ const modules = ref<ModuleOverViewType[]>([
     type: 'Web安全',
     status: 'available',
     estimatedTime: '2-3小时',
-    score: calculateScore(2, '2-3小时') // 45分：难度2×15 + 3小时×5
+    score: calculateScore(3, '2-3小时') // 65分：难度3×15 + 3小时×5
   },
   {
     id: 3,
@@ -44,12 +44,13 @@ const modules = ref<ModuleOverViewType[]>([
     status: 'completed',
     estimatedTime: '3-4小时',
     score: calculateScore(3, '3-4小时') // 65分：难度3×15 + 4小时×5
-  },  {
+  },  
+  {
     id: 101,
     name: '字符型注入突破',
     description: '通过DVWA环境实践单引号闭合技巧，掌握order by判断字段数、union select数据回显等基础注入方法',
     difficulty: 2,
-    type: 'sql-injection',
+    type: 'Web安全',
     status: 'available',
     estimatedTime: '2小时',
     score: calculateScore(2, '2小时') // 40分：难度2×15 + 2小时×5
@@ -59,7 +60,7 @@ const modules = ref<ModuleOverViewType[]>([
     name: '布尔盲注实战',
     description: '使用二分法逐字符爆破数据库信息，编写Python脚本实现自动化盲注攻击',
     difficulty: 3,
-    type: 'sql-injection',
+    type: 'Web安全',
     status: 'available',
     prerequisites: [101],
     estimatedTime: '2小时',
@@ -70,7 +71,7 @@ const modules = ref<ModuleOverViewType[]>([
     name: 'WAF绕过挑战',
     description: '利用特殊字符（/*!*/）、HEX编码、参数污染等技术突破安全狗/WAF防护规则',
     difficulty: 4,
-    type: 'sql-injection',
+    type: 'Web安全',
     status: 'available',
     prerequisites: [102],
     estimatedTime: '2小时',
@@ -81,11 +82,197 @@ const modules = ref<ModuleOverViewType[]>([
     name: '二阶注入攻击',
     description: '分析用户注册场景下的存储型注入漏洞，通过恶意数据存储触发二次查询攻击',
     difficulty: 4,
-    type: 'sql-injection',
+    type: 'Web安全',
     status: 'available',
     prerequisites: [103],
     estimatedTime: '2小时',
     score: calculateScore(4, '2小时') // 70分：难度4×15 + 2小时×5
+  },
+  // Web安全类别新增
+  {
+    id: 105,
+    name: 'XSS攻击实战',
+    description: '学习跨站脚本攻击的各种类型（存储型、反射型、DOM型）及其防御方法',
+    difficulty: 3,
+    type: 'Web安全',
+    status: 'available',
+    estimatedTime: '3小时',
+    score: calculateScore(3, '3小时')
+  },
+  {
+    id: 106,
+    name: 'CSRF漏洞利用',
+    description: '掌握跨站请求伪造攻击的原理和攻击手法，学习构建POC和防御措施',
+    difficulty: 3,
+    type: 'Web安全',
+    status: 'locked',
+    prerequisites: [105],
+    estimatedTime: '2-3小时',
+    score: calculateScore(3, '2-3小时')
+  },
+  {
+    id: 107,
+    name: 'JWT安全测试',
+    description: '学习JSON Web Token的安全测试方法，包括签名验证绕过、信息泄露等漏洞利用',
+    difficulty: 4,
+    type: 'Web安全',
+    status: 'locked',
+    prerequisites: [105, 106],
+    estimatedTime: '3-4小时',
+    score: calculateScore(4, '3-4小时')
+  },
+  {
+    id: 108,
+    name: 'XXE漏洞利用',
+    description: '掌握XML外部实体注入的攻击原理和利用技巧，学习文件读取和SSRF组合攻击',
+    difficulty: 4,
+    type: 'Web安全',
+    status: 'locked',
+    prerequisites: [105],
+    estimatedTime: '3小时',
+    score: calculateScore(4, '3小时')
+  },
+  // 网络攻防类别
+  {
+    id: 201,
+    name: '网络嗅探技术',
+    description: '使用Wireshark分析网络流量，捕获和解析各种协议的数据包，提取有价值的信息',
+    difficulty: 2,
+    type: '网络攻防',
+    status: 'available',
+    estimatedTime: '2-3小时',
+    score: calculateScore(2, '2-3小时')
+  },
+  {
+    id: 202,
+    name: 'ARP欺骗攻防',
+    description: '学习ARP协议漏洞原理，实践中间人攻击，并掌握网络流量监听和防御方法',
+    difficulty: 3,
+    type: '网络攻防',
+    status: 'available',
+    prerequisites: [201],
+    estimatedTime: '3小时',
+    score: calculateScore(3, '3小时')
+  },
+  {
+    id: 203,
+    name: 'DNS劫持与污染',
+    description: '深入了解DNS协议安全，实践域名劫持攻击和防御，构建安全DNS解析环境',
+    difficulty: 4,
+    type: '网络攻防',
+    status: 'locked',
+    prerequisites: [202],
+    estimatedTime: '3-4小时',
+    score: calculateScore(4, '3-4小时')
+  },
+  {
+    id: 204,
+    name: '无线网络渗透',
+    description: '掌握无线网络安全测试方法，实践WiFi密码破解、伪AP搭建等攻防技术',
+    difficulty: 4,
+    type: '网络攻防',
+    status: 'locked',
+    prerequisites: [202],
+    estimatedTime: '4小时',
+    score: calculateScore(4, '4小时')
+  },
+  {
+    id: 205,
+    name: 'VPN安全测试',
+    description: '学习各类VPN协议的安全测试方法，检测配置错误和实施绕过技术',
+    difficulty: 5,
+    type: '网络攻防',
+    status: 'locked',
+    prerequisites: [203, 204],
+    estimatedTime: '4-5小时',
+    score: calculateScore(5, '4-5小时')
+  },
+  // 系统安全类别
+  {
+    id: 301,
+    name: 'Linux权限提升',
+    description: '学习Linux系统中常见的权限提升技术，包括配置错误利用、内核漏洞利用等',
+    difficulty: 3,
+    type: '系统安全',
+    status: 'available',
+    estimatedTime: '3-4小时',
+    score: calculateScore(3, '3-4小时')
+  },
+  {
+    id: 302,
+    name: 'Windows渗透测试',
+    description: '掌握Windows系统渗透测试技术，包括认证绕过、本地提权和持久化技术',
+    difficulty: 4,
+    type: '系统安全',
+    status: 'available',
+    estimatedTime: '4小时',
+    score: calculateScore(4, '4小时')
+  },
+  {
+    id: 303,
+    name: '内存取证分析',
+    description: '学习使用Volatility等工具进行内存镜像分析，提取进程、网络连接和恶意代码',
+    difficulty: 4,
+    type: '系统安全',
+    status: 'locked',
+    prerequisites: [301, 302],
+    estimatedTime: '3-4小时',
+    score: calculateScore(4, '3-4小时')
+  },
+  {
+    id: 304,
+    name: '恶意代码分析',
+    description: '掌握静态和动态恶意代码分析技术，理解病毒、木马的工作原理和对抗方法',
+    difficulty: 5,
+    type: '系统安全',
+    status: 'locked',
+    prerequisites: [303],
+    estimatedTime: '5小时',
+    score: calculateScore(5, '5小时')
+  },
+  // 密码学类别
+  {
+    id: 401,
+    name: '古典密码破解',
+    description: '学习凯撒密码、维吉尼亚密码等古典密码算法的加解密和破解技术',
+    difficulty: 1,
+    type: '密码学',
+    status: 'available',
+    estimatedTime: '2小时',
+    score: calculateScore(1, '2小时')
+  },
+  {
+    id: 402,
+    name: '现代密码学应用',
+    description: '深入学习对称加密、哈希算法、数字签名等现代密码学原理和实际应用',
+    difficulty: 3,
+    type: '密码学',
+    status: 'available',
+    prerequisites: [401],
+    estimatedTime: '3-4小时',
+    score: calculateScore(3, '3-4小时')
+  },
+  {
+    id: 403,
+    name: 'PKI与证书安全',
+    description: '掌握公钥基础设施的原理和应用，学习数字证书的生成、验证和安全测试',
+    difficulty: 4,
+    type: '密码学',
+    status: 'locked',
+    prerequisites: [402],
+    estimatedTime: '3小时',
+    score: calculateScore(4, '3小时')
+  },
+  {
+    id: 404,
+    name: '区块链安全',
+    description: '探索区块链技术的安全机制，学习智能合约审计和常见漏洞利用技术',
+    difficulty: 5,
+    type: '密码学',
+    status: 'locked',
+    prerequisites: [403],
+    estimatedTime: '5小时',
+    score: calculateScore(5, '5小时')
   }
 ])
 
