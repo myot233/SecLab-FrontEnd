@@ -1255,7 +1255,7 @@ const discussions = [
             <div class="flex items-center gap-2">
               <i class="fas fa-comments text-primary text-2xl"></i>
               <h1 class="text-2xl font-bold">题解讨论</h1>
-            </div>
+    </div>
             <div class="flex items-center gap-2 text-secondary">
               <i class="fas fa-coins"></i>
               <span class="font-semibold">{{ userPoints }} 积分</span>
@@ -1288,11 +1288,11 @@ const discussions = [
                       <i class="fas fa-reply mr-1"></i>
                       <span>回复</span>
                     </button>
-                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
           <!-- 悬浮的讨论输入框 -->
           <div class="discussion-input-fixed">
@@ -1319,10 +1319,10 @@ const discussions = [
                       </button>
                       <button class="btn btn-sm btn-circle btn-ghost ml-1">
                         <i class="fas fa-code"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
+            </button>
+          </div>
+        </div>
+      </div>
               </div>
             </div>
           </div>
@@ -1335,9 +1335,9 @@ const discussions = [
       <iframe src="http://127.0.0.1:8443" width="100%" height="100%"></iframe>
     </div>
 
-      <!-- 积分确认弹窗 -->
-      <dialog :class="{'modal': true, 'modal-open': showCostModal}">
-        <div class="modal-box">
+    <!-- 积分确认弹窗 -->
+    <dialog :class="{'modal': true, 'modal-open': showCostModal}">
+      <div class="modal-box">
           <h3 class="font-bold text-lg">确认查看题解</h3>
           <p class="py-4">
             确认使用 {{ solutionCost }} 积分查看题解讨论吗？
@@ -1348,13 +1348,13 @@ const discussions = [
           <div class="flex justify-between items-center mb-4 border-t border-b py-2 mt-2">
             <span class="font-medium">当前积分余额:</span>
             <span class="text-success font-bold">{{ userPoints }} 积分</span>
-          </div>
-          <div class="modal-action">
+        </div>
+        <div class="modal-action">
             <button class="btn" @click="showCostModal = false">取消</button>
             <button class="btn btn-primary" @click="confirmViewDiscussion">确认</button>
-          </div>
         </div>
-      </dialog>
+      </div>
+    </dialog>
     </div>
   </div>
 </template>

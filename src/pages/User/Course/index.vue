@@ -216,7 +216,7 @@ onMounted(() => {
 
       <!-- 右侧信息卡片（目前没有内容，可以后续扩展）-->
       <div class="lg:col-span-1">
-        <!-- 可以添加教师信息等右侧内容 -->
+        <ModuleDependencyGraph :modules="moduleItems" />
       </div>
     </div>
 
