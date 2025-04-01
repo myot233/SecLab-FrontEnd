@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import MarkdownRenderer from "../../../components/MarkdownRenderer.vue";
 import type { DisplayQuestionType } from '../../../types/Question';
 import { ref, watch, computed } from 'vue';
@@ -7,6 +7,7 @@ import type {Experiment} from "../../../types/experiment.ts";
 import type { Module } from './index.ts';
 
 const route = useRoute();
+const router = useRouter();
 const moduleId = route.params.id;
 
 
@@ -546,7 +547,8 @@ const startTargetMachine = async () => {
     // 模拟启动延迟
     await new Promise(resolve => setTimeout(resolve, 2000))
 
-    window.open(`/container/${experiment.targetMachine.id}`, '_blank')
+    // 使用router.push方法导航到MockTarget组件
+    router.push(`/container/${experiment.targetMachine.id}`)
     isTargetLoading.value = false
   }
 }
