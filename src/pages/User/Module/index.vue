@@ -504,12 +504,17 @@ const experiment: Module = {
 // 添加状态控制
 const showNoVNC = ref(false)
 const isOperationMachineRunning = ref(false)
+const isTargetMachineRunning = ref(false)
 
 // 添加加载状态
 const isTargetLoading = ref(false)
 
 // 添加操作环境加载状态
 const isOperationLoading = ref(false)
+
+// 添加环境管理变量
+const activeEnvironmentTab = ref<string | null>(null)
+const targetMachineUrl = ref<string | null>(null)
 
 // 添加答案状态
 const answerStatus = ref<{ [key: number]: { [key: number]: boolean | null } }>({})
@@ -530,12 +535,14 @@ const toggleOperationMachine = async () => {
     await new Promise(resolve => setTimeout(resolve, 2000))
 
     isOperationMachineRunning.value = true
-    showNoVNC.value = true
+    activeEnvironmentTab.value = 'operation'
     isOperationLoading.value = false
   } else {
     // 关闭操作环境
     isOperationMachineRunning.value = false
-    showNoVNC.value = false
+    if (activeEnvironmentTab.value === 'operation') {
+      activeEnvironmentTab.value = isTargetMachineRunning.value ? 'target' : null
+    }
   }
 }
 
@@ -547,9 +554,19 @@ const startTargetMachine = async () => {
     // 模拟启动延迟
     await new Promise(resolve => setTimeout(resolve, 2000))
 
-    // 使用router.push方法导航到MockTarget组件
-    router.push(`/container/${experiment.targetMachine.id}`)
+    // 设置靶机 URL 并在当前页面中显示
+    targetMachineUrl.value = `/#/container/${experiment.targetMachine.id}`
+    isTargetMachineRunning.value = true
+    activeEnvironmentTab.value = 'target'
     isTargetLoading.value = false
+  }
+}
+
+// 关闭靶机环境
+const closeTargetMachine = () => {
+  isTargetMachineRunning.value = false
+  if (activeEnvironmentTab.value === 'target') {
+    activeEnvironmentTab.value = isOperationMachineRunning.value ? 'operation' : null
   }
 }
 
@@ -598,8 +615,7 @@ const calculatePoints = computed(() => {
   return difficultyPoints + timePoints
 })
 
-// 控制题解讨论弹窗的显示状态
-const showDiscussionModal = ref(false)
+
 // 添加页面状态控制，用于切换做题和题解讨论页面
 const currentTab = ref('practice') // 'practice'或'discussion'
 
@@ -1026,6 +1042,15 @@ const discussions = [
     likes: 22
   }
 ]
+
+// 添加新窗口打开函数
+const openInNewWindow = (type: string) => {
+  if (type === 'operation') {
+    window.open('http://127.0.0.1:8443', '_blank')
+  } else if (type === 'target' && targetMachineUrl.value) {
+    window.open(targetMachineUrl.value, '_blank')
+  }
+}
 </script>
 
 <template>
@@ -1332,9 +1357,101 @@ const discussions = [
       </div>
     </div>
 
-    <!-- code-server -->
-    <div v-if="showNoVNC" class="w-[60%] bg-base-300 transition-all duration-300 border-l border-base-300">
-      <iframe src="http://127.0.0.1:8443" width="100%" height="100%"></iframe>
+    <!-- Environment Tab Interface -->
+    <div v-if="activeEnvironmentTab" class="w-[60%] bg-base-300 transition-all duration-300 border-l border-base-300 flex flex-col">
+      <!-- Browser-like Tab Headers -->
+      <div class="bg-base-200 flex items-center border-b border-base-300 p-1 gap-1">
+        <a 
+          v-if="isOperationMachineRunning" 
+          class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2"
+          :class="{ 'border-primary': activeEnvironmentTab === 'operation', 'border-transparent': activeEnvironmentTab !== 'operation' }"
+        >
+          <!-- Tab content -->
+          <div 
+            @click="activeEnvironmentTab = 'operation'"
+            class="flex items-center cursor-pointer"
+          >
+            <i class="fas fa-desktop mr-2 text-primary"></i>
+            <span :class="{ 'font-medium': activeEnvironmentTab === 'operation' }">操作环境</span>
+          </div>
+          
+          <!-- Action buttons -->
+          <div class="flex items-center ml-2">
+            <!-- Pop-out button -->
+            <button 
+              @click.stop="openInNewWindow('operation')" 
+              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1"
+              title="在新窗口打开"
+            >
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+            
+            <!-- Close button -->
+            <button 
+              @click.stop="toggleOperationMachine" 
+              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs"
+              title="关闭"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </a>
+        
+        <a 
+          v-if="isTargetMachineRunning" 
+          class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2"
+          :class="{ 'border-primary': activeEnvironmentTab === 'target', 'border-transparent': activeEnvironmentTab !== 'target' }"
+        >
+          <!-- Tab content -->
+          <div 
+            @click="activeEnvironmentTab = 'target'"
+            class="flex items-center cursor-pointer"
+          >
+            <i class="fas fa-server mr-2 text-primary"></i>
+            <span :class="{ 'font-medium': activeEnvironmentTab === 'target' }">靶机环境</span>
+          </div>
+          
+          <!-- Action buttons -->
+          <div class="flex items-center ml-2">
+            <!-- Pop-out button -->
+            <button 
+              @click.stop="openInNewWindow('target')" 
+              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1"
+              title="在新窗口打开"
+            >
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+            
+            <!-- Close button -->
+            <button 
+              @click.stop="closeTargetMachine" 
+              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs"
+              title="关闭"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </a>
+        
+        <div class="flex-1"></div>
+      </div>
+      
+      <!-- Tab Content -->
+      <div class="flex-1">
+        <!-- Operation Environment -->
+        <iframe 
+          v-if="activeEnvironmentTab === 'operation'" 
+          src="http://127.0.0.1:8443" 
+          class="w-full h-full"
+        ></iframe>
+        
+        <!-- Target Machine -->
+        <iframe 
+          v-if="activeEnvironmentTab === 'target' && targetMachineUrl" 
+          :src="targetMachineUrl" 
+          class="w-full h-full"
+        ></iframe>
+      </div>
     </div>
 
     <!-- 积分确认弹窗 -->

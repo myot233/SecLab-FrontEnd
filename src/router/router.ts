@@ -78,7 +78,7 @@ export const router = createRouter({
             children: [
                 {
                     path:"",
-                    redirect:"/admin/welcome"
+                    redirect:"/admin/dashboard"
                 },
                 // 在admin路径下
                 {
