@@ -554,7 +554,7 @@ const startTargetMachine = async () => {
     await new Promise(resolve => setTimeout(resolve, 2000))
 
     // 设置靶机 URL 并在当前页面中显示
-    targetMachineUrl.value = `/container/${experiment.targetMachine.id}`
+    targetMachineUrl.value = `/#/container/${experiment.targetMachine.id}`
     isTargetMachineRunning.value = true
     activeEnvironmentTab.value = 'target'
     isTargetLoading.value = false
@@ -1041,6 +1041,15 @@ const discussions = [
     likes: 22
   }
 ]
+
+// 添加新窗口打开函数
+const openInNewWindow = (type: string) => {
+  if (type === 'operation') {
+    window.open('http://127.0.0.1:8443', '_blank')
+  } else if (type === 'target' && targetMachineUrl.value) {
+    window.open(targetMachineUrl.value, '_blank')
+  }
+}
 </script>
 
 <template>
@@ -1365,13 +1374,26 @@ const discussions = [
             <span :class="{ 'font-medium': activeEnvironmentTab === 'operation' }">操作环境</span>
           </div>
           
-          <!-- Close button -->
-          <button 
-            @click.stop="toggleOperationMachine" 
-            class="ml-2 w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs"
-          >
-            <i class="fas fa-times"></i>
-          </button>
+          <!-- Action buttons -->
+          <div class="flex items-center ml-2">
+            <!-- Pop-out button -->
+            <button 
+              @click.stop="openInNewWindow('operation')" 
+              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1"
+              title="在新窗口打开"
+            >
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+            
+            <!-- Close button -->
+            <button 
+              @click.stop="toggleOperationMachine" 
+              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs"
+              title="关闭"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
         </a>
         
         <a 
@@ -1388,13 +1410,26 @@ const discussions = [
             <span :class="{ 'font-medium': activeEnvironmentTab === 'target' }">靶机环境</span>
           </div>
           
-          <!-- Close button -->
-          <button 
-            @click.stop="closeTargetMachine" 
-            class="ml-2 w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs"
-          >
-            <i class="fas fa-times"></i>
-          </button>
+          <!-- Action buttons -->
+          <div class="flex items-center ml-2">
+            <!-- Pop-out button -->
+            <button 
+              @click.stop="openInNewWindow('target')" 
+              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1"
+              title="在新窗口打开"
+            >
+              <i class="fas fa-external-link-alt"></i>
+            </button>
+            
+            <!-- Close button -->
+            <button 
+              @click.stop="closeTargetMachine" 
+              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs"
+              title="关闭"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
         </a>
         
         <div class="flex-1"></div>
