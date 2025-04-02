@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import type { UserScore, ScoreboardFilters } from './types.ts'
-import a from "./test_users.json"
+import a from './test_users.json'
 
 // 模拟用户数据 - 按照总分由高到低排序
 const initialScores = ref(a.sort((a, b) => b.totalScore - a.totalScore))
@@ -30,63 +30,51 @@ const filters = ref<ScoreboardFilters>({
 // 当前用户（与个人中心页面同步）
 const currentUser = ref<UserScore>({
   id: 3,
-  username: "林宗恒",
-  avatar: "/example.png",
+  username: '林宗恒',
+  avatar: '/example.png',
   totalScore: 874,
   completedTasks: 18,
-  class: "网络安全232班",
+  class: '网络安全232班',
   rank: 3,
   recentActivity: {
-    date: "2025-03-20",
-    experimentName: "逆向工程实验",
+    date: '2025-03-20',
+    experimentName: '逆向工程实验',
     score: 90
   }
 })
 
 // 实验类型列表
-const experimentTypes = [
-  "Web安全",
-  "系统安全",
-  "密码学",
-  "网络攻防",
-  "漏洞扫描",
-  "逆向工程"
-]
+const experimentTypes = ['Web安全', '系统安全', '密码学', '网络攻防', '漏洞扫描', '逆向工程']
 
 // 班级列表
-const classes = [
-  "网络安全232班",
-  "网络安全231班",
-  "信息安全231班",
-  "信息安全232班",
-  "物联网安全231班"
-]
+const classes = ['网络安全232班', '网络安全231班', '信息安全231班', '信息安全232班', '物联网安全231班']
 
 // 过滤后的排行榜数据
 const filteredScores = computed(() => {
   let result = [...scores.value]
-  
+
   if (filters.value.experimentType) {
     // 在真实情况下，这里会根据实验类型进行过滤
     // 模拟过滤
-    result = result.filter(score => 
-      score.recentActivity && 
-      score.recentActivity.experimentName.includes(filters.value.experimentType || '')
-    )
+    result = result.filter((score) => score.recentActivity && score.recentActivity.experimentName.includes(filters.value.experimentType || ''))
   }
-  
+
   if (filters.value.className) {
-    result = result.filter(score => score.class === filters.value.className)
+    result = result.filter((score) => score.class === filters.value.className)
   }
-  
+
   // 根据过滤后的结果重新计算排名
   return recalculateRanks(result)
 })
 
 // 监听筛选条件变化，更新排名
-watch(filters, () => {
-  console.log('过滤条件变化，重新计算排名')
-}, { deep: true })
+watch(
+  filters,
+  () => {
+    console.log('过滤条件变化，重新计算排名')
+  },
+  { deep: true }
+)
 
 // 更新筛选条件
 const updateFilters = (newFilters: Partial<ScoreboardFilters>) => {
@@ -115,14 +103,11 @@ const getRankStyle = (rank: number) => {
 <template>
   <div class="container-fluid px-4 py-6 overflow-x-hidden">
     <!-- 个人得分卡片 -->
-    <div class="card bg-gradient-to-br from-primary/10 to-transparent shadow-xl mb-6 backdrop-blur-sm
-                transition-all duration-500 hover:shadow-2xl"
-         :class="{ 'translate-y-0 opacity-100': isLoaded, 'translate-y-4 opacity-0': !isLoaded }">
+    <div class="card bg-gradient-to-br from-primary/10 to-transparent shadow-xl mb-6 backdrop-blur-sm transition-all duration-500 hover:shadow-2xl" :class="{ 'translate-y-0 opacity-100': isLoaded, 'translate-y-4 opacity-0': !isLoaded }">
       <div class="card-body">
         <div class="flex items-center gap-6">
           <div class="relative">
-            <img :src="currentUser.avatar" alt="avatar" 
-                 class="w-20 h-20 rounded-full ring-2 ring-primary/20 object-cover">
+            <img :src="currentUser.avatar" alt="avatar" class="w-20 h-20 rounded-full ring-2 ring-primary/20 object-cover" />
             <div class="absolute -bottom-2 -right-2 bg-base-100 rounded-full p-1 shadow-lg">
               <div class="badge badge-primary">Lv.{{ Math.floor(currentUser.totalScore / 100) }}</div>
             </div>
@@ -153,8 +138,7 @@ const getRankStyle = (rank: number) => {
     </div>
 
     <!-- 筛选器 -->
-    <div class="card bg-base-100 shadow-xl mb-6 overflow-hidden transition-all duration-300 hover:shadow-2xl"
-         :class="{ 'translate-y-0 opacity-100': isLoaded, 'translate-y-4 opacity-0': !isLoaded }">
+    <div class="card bg-base-100 shadow-xl mb-6 overflow-hidden transition-all duration-300 hover:shadow-2xl" :class="{ 'translate-y-0 opacity-100': isLoaded, 'translate-y-4 opacity-0': !isLoaded }">
       <div class="card-body">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <!-- 时间范围选择 -->
@@ -163,10 +147,7 @@ const getRankStyle = (rank: number) => {
               <i class="fas fa-calendar text-primary"></i>
               <span class="label-text">时间范围</span>
             </label>
-            <select 
-              class="select select-bordered w-full bg-base-100/70 hover:bg-base-100 transition-colors"
-              v-model="filters.timeRange"
-            >
+            <select class="select select-bordered w-full bg-base-100/70 hover:bg-base-100 transition-colors" v-model="filters.timeRange">
               <option value="week">本周</option>
               <option value="month">本月</option>
               <option value="all">全部</option>
@@ -179,10 +160,7 @@ const getRankStyle = (rank: number) => {
               <i class="fas fa-flask text-primary"></i>
               <span class="label-text">实验类型</span>
             </label>
-            <select 
-              class="select select-bordered w-full bg-base-100/70 hover:bg-base-100 transition-colors"
-              v-model="filters.experimentType"
-            >
+            <select class="select select-bordered w-full bg-base-100/70 hover:bg-base-100 transition-colors" v-model="filters.experimentType">
               <option value="">全部</option>
               <option v-for="type in experimentTypes" :key="type" :value="type">
                 {{ type }}
@@ -196,10 +174,7 @@ const getRankStyle = (rank: number) => {
               <i class="fas fa-users text-primary"></i>
               <span class="label-text">班级</span>
             </label>
-            <select 
-              class="select select-bordered w-full bg-base-100/70 hover:bg-base-100 transition-colors"
-              v-model="filters.className"
-            >
+            <select class="select select-bordered w-full bg-base-100/70 hover:bg-base-100 transition-colors" v-model="filters.className">
               <option value="">全部</option>
               <option v-for="class_ in classes" :key="class_" :value="class_">
                 {{ class_ }}
@@ -211,8 +186,7 @@ const getRankStyle = (rank: number) => {
     </div>
 
     <!-- 排行榜 -->
-    <div class="card bg-base-100 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl"
-         :class="{ 'translate-y-0 opacity-100': isLoaded, 'translate-y-4 opacity-0': !isLoaded }">
+    <div class="card bg-base-100 shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl" :class="{ 'translate-y-0 opacity-100': isLoaded, 'translate-y-4 opacity-0': !isLoaded }">
       <div class="p-6 border-b border-base-200">
         <h2 class="card-title flex items-center gap-3">
           <i class="fas fa-trophy text-primary"></i>
@@ -221,8 +195,8 @@ const getRankStyle = (rank: number) => {
           <span v-if="filters.experimentType" class="badge badge-secondary">{{ filters.experimentType }}</span>
         </h2>
       </div>
-      
-      <div class="overflow-x-auto">
+
+      <div>
         <table class="table table-zebra">
           <thead class="bg-base-200/50">
             <tr>
@@ -235,24 +209,22 @@ const getRankStyle = (rank: number) => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(score, index) in filteredScores" 
-                :key="score.id"
-                class="transition-colors hover:bg-base-200"
-                :class="{ 
-                  'bg-primary/5': score.username === currentUser.username,
-                  'animate-slide-in': isLoaded
-                }"
-                :style="{ 
-                  animationDelay: `${index * 0.1}s`,
-                  borderLeft: score.rank <= 3 ? '4px solid' : '',
-                  borderLeftColor: score.rank === 1 ? '#fbbf24' : 
-                                  score.rank === 2 ? '#94a3b8' : 
-                                  score.rank === 3 ? '#d97706' : ''
-                }">
+            <tr
+              v-for="(score, index) in filteredScores"
+              :key="score.id"
+              class="transition-colors hover:bg-base-200"
+              :class="{
+                'bg-primary/5': score.username === currentUser.username,
+                'animate-slide-in': isLoaded
+              }"
+              :style="{
+                animationDelay: `${index * 0.1}s`,
+                borderLeft: score.rank <= 3 ? '4px solid' : '',
+                borderLeftColor: score.rank === 1 ? '#fbbf24' : score.rank === 2 ? '#94a3b8' : score.rank === 3 ? '#d97706' : ''
+              }"
+            >
               <td class="text-center">
-                <div v-if="score.rank <= 3" 
-                     class="w-8 h-8 rounded-full flex items-center justify-center mx-auto text-white font-bold"
-                     :class="getRankStyle(score.rank)">
+                <div v-if="score.rank <= 3" class="w-8 h-8 rounded-full flex items-center justify-center mx-auto text-white font-bold" :class="getRankStyle(score.rank)">
                   {{ score.rank }}
                 </div>
                 <div v-else class="font-mono">{{ score.rank }}</div>
@@ -266,8 +238,7 @@ const getRankStyle = (rank: number) => {
                   </div>
                   <div>
                     <div class="font-bold">{{ score.username }}</div>
-                    <div v-if="score.username === currentUser.username" 
-                         class="text-xs opacity-70">(我)</div>
+                    <div v-if="score.username === currentUser.username" class="text-xs opacity-70">(我)</div>
                   </div>
                 </div>
               </td>
@@ -307,7 +278,8 @@ const getRankStyle = (rank: number) => {
   margin: 0 auto;
 }
 
-html, body {
+html,
+body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
@@ -361,4 +333,4 @@ tr:hover .badge {
   --tw-gradient-from: rgb(var(--color-primary) / 0.1);
   --tw-gradient-to: transparent;
 }
-</style> 
+</style>

@@ -6,421 +6,421 @@ import type { User } from '../../../types/user'
 const users = ref<User[]>([
   {
     userId: 1,
-    userStudentNumber: "2021123456789",
-    userName: "林宗恒",
-    userEmail: "linzh@example.com",
-    userTel: "13800138000",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456789',
+    userName: '林宗恒',
+    userEmail: 'linzh@example.com',
+    userTel: '13800138000',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:00:00"
+    createTime: '2024-03-15 10:00:00'
   },
   {
     userId: 2,
-    userStudentNumber: "2021123456790",
-    userName: "陈思远",
-    userEmail: "chensy@example.com",
-    userTel: "13800138001",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456790',
+    userName: '陈思远',
+    userEmail: 'chensy@example.com',
+    userTel: '13800138001',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:01:00"
+    createTime: '2024-03-15 10:01:00'
   },
   {
     userId: 3,
-    userStudentNumber: "2021123456791",
-    userName: "张雨晨",
-    userEmail: "zhangyc@example.com",
-    userTel: "13800138002",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456791',
+    userName: '张雨晨',
+    userEmail: 'zhangyc@example.com',
+    userTel: '13800138002',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:02:00"
+    createTime: '2024-03-15 10:02:00'
   },
   {
     userId: 4,
-    userStudentNumber: "2021123456792",
-    userName: "王浩宇",
-    userEmail: "wanghy@example.com",
-    userTel: "13800138003",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456792',
+    userName: '王浩宇',
+    userEmail: 'wanghy@example.com',
+    userTel: '13800138003',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:03:00"
+    createTime: '2024-03-15 10:03:00'
   },
   {
     userId: 5,
-    userStudentNumber: "2021123456793",
-    userName: "李梓萱",
-    userEmail: "lizx@example.com",
-    userTel: "13800138004",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456793',
+    userName: '李梓萱',
+    userEmail: 'lizx@example.com',
+    userTel: '13800138004',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 0,
-    createTime: "2024-03-15 10:04:00"
+    createTime: '2024-03-15 10:04:00'
   },
   {
     userId: 6,
-    userStudentNumber: "2021123456794",
-    userName: "刘子轩",
-    userEmail: "liuzx@example.com",
-    userTel: "13800138005",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456794',
+    userName: '刘子轩',
+    userEmail: 'liuzx@example.com',
+    userTel: '13800138005',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:05:00"
+    createTime: '2024-03-15 10:05:00'
   },
   {
     userId: 7,
-    userStudentNumber: "2021123456795",
-    userName: "周雪莹",
-    userEmail: "zhouxy@example.com",
-    userTel: "13800138006",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456795',
+    userName: '周雪莹',
+    userEmail: 'zhouxy@example.com',
+    userTel: '13800138006',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:06:00"
+    createTime: '2024-03-15 10:06:00'
   },
   {
     userId: 8,
-    userStudentNumber: "2021123456796",
-    userName: "吴承远",
-    userEmail: "wucy@example.com",
-    userTel: "13800138007",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456796',
+    userName: '吴承远',
+    userEmail: 'wucy@example.com',
+    userTel: '13800138007',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:07:00"
+    createTime: '2024-03-15 10:07:00'
   },
   {
     userId: 9,
-    userStudentNumber: "2021123456797",
-    userName: "郑博文",
-    userEmail: "zhengbw@example.com",
-    userTel: "13800138008",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456797',
+    userName: '郑博文',
+    userEmail: 'zhengbw@example.com',
+    userTel: '13800138008',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:08:00"
+    createTime: '2024-03-15 10:08:00'
   },
   {
     userId: 10,
-    userStudentNumber: "2021123456798",
-    userName: "黄语嫣",
-    userEmail: "huangyy@example.com",
-    userTel: "13800138009",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456798',
+    userName: '黄语嫣',
+    userEmail: 'huangyy@example.com',
+    userTel: '13800138009',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:09:00"
+    createTime: '2024-03-15 10:09:00'
   },
   {
     userId: 11,
-    userStudentNumber: "2021123456799",
-    userName: "杨晓东",
-    userEmail: "yangxd@example.com",
-    userTel: "13800138010",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456799',
+    userName: '杨晓东',
+    userEmail: 'yangxd@example.com',
+    userTel: '13800138010',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:10:00"
+    createTime: '2024-03-15 10:10:00'
   },
   {
     userId: 12,
-    userStudentNumber: "2021123456800",
-    userName: "朱天宇",
-    userEmail: "zhuty@example.com",
-    userTel: "13800138011",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456800',
+    userName: '朱天宇',
+    userEmail: 'zhuty@example.com',
+    userTel: '13800138011',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:11:00"
+    createTime: '2024-03-15 10:11:00'
   },
   {
     userId: 13,
-    userStudentNumber: "2021123456801",
-    userName: "赵雨欣",
-    userEmail: "zhaoyx@example.com",
-    userTel: "13800138012",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456801',
+    userName: '赵雨欣',
+    userEmail: 'zhaoyx@example.com',
+    userTel: '13800138012',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:12:00"
+    createTime: '2024-03-15 10:12:00'
   },
   {
     userId: 14,
-    userStudentNumber: "2021123456802",
-    userName: "孙志远",
-    userEmail: "sunzy@example.com",
-    userTel: "13800138013",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456802',
+    userName: '孙志远',
+    userEmail: 'sunzy@example.com',
+    userTel: '13800138013',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:13:00"
+    createTime: '2024-03-15 10:13:00'
   },
   {
     userId: 15,
-    userStudentNumber: "2021123456803",
-    userName: "徐晨阳",
-    userEmail: "xucy@example.com",
-    userTel: "13800138014",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456803',
+    userName: '徐晨阳',
+    userEmail: 'xucy@example.com',
+    userTel: '13800138014',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:14:00"
+    createTime: '2024-03-15 10:14:00'
   },
   {
     userId: 16,
-    userStudentNumber: "2021123456804",
-    userName: "马思琪",
-    userEmail: "masq@example.com",
-    userTel: "13800138015",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456804',
+    userName: '马思琪',
+    userEmail: 'masq@example.com',
+    userTel: '13800138015',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:15:00"
+    createTime: '2024-03-15 10:15:00'
   },
   {
     userId: 17,
-    userStudentNumber: "2021123456805",
-    userName: "胡宇轩",
-    userEmail: "huyx@example.com",
-    userTel: "13800138016",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456805',
+    userName: '胡宇轩',
+    userEmail: 'huyx@example.com',
+    userTel: '13800138016',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:16:00"
+    createTime: '2024-03-15 10:16:00'
   },
   {
     userId: 18,
-    userStudentNumber: "2021123456806",
-    userName: "林雨晴",
-    userEmail: "linyq@example.com",
-    userTel: "13800138017",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456806',
+    userName: '林雨晴',
+    userEmail: 'linyq@example.com',
+    userTel: '13800138017',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:17:00"
+    createTime: '2024-03-15 10:17:00'
   },
   {
     userId: 19,
-    userStudentNumber: "2021123456807",
-    userName: "王子豪",
-    userEmail: "wangzh@example.com",
-    userTel: "13800138018",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456807',
+    userName: '王子豪',
+    userEmail: 'wangzh@example.com',
+    userTel: '13800138018',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:18:00"
+    createTime: '2024-03-15 10:18:00'
   },
   {
     userId: 20,
-    userStudentNumber: "2021123456808",
-    userName: "陈梓涵",
-    userEmail: "chenzh@example.com",
-    userTel: "13800138019",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456808',
+    userName: '陈梓涵',
+    userEmail: 'chenzh@example.com',
+    userTel: '13800138019',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 0,
-    createTime: "2024-03-15 10:19:00"
+    createTime: '2024-03-15 10:19:00'
   },
   {
     userId: 21,
-    userStudentNumber: "2021123456809",
-    userName: "张浩然",
-    userEmail: "zhanghr@example.com",
-    userTel: "13800138020",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456809',
+    userName: '张浩然',
+    userEmail: 'zhanghr@example.com',
+    userTel: '13800138020',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:20:00"
+    createTime: '2024-03-15 10:20:00'
   },
   {
     userId: 22,
-    userStudentNumber: "2021123456810",
-    userName: "李思源",
-    userEmail: "lisy@example.com",
-    userTel: "13800138021",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456810',
+    userName: '李思源',
+    userEmail: 'lisy@example.com',
+    userTel: '13800138021',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:21:00"
+    createTime: '2024-03-15 10:21:00'
   },
   {
     userId: 23,
-    userStudentNumber: "2021123456811",
-    userName: "刘雨菲",
-    userEmail: "liuyf@example.com",
-    userTel: "13800138022",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456811',
+    userName: '刘雨菲',
+    userEmail: 'liuyf@example.com',
+    userTel: '13800138022',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 0,
-    createTime: "2024-03-15 10:22:00"
+    createTime: '2024-03-15 10:22:00'
   },
   {
     userId: 24,
-    userStudentNumber: "2021123456812",
-    userName: "周子涵",
-    userEmail: "zhouzh@example.com",
-    userTel: "13800138023",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456812',
+    userName: '周子涵',
+    userEmail: 'zhouzh@example.com',
+    userTel: '13800138023',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:23:00"
+    createTime: '2024-03-15 10:23:00'
   },
   {
     userId: 25,
-    userStudentNumber: "2021123456813",
-    userName: "吴承轩",
-    userEmail: "wucx@example.com",
-    userTel: "13800138024",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456813',
+    userName: '吴承轩',
+    userEmail: 'wucx@example.com',
+    userTel: '13800138024',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:24:00"
+    createTime: '2024-03-15 10:24:00'
   },
   {
     userId: 26,
-    userStudentNumber: "2021123456814",
-    userName: "郑雨泽",
-    userEmail: "zhengyz@example.com",
-    userTel: "13800138025",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456814',
+    userName: '郑雨泽',
+    userEmail: 'zhengyz@example.com',
+    userTel: '13800138025',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:25:00"
+    createTime: '2024-03-15 10:25:00'
   },
   {
     userId: 27,
-    userStudentNumber: "2021123456815",
-    userName: "黄子轩",
-    userEmail: "huangzx@example.com",
-    userTel: "13800138026",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456815',
+    userName: '黄子轩',
+    userEmail: 'huangzx@example.com',
+    userTel: '13800138026',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:26:00"
+    createTime: '2024-03-15 10:26:00'
   },
   {
     userId: 28,
-    userStudentNumber: "2021123456816",
-    userName: "杨雨欣",
-    userEmail: "yangyx@example.com",
-    userTel: "13800138027",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456816',
+    userName: '杨雨欣',
+    userEmail: 'yangyx@example.com',
+    userTel: '13800138027',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:27:00"
+    createTime: '2024-03-15 10:27:00'
   },
   {
     userId: 29,
-    userStudentNumber: "2021123456817",
-    userName: "朱思远",
-    userEmail: "zhusy@example.com",
-    userTel: "13800138028",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456817',
+    userName: '朱思远',
+    userEmail: 'zhusy@example.com',
+    userTel: '13800138028',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:28:00"
+    createTime: '2024-03-15 10:28:00'
   },
   {
     userId: 30,
-    userStudentNumber: "2021123456818",
-    userName: "赵雨晨",
-    userEmail: "zhaoyc@example.com",
-    userTel: "13800138029",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456818',
+    userName: '赵雨晨',
+    userEmail: 'zhaoyc@example.com',
+    userTel: '13800138029',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:29:00"
+    createTime: '2024-03-15 10:29:00'
   },
   {
     userId: 31,
-    userStudentNumber: "2021123456819",
-    userName: "孙浩宇",
-    userEmail: "sunhy@example.com",
-    userTel: "13800138030",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456819',
+    userName: '孙浩宇',
+    userEmail: 'sunhy@example.com',
+    userTel: '13800138030',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:30:00"
+    createTime: '2024-03-15 10:30:00'
   },
   {
     userId: 32,
-    userStudentNumber: "2021123456820",
-    userName: "徐梓萱",
-    userEmail: "xuzx@example.com",
-    userTel: "13800138031",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456820',
+    userName: '徐梓萱',
+    userEmail: 'xuzx@example.com',
+    userTel: '13800138031',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 0,
-    createTime: "2024-03-15 10:31:00"
+    createTime: '2024-03-15 10:31:00'
   },
   {
     userId: 33,
-    userStudentNumber: "2021123456821",
-    userName: "马子轩",
-    userEmail: "mazx@example.com",
-    userTel: "13800138032",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456821',
+    userName: '马子轩',
+    userEmail: 'mazx@example.com',
+    userTel: '13800138032',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:32:00"
+    createTime: '2024-03-15 10:32:00'
   },
   {
     userId: 34,
-    userStudentNumber: "2021123456822",
-    userName: "胡雪莹",
-    userEmail: "huxy@example.com",
-    userTel: "13800138033",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456822',
+    userName: '胡雪莹',
+    userEmail: 'huxy@example.com',
+    userTel: '13800138033',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:33:00"
+    createTime: '2024-03-15 10:33:00'
   },
   {
     userId: 35,
-    userStudentNumber: "2021123456823",
-    userName: "林承远",
-    userEmail: "lincy@example.com",
-    userTel: "13800138034",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456823',
+    userName: '林承远',
+    userEmail: 'lincy@example.com',
+    userTel: '13800138034',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:34:00"
+    createTime: '2024-03-15 10:34:00'
   },
   {
     userId: 36,
-    userStudentNumber: "2021123456824",
-    userName: "王博文",
-    userEmail: "wangbw@example.com",
-    userTel: "13800138035",
-    userAcademy: "信息工程学院",
-    userClass: "信息安全1班",
+    userStudentNumber: '2021123456824',
+    userName: '王博文',
+    userEmail: 'wangbw@example.com',
+    userTel: '13800138035',
+    userAcademy: '信息工程学院',
+    userClass: '信息安全1班',
     userGender: 1,
-    createTime: "2024-03-15 10:35:00"
+    createTime: '2024-03-15 10:35:00'
   },
   {
     userId: 37,
-    userStudentNumber: "2021123456825",
-    userName: "陈语嫣",
-    userEmail: "chenyy@example.com",
-    userTel: "13800138036",
-    userAcademy: "网络空间安全学院",
-    userClass: "网络安全1班",
+    userStudentNumber: '2021123456825',
+    userName: '陈语嫣',
+    userEmail: 'chenyy@example.com',
+    userTel: '13800138036',
+    userAcademy: '网络空间安全学院',
+    userClass: '网络安全1班',
     userGender: 0,
-    createTime: "2024-03-15 10:36:00"
+    createTime: '2024-03-15 10:36:00'
   },
   {
     userId: 38,
-    userStudentNumber: "2021123456826",
-    userName: "张晓东",
-    userEmail: "zhangxd@example.com",
-    userTel: "13800138037",
-    userAcademy: "计算机科学与技术学院",
-    userClass: "网络安全2班",
+    userStudentNumber: '2021123456826',
+    userName: '张晓东',
+    userEmail: 'zhangxd@example.com',
+    userTel: '13800138037',
+    userAcademy: '计算机科学与技术学院',
+    userClass: '网络安全2班',
     userGender: 1,
-    createTime: "2024-03-15 10:37:00"
+    createTime: '2024-03-15 10:37:00'
   }
 ])
 
@@ -456,7 +456,7 @@ const pageNumbers = computed(() => {
   const current = pagination.value.current
   const total = totalPages.value
   const pages = []
-  
+
   if (total <= 7) {
     // 如果总页数小于等于7，显示所有页码
     for (let i = 1; i <= total; i++) {
@@ -502,25 +502,15 @@ const handlePageSizeChange = (event: Event) => {
 }
 
 // 学院列表
-const academies = [
-  "计算机科学与技术学院",
-  "信息工程学院",
-  "网络空间安全学院"
-]
+const academies = ['计算机科学与技术学院', '信息工程学院', '网络空间安全学院']
 
 // 班级列表
-const classes = [
-  "网络安全1班",
-  "网络安全2班",
-  "信息安全1班"
-]
+const classes = ['网络安全1班', '网络安全2班', '信息安全1班']
 
 // 过滤后的用户列表
 const filteredUsers = computed(() => {
-  return users.value.filter(user => {
-    if (filters.value.search && 
-        !user.userName.includes(filters.value.search) && 
-        !user.userStudentNumber.includes(filters.value.search)) {
+  return users.value.filter((user) => {
+    if (filters.value.search && !user.userName.includes(filters.value.search) && !user.userStudentNumber.includes(filters.value.search)) {
       return false
     }
     if (filters.value.academy && user.userAcademy !== filters.value.academy) {
@@ -608,12 +598,7 @@ const handleResetPassword = (user: User) => {
               <label class="label">
                 <span class="label-text">搜索</span>
               </label>
-              <input 
-                type="text" 
-                class="input input-bordered" 
-                placeholder="搜索用户名或学号"
-                v-model="filters.search"
-              >
+              <input type="text" class="input input-bordered" placeholder="搜索用户名或学号" v-model="filters.search" />
             </div>
 
             <!-- 学院筛选 -->
@@ -664,7 +649,7 @@ const handleResetPassword = (user: User) => {
       <div v-else-if="error" class="text-center py-4 text-error">
         {{ error }}
       </div>
-      
+
       <!-- 优化后的用户列表表格 -->
       <div v-else class="card bg-base-100 shadow-xl">
         <div class="card-body p-0">
@@ -701,24 +686,9 @@ const handleResetPassword = (user: User) => {
                   <td class="whitespace-nowrap">{{ user.createTime }}</td>
                   <td class="whitespace-nowrap">
                     <div class="flex justify-center gap-2">
-                      <button 
-                        class="btn btn-xs btn-ghost"
-                        @click="handleEdit(user)"
-                      >
-                        编辑
-                      </button>
-                      <button 
-                        class="btn btn-xs btn-ghost text-warning"
-                        @click="handleResetPassword(user)"
-                      >
-                        重置密码
-                      </button>
-                      <button 
-                        class="btn btn-xs btn-ghost text-error"
-                        @click="handleDelete(user)"
-                      >
-                        删除
-                      </button>
+                      <button class="btn btn-xs btn-ghost" @click="handleEdit(user)">编辑</button>
+                      <button class="btn btn-xs btn-ghost text-warning" @click="handleResetPassword(user)">重置密码</button>
+                      <button class="btn btn-xs btn-ghost text-error" @click="handleDelete(user)">删除</button>
                     </div>
                   </td>
                 </tr>
@@ -739,36 +709,14 @@ const handleResetPassword = (user: User) => {
               条
             </div>
             <div class="join">
-              <button 
-                class="join-item btn btn-sm" 
-                :disabled="pagination.current === 1"
-                @click="handlePageChange(pagination.current - 1)"
-              >
-                «
-              </button>
+              <button class="join-item btn btn-sm" :disabled="pagination.current === 1" @click="handlePageChange(pagination.current - 1)">«</button>
               <template v-for="page in pageNumbers" :key="page">
-                <button 
-                  v-if="page === '...'" 
-                  class="join-item btn btn-sm btn-disabled"
-                >
-                  ...
-                </button>
-                <button 
-                  v-else
-                  class="join-item btn btn-sm"
-                  :class="{ 'btn-active': page === pagination.current }"
-                  @click="handlePageChange(Number(page))"
-                >
+                <button v-if="page === '...'" class="join-item btn btn-sm btn-disabled">...</button>
+                <button v-else class="join-item btn btn-sm" :class="{ 'btn-active': page === pagination.current }" @click="handlePageChange(Number(page))">
                   {{ page }}
                 </button>
               </template>
-              <button 
-                class="join-item btn btn-sm" 
-                :disabled="pagination.current === totalPages"
-                @click="handlePageChange(pagination.current + 1)"
-              >
-                »
-              </button>
+              <button class="join-item btn btn-sm" :disabled="pagination.current === totalPages" @click="handlePageChange(pagination.current + 1)">»</button>
             </div>
           </div>
         </div>
@@ -797,7 +745,7 @@ const handleResetPassword = (user: User) => {
 }
 
 .overflow-x-auto {
-  overflow-x: auto;
+  overflow-x: none;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
 }
@@ -881,4 +829,4 @@ const handleResetPassword = (user: User) => {
 .table tr:hover td > * {
   transform: scale(1.02);
 }
-</style> 
+</style>
