@@ -1,24 +1,32 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-import { ref, onMounted } from 'vue';
-import IntroductionCard from './component/IntroductionCard.vue';
+import { useRouter } from 'vue-router'
+import { ref, onMounted } from 'vue'
+import IntroductionCard from './component/IntroductionCard.vue'
 
-const router = useRouter();
-const isLoaded = ref(false);
-const showParticles = ref(false);
+const router = useRouter()
+const isLoaded = ref(false)
+const showParticles = ref(false)
 
 const navigateToCourses = () => {
-  router.push('/user/courses');
-};
+  router.push('/user/courses')
+}
+
+const navigateToModules = () => {
+  router.push('/user/modules')
+}
+
+const navigateToCommunity = () => {
+  router.push('/user/community')
+}
 
 onMounted(() => {
   setTimeout(() => {
-    isLoaded.value = true;
-  }, 100);
+    isLoaded.value = true
+  }, 100)
   setTimeout(() => {
-    showParticles.value = true;
-  }, 500);
-});
+    showParticles.value = true
+  }, 500)
+})
 
 // 定义卡片数据
 const cards = [
@@ -36,19 +44,23 @@ const cards = [
     title: '实践演练',
     description: '通过真实的案例和模拟环境，将理论知识转化为实践技能。',
     svgPath: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
-    buttonText: '即将推出',
-    buttonClass: 'btn-secondary',
-    icon: 'fa-laptop-code'
+    buttonText: '开始实践',
+    buttonClass: 'btn-primary',
+    onClick: navigateToModules,
+    icon: 'fa-laptop-code',
+    highlight: true
   },
   {
     title: '学习社区',
     description: '加入我们的学习社区，与其他学习者交流经验，分享心得。',
     svgPath: 'M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z',
-    buttonText: '即将推出',
-    buttonClass: 'btn-secondary',
+    buttonText: '进入社区',
+    buttonClass: 'btn-primary',
+    onClick: navigateToCommunity,
     icon: 'fa-users'
+    // highlight: true
   }
-];
+]
 
 // 生成随机粒子
 const particles = Array.from({ length: 50 }, (_, i) => ({
@@ -57,7 +69,7 @@ const particles = Array.from({ length: 50 }, (_, i) => ({
   y: Math.random() * 100,
   size: Math.random() * 4 + 1,
   speed: Math.random() * 2 + 1
-}));
+}))
 </script>
 
 <template>
@@ -66,70 +78,65 @@ const particles = Array.from({ length: 50 }, (_, i) => ({
     <div class="absolute inset-0 overflow-hidden pointer-events-none">
       <!-- 渐变光晕 -->
       <div class="absolute inset-0 opacity-30">
-        <div v-for="i in 3" :key="`gradient-${i}`"
-             class="absolute rounded-full blur-3xl"
-             :class="`bg-${i === 1 ? 'primary' : i === 2 ? 'secondary' : 'accent'}/20`"
-             :style="{
-               width: `${400 + i * 100}px`,
-               height: `${400 + i * 100}px`,
-               left: `${30 + i * 20}%`,
-               top: `${20 + i * 15}%`,
-               transform: `rotate(${i * 45}deg)`,
-               animation: `float ${10 + i * 2}s ease-in-out infinite`,
-               animationDelay: `${i * -2}s`
-             }">
-        </div>
+        <div
+          v-for="i in 3"
+          :key="`gradient-${i}`"
+          class="absolute rounded-full blur-3xl"
+          :class="`bg-${i === 1 ? 'primary' : i === 2 ? 'secondary' : 'accent'}/20`"
+          :style="{
+            width: `${400 + i * 100}px`,
+            height: `${400 + i * 100}px`,
+            left: `${30 + i * 20}%`,
+            top: `${20 + i * 15}%`,
+            transform: `rotate(${i * 45}deg)`,
+            animation: `float ${10 + i * 2}s ease-in-out infinite`,
+            animationDelay: `${i * -2}s`
+          }"
+        ></div>
       </div>
-      
+
       <!-- 动态粒子 -->
-      <div v-if="showParticles" 
-           v-for="particle in particles" 
-           :key="particle.id"
-           class="absolute w-1 h-1 bg-primary/30 rounded-full"
-           :style="{
-             left: `${particle.x}%`,
-             top: `${particle.y}%`,
-             width: `${particle.size}px`,
-             height: `${particle.size}px`,
-             animation: `particleFloat ${particle.speed * 5}s infinite linear`
-           }">
-      </div>
+      <div
+        v-if="showParticles"
+        v-for="particle in particles"
+        :key="particle.id"
+        class="absolute w-1 h-1 bg-primary/30 rounded-full"
+        :style="{
+          left: `${particle.x}%`,
+          top: `${particle.y}%`,
+          width: `${particle.size}px`,
+          height: `${particle.size}px`,
+          animation: `particleFloat ${particle.speed * 5}s infinite linear`
+        }"
+      ></div>
     </div>
 
     <!-- 主要内容 -->
     <div class="relative z-10 w-full max-w-7xl mx-auto px-4">
       <!-- 欢迎区域 -->
-      <div class="text-center mb-16"
-           :class="{ 'animate-slide-down': isLoaded }">
+      <div class="text-center mb-16" :class="{ 'animate-slide-down': isLoaded }">
         <div class="inline-block mb-6">
-          <div class="text-sm font-semibold text-primary/80 mb-2 tracking-wider uppercase">
-            <i class="fas fa-shield-alt mr-2"></i>Sec Lab
-          </div>
-          <h1 class="text-6xl font-bold mb-4 bg-clip-text text-transparent 
-                     bg-gradient-to-r from-primary via-secondary to-accent
-                     leading-tight">
-            开启你的安全实验之旅
-          </h1>
+          <div class="text-sm font-semibold text-primary/80 mb-2 tracking-wider uppercase"><i class="fas fa-shield-alt mr-2"></i>Sec Lab</div>
+          <h1 class="text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent leading-tight">开启你的安全实验之旅</h1>
         </div>
-        <p class="text-xl text-base-content/80 max-w-3xl mx-auto leading-relaxed">
-          在这里，你将开启一段精彩的网络安全学习之旅。我们提供专业的课程内容和实践机会，
-          帮助你掌握必要的网络安全技能。
-        </p>
+        <p class="text-xl text-base-content/80 max-w-3xl mx-auto leading-relaxed">在这里，你将开启一段精彩的网络安全学习之旅。我们提供专业的课程内容和实践机会， 帮助你掌握必要的网络安全技能。</p>
       </div>
 
       <!-- 功能卡片区域 -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative">
-        <div v-for="(card, index) in cards" 
-             :key="index"
-             class="transform"
-             :class="{ 
-               'animate-slide-up': isLoaded,
-               'hover:z-10': card.highlight
-             }"
-             :style="{ 
-               animationDelay: `${index * 0.2}s`,
-               transform: `perspective(1000px) rotateY(${(index - 1) * 5}deg)`
-             }">
+        <div
+          v-for="(card, index) in cards"
+          :key="index"
+          class="transform"
+          :class="{
+            'animate-slide-up': isLoaded,
+            'hover:z-10': card.highlight
+          }"
+          :style="{
+            animationDelay: `${index * 0.2}s`,
+            transform: `perspective(1000px) rotateY(${(index - 1) * 5}deg)`
+          }"
+        >
           <IntroductionCard v-bind="card" />
         </div>
       </div>
@@ -158,7 +165,8 @@ const particles = Array.from({ length: 50 }, (_, i) => ({
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
   }
   50% {
@@ -237,9 +245,9 @@ const particles = Array.from({ length: 50 }, (_, i) => ({
   .text-6xl {
     font-size: 3rem;
   }
-  
+
   .grid > div {
     transform: none !important;
   }
 }
-</style> 
+</style>

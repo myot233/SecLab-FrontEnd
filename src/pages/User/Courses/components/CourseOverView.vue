@@ -35,7 +35,7 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-500 group 
+  <div class="card bg-base-100 shadow-md hover:shadow-lg transition-all duration-500 group 
               backdrop-blur-sm border border-base-200 hover:border-primary/20 h-full"
        @click="handleClick">
     <!-- 课程图片 -->
@@ -60,16 +60,16 @@ const handleClick = () => {
         <h2 class="card-title text-lg group-hover:text-primary transition-colors">
           {{ course.name }}
         </h2>
-        <div class="text-yellow-500 text-xs" :title="`难度: ${course.difficulty}/5`">
+        <div class="text-yellow-500 text-sm" :title="`难度: ${course.difficulty}/5`">
           {{ getDifficultyStars(course.difficulty) }}
         </div>
       </div>
 
       <!-- 描述 -->
-      <p class="text-base-content/70 text-xs line-clamp-2">{{ course.description }}</p>
+      <p class="text-base-content/70 text-sm line-clamp-2 mb-2">{{ course.description }}</p>
 
       <!-- 课程信息 -->
-      <div class="mt-3 flex flex-wrap gap-2 text-xs text-base-content/60">
+      <div class="mt-2 flex flex-wrap gap-2 text-sm text-base-content/60">
         <div class="flex items-center gap-1">
           <i class="fas fa-clock text-primary/70"></i>
           <span>{{ course.estimatedHours }}小时</span>
@@ -87,12 +87,12 @@ const handleClick = () => {
       <!-- 进度条 -->
       <div v-if="course.status === 'in-progress' && course.progress !== undefined" 
            class="mt-3">
-        <div class="flex justify-between text-xs mb-1">
+        <div class="flex justify-between text-sm mb-1">
           <span class="text-base-content/70">学习进度</span>
           <span class="text-primary">{{ course.progress }}%</span>
         </div>
-        <div class="w-full bg-base-200 rounded-full h-1.5">
-          <div class="bg-primary h-1.5 rounded-full transition-all duration-300"
+        <div class="w-full bg-base-200 rounded-full h-2">
+          <div class="bg-primary h-2 rounded-full transition-all duration-300"
                :style="{ width: `${course.progress}%` }"></div>
         </div>
       </div>
@@ -118,7 +118,7 @@ const handleClick = () => {
 
       <!-- 操作按钮 -->
       <div class="card-actions justify-end mt-3">
-        <button class="btn btn-primary btn-xs gap-1 group-hover:scale-105 transition-transform">
+        <button class="btn btn-primary btn-sm gap-1 group-hover:scale-105 transition-transform">
           <span>{{ course.status === 'in-progress' ? '继续学习' : '开始学习' }}</span>
           <i class="fas fa-arrow-right"></i>
         </button>
@@ -131,7 +131,7 @@ const handleClick = () => {
 .card {
   cursor: pointer;
   transform-style: preserve-3d;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card:hover {

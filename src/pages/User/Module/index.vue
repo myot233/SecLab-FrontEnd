@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import MarkdownRenderer from "../../../components/MarkdownRenderer.vue";
 import type { DisplayQuestionType } from '../../../types/Question';
 import { ref, watch, computed } from 'vue';
@@ -7,7 +7,6 @@ import type {Experiment} from "../../../types/experiment.ts";
 import type { Module } from './index.ts';
 
 const route = useRoute();
-const router = useRouter();
 const moduleId = route.params.id;
 
 
@@ -23,33 +22,24 @@ const experiment: Module = {
       name: '基础SQL语法',
       description: '学习基本SQL查询语句结构和语法，为理解注入打下基础',
       score: 5,
-      document: '## SQL基础语法\n\n在开始学习SQL注入之前，首先需要理解基本的SQL语法结构。SQL(Structured Query Language)是一种用于管理关系型数据库的标准化语言。\n\n### 基本SQL语句\n\n1. **SELECT语句** - 用于从数据库中检索数据\n```sql\nSELECT 列名 FROM 表名 WHERE 条件;\n```\n\n2. **INSERT语句** - 用于向数据库添加新记录\n```sql\nINSERT INTO 表名 (列1, 列2) VALUES (值1, 值2);\n```\n\n3. **UPDATE语句** - 用于修改数据库中的记录\n```sql\nUPDATE 表名 SET 列名=新值 WHERE 条件;\n```\n\n4. **DELETE语句** - 用于删除数据库中的记录\n```sql\nDELETE FROM 表名 WHERE 条件;\n```\n\n了解这些基础语法对于理解SQL注入的工作原理至关重要。',
+      document:
+        '## SQL基础语法\n\n在开始学习SQL注入之前，首先需要理解基本的SQL语法结构。SQL(Structured Query Language)是一种用于管理关系型数据库的标准化语言。\n\n### 基本SQL语句\n\n1. **SELECT语句** - 用于从数据库中检索数据\n```sql\nSELECT 列名 FROM 表名 WHERE 条件;\n```\n\n2. **INSERT语句** - 用于向数据库添加新记录\n```sql\nINSERT INTO 表名 (列1, 列2) VALUES (值1, 值2);\n```\n\n3. **UPDATE语句** - 用于修改数据库中的记录\n```sql\nUPDATE 表名 SET 列名=新值 WHERE 条件;\n```\n\n4. **DELETE语句** - 用于删除数据库中的记录\n```sql\nDELETE FROM 表名 WHERE 条件;\n```\n\n了解这些基础语法对于理解SQL注入的工作原理至关重要。',
       questions: [
         {
-          "id": 1,
-          "content": "以下哪个是用于从数据库获取数据的SQL语句？",
-          "score": 2,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "INSERT",
-            "SELECT",
-            "UPDATE",
-            "DELETE"
-          ]
+          id: 1,
+          content: '以下哪个是用于从数据库获取数据的SQL语句？',
+          score: 2,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['INSERT', 'SELECT', 'UPDATE', 'DELETE']
         },
         {
-          "id": 2,
-          "content": "WHERE子句在SQL查询中的作用是什么？",
-          "score": 3,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "指定要检索的列",
-            "指定要查询的表",
-            "过滤满足特定条件的行",
-            "对结果进行排序"
-          ]
+          id: 2,
+          content: 'WHERE子句在SQL查询中的作用是什么？',
+          score: 3,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['指定要检索的列', '指定要查询的表', '过滤满足特定条件的行', '对结果进行排序']
         }
       ]
     },
@@ -58,33 +48,24 @@ const experiment: Module = {
       name: '数据库类型识别',
       description: '学习如何识别不同类型数据库的特征和指纹信息',
       score: 7,
-      document: '## 数据库类型识别\n\n在进行SQL注入之前，识别目标系统使用的数据库类型是非常重要的，因为不同类型的数据库有不同的语法和特性。\n\n### 常见数据库类型识别方法\n\n1. **错误信息分析**\n当网站显示数据库错误时，错误信息中通常包含数据库类型的线索。\n\n2. **版本注释语法**\n不同数据库的注释语法不同：\n- MySQL: `-- 注释` 或 `#注释`\n- SQL Server: `-- 注释` 或 `/*注释*/`\n- Oracle: `-- 注释`\n- PostgreSQL: `-- 注释` 或 `/*注释*/`\n\n3. **内置函数差异**\n不同数据库的函数名不同：\n- MySQL: `version()`, `user()`\n- SQL Server: `@@version`, `system_user`\n- Oracle: `v$version`, `user`\n- PostgreSQL: `version()`, `current_user`\n\n通过测试这些函数，可以确定数据库类型。',
+      document:
+        '## 数据库类型识别\n\n在进行SQL注入之前，识别目标系统使用的数据库类型是非常重要的，因为不同类型的数据库有不同的语法和特性。\n\n### 常见数据库类型识别方法\n\n1. **错误信息分析**\n当网站显示数据库错误时，错误信息中通常包含数据库类型的线索。\n\n2. **版本注释语法**\n不同数据库的注释语法不同：\n- MySQL: `-- 注释` 或 `#注释`\n- SQL Server: `-- 注释` 或 `/*注释*/`\n- Oracle: `-- 注释`\n- PostgreSQL: `-- 注释` 或 `/*注释*/`\n\n3. **内置函数差异**\n不同数据库的函数名不同：\n- MySQL: `version()`, `user()`\n- SQL Server: `@@version`, `system_user`\n- Oracle: `v$version`, `user`\n- PostgreSQL: `version()`, `current_user`\n\n通过测试这些函数，可以确定数据库类型。',
       questions: [
         {
-          "id": 1,
-          "content": "MySQL数据库中获取版本信息的函数是？",
-          "score": 3,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "@@version",
-            "version()",
-            "getVersion()",
-            "v$version"
-          ]
+          id: 1,
+          content: 'MySQL数据库中获取版本信息的函数是？',
+          score: 3,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['@@version', 'version()', 'getVersion()', 'v$version']
         },
         {
-          "id": 2,
-          "content": "以下哪种注释语法是MySQL特有的？",
-          "score": 4,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "-- 注释",
-            "/* 注释 */",
-            "# 注释",
-            "// 注释"
-          ]
+          id: 2,
+          content: '以下哪种注释语法是MySQL特有的？',
+          score: 4,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['-- 注释', '/* 注释 */', '# 注释', '// 注释']
         }
       ]
     },
@@ -93,33 +74,24 @@ const experiment: Module = {
       name: '注入点检测方法',
       description: '掌握常见注入点检测技术和错误信息分析方法',
       score: 8,
-      document: '## 注入点检测方法\n\n找到可能存在SQL注入漏洞的输入点是成功利用该漏洞的第一步。\n\n### 常用检测方法\n\n1. **单引号测试**\n在输入中添加单引号`\'`，如果返回数据库错误，则可能存在注入点。\n\n2. **逻辑测试**\n使用`AND 1=1`和`AND 1=2`进行测试。如果前者返回正常结果而后者返回异常或无结果，则可能存在注入点。\n\n3. **时间延迟测试**\n使用`SLEEP()`或`pg_sleep()`等函数测试是否可以控制响应时间，尤其适用于盲注场景。\n\n4. **错误信息分析**\n仔细分析错误信息中的数据库类型、表名、列名等信息，为后续注入提供线索。',
+      document:
+        "## 注入点检测方法\n\n找到可能存在SQL注入漏洞的输入点是成功利用该漏洞的第一步。\n\n### 常用检测方法\n\n1. **单引号测试**\n在输入中添加单引号`'`，如果返回数据库错误，则可能存在注入点。\n\n2. **逻辑测试**\n使用`AND 1=1`和`AND 1=2`进行测试。如果前者返回正常结果而后者返回异常或无结果，则可能存在注入点。\n\n3. **时间延迟测试**\n使用`SLEEP()`或`pg_sleep()`等函数测试是否可以控制响应时间，尤其适用于盲注场景。\n\n4. **错误信息分析**\n仔细分析错误信息中的数据库类型、表名、列名等信息，为后续注入提供线索。",
       questions: [
         {
-          "id": 1,
-          "content": "以下哪种方法最适合用来初步判断是否存在SQL注入漏洞？",
-          "score": 4,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "输入大量随机字符",
-            "尝试输入单引号",
-            "使用JavaScript代码",
-            "修改HTTP头信息"
-          ]
+          id: 1,
+          content: '以下哪种方法最适合用来初步判断是否存在SQL注入漏洞？',
+          score: 4,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['输入大量随机字符', '尝试输入单引号', '使用JavaScript代码', '修改HTTP头信息']
         },
         {
-          "id": 2,
-          "content": "使用`AND 1=2`进行注入测试，预期的结果是什么？",
-          "score": 4,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "返回所有记录",
-            "返回第一条记录",
-            "返回错误信息",
-            "不返回任何记录"
-          ]
+          id: 2,
+          content: '使用`AND 1=2`进行注入测试，预期的结果是什么？',
+          score: 4,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['返回所有记录', '返回第一条记录', '返回错误信息', '不返回任何记录']
         }
       ]
     },
@@ -128,7 +100,8 @@ const experiment: Module = {
       name: '理解SQL注入原理',
       description: '学习SQL注入的基本概念和攻击原理',
       score: 10,
-      document: '## SQL注入的背景和基本操作\n' +
+      document:
+        '## SQL注入的背景和基本操作\n' +
         '\n' +
         '### 背景\n' +
         '\n' +
@@ -141,7 +114,7 @@ const experiment: Module = {
         '你正在访问一个网站，网站有一个登录页面，需要你输入用户名和密码。网站后端可能会用类似这样的SQL语句来验证你的身份：\n' +
         '\n' +
         '```sql\n' +
-        'SELECT * FROM users WHERE username = \'你输入的用户名\' AND password = \'你输入的密码\';\n' +
+        "SELECT * FROM users WHERE username = '你输入的用户名' AND password = '你输入的密码';\n" +
         '```\n' +
         '\n' +
         '如果开发者没有对 "你输入的用户名" 和 "你输入的密码" 进行安全处理，那么攻击者就可以利用这一点，构造特殊的输入，改变原本SQL语句的含义，从而达到非法目的。\n' +
@@ -171,7 +144,7 @@ const experiment: Module = {
         '\n' +
         '```php\n' +
         '<?php\n' +
-        '$username = $_GET[\'username\'];\n' +
+        "$username = $_GET['username'];\n" +
         '$query = "SELECT * FROM users WHERE username = \'$username\'";\n' +
         '// ... 执行查询 ...\n' +
         '?>\n' +
@@ -179,26 +152,26 @@ const experiment: Module = {
         '\n' +
         '如果攻击者在 URL 中输入：\n' +
         '\n' +
-        '`http://example.com/vulnerable.php?username=admin\' OR \'1\'=\'1`\n' +
+        "`http://example.com/vulnerable.php?username=admin' OR '1'='1`\n" +
         '\n' +
         '那么拼接后的 SQL 语句会变成：\n' +
         '\n' +
         '```sql\n' +
-        'SELECT * FROM users WHERE username = \'admin\' OR \'1\'=\'1\'\n' +
+        "SELECT * FROM users WHERE username = 'admin' OR '1'='1'\n" +
         '```\n' +
         '\n' +
-        '由于 `OR \'1\'=\'1\'` 永远为真，这条 SQL 语句会返回 `users` 表中所有的数据，即使攻击者不知道 `admin` 用户的密码，也能绕过身份验证，获取所有用户信息。\n' +
+        "由于 `OR '1'='1'` 永远为真，这条 SQL 语句会返回 `users` 表中所有的数据，即使攻击者不知道 `admin` 用户的密码，也能绕过身份验证，获取所有用户信息。\n" +
         '\n' +
         '**更进一步的例子 (获取数据库版本信息)：**\n' +
         '\n' +
         '攻击者可以在 `username` 参数中注入如下语句：\n' +
         '\n' +
-        '`http://example.com/vulnerable.php?username=admin\' UNION SELECT version() --`\n' +
+        "`http://example.com/vulnerable.php?username=admin' UNION SELECT version() --`\n" +
         '\n' +
         '拼接后的 SQL 语句可能变成 (取决于数据库类型)：\n' +
         '\n' +
         '```sql\n' +
-        'SELECT * FROM users WHERE username = \'admin\' UNION SELECT version() --\'\n' +
+        "SELECT * FROM users WHERE username = 'admin' UNION SELECT version() --'\n" +
         '```\n' +
         '\n' +
         '`UNION SELECT version()` 会将数据库版本信息作为结果集返回，攻击者就可以从中获取数据库类型和版本信息，为后续更深入的攻击做准备。 `--` 是 SQL 的注释符，用于注释掉后面的语句，防止语法错误。\n' +
@@ -208,108 +181,68 @@ const experiment: Module = {
         'SQL注入是一种利用应用程序对用户输入处理不当，将恶意SQL代码注入到数据库查询语句中，从而达到非法目的的网络攻击手段。  理解其背景和基本操作原理，是防范SQL注入攻击的第一步。\n',
       questions: [
         {
-          "id": 1,
-          "content": "SQL注入漏洞产生的根本原因是？",
-          "score": 2,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "数据库软件本身存在漏洞",
-            "操作系统安全配置不足",
-            "应用程序未对用户输入进行充分的安全处理",
-            "网络防火墙配置不当"
-          ]
+          id: 1,
+          content: 'SQL注入漏洞产生的根本原因是？',
+          score: 2,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['数据库软件本身存在漏洞', '操作系统安全配置不足', '应用程序未对用户输入进行充分的安全处理', '网络防火墙配置不当']
         },
         {
-          "id": 2,
-          "content": "以下哪个是SQL注入攻击的主要目标？",
-          "score": 1,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "数据库服务器",
-            "Web服务器",
-            "客户端浏览器",
-            "操作系统"
-          ]
+          id: 2,
+          content: '以下哪个是SQL注入攻击的主要目标？',
+          score: 1,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['数据库服务器', 'Web服务器', '客户端浏览器', '操作系统']
         },
         {
-          "id": 3,
-          "content": "攻击者通过SQL注入可以实现以下哪些目的？",
-          "score": 1,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "绕过身份验证",
-            "获取数据库敏感数据",
-            "修改或删除数据库数据",
-            "以上所有"
-          ]
+          id: 3,
+          content: '攻击者通过SQL注入可以实现以下哪些目的？',
+          score: 1,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['绕过身份验证', '获取数据库敏感数据', '修改或删除数据库数据', '以上所有']
         },
         {
-          "id": 4,
-          "content": "在URL参数 `http://example.com/products.php?id=1` 中，哪个部分最有可能成为SQL注入的注入点？",
-          "score": 1,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "http://example.com",
-            "products.php",
-            "?",
-            "id=1"
-          ]
+          id: 4,
+          content: '在URL参数 `http://example.com/products.php?id=1` 中，哪个部分最有可能成为SQL注入的注入点？',
+          score: 1,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['http://example.com', 'products.php', '?', 'id=1']
         },
         {
-          "id": 5,
-          "content": "为了有效防止SQL注入，开发者应该采取的主要措施是？",
-          "score": 2,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "使用强密码",
-            "使用参数化查询 (或预编译语句)",
-            "安装防火墙",
-            "定期备份数据"
-          ]
+          id: 5,
+          content: '为了有效防止SQL注入，开发者应该采取的主要措施是？',
+          score: 2,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['使用强密码', '使用参数化查询 (或预编译语句)', '安装防火墙', '定期备份数据']
         },
         {
-          "id": 6,
-          "content": "以下哪种SQL注入类型是利用 `UNION` 关键字来合并查询结果的？",
-          "score": 1,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "盲注 (Blind SQL Injection)",
-            "联合查询注入 (Union-based SQL Injection)",
-            "报错注入 (Error-based SQL Injection)",
-            "布尔盲注 (Boolean-based Blind SQL Injection)"
-          ]
+          id: 6,
+          content: '以下哪种SQL注入类型是利用 `UNION` 关键字来合并查询结果的？',
+          score: 1,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['盲注 (Blind SQL Injection)', '联合查询注入 (Union-based SQL Injection)', '报错注入 (Error-based SQL Injection)', '布尔盲注 (Boolean-based Blind SQL Injection)']
         },
         {
-          "id": 7,
-          "content": "在SQL注入语句中，`--` 的作用是？",
-          "score": 1,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "执行SQL语句",
-            "注释掉后面的SQL语句",
-            "分隔SQL语句",
-            "定义变量"
-          ]
+          id: 7,
+          content: '在SQL注入语句中，`--` 的作用是？',
+          score: 1,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['执行SQL语句', '注释掉后面的SQL语句', '分隔SQL语句', '定义变量']
         },
         {
-          "id": 8,
-          "content": "如果在一个登录表单的用户名输入框中输入 `' OR '1'='1 --`，最有可能发生的情况是？",
-          "score": 1,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "网站崩溃",
-            "成功绕过登录验证",
-            "账号被锁定",
-            "输入被视为普通的用户名"
-          ]
+          id: 8,
+          content: "如果在一个登录表单的用户名输入框中输入 `' OR '1'='1 --`，最有可能发生的情况是？",
+          score: 1,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['网站崩溃', '成功绕过登录验证', '账号被锁定', '输入被视为普通的用户名']
         }
       ]
     },
@@ -318,33 +251,24 @@ const experiment: Module = {
       name: 'SQL注入防御技术',
       description: '了解参数化查询、ORM和输入验证等防御SQL注入的方法',
       score: 10,
-      document: '## SQL注入防御技术\n\n防御SQL注入攻击是web应用安全中的重要环节。以下是几种主要的防御技术：\n\n### 1. 参数化查询 (预编译语句)\n\n参数化查询是防御SQL注入的最有效方法之一。它将SQL语句与数据分开处理：\n\n```php\n// 不安全的方式\n$query = "SELECT * FROM users WHERE username = \'" + $username + "\'"; \n\n// 安全的方式（PHP PDO示例）\n$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");\n$stmt->execute([$username]);\n```\n\n### 2. ORM框架\n\nORM(Object-Relational Mapping)框架可以自动处理SQL查询，并实现参数化：\n\n```javascript\n// Node.js Sequelize示例\nUser.findOne({ where: { username: username } });\n```\n\n### 3. 输入验证与转义\n\n对用户输入进行验证和转义：\n\n```php\n// PHP示例\n$username = mysqli_real_escape_string($conn, $username);\n```\n\n### 4. 最小权限原则\n\n数据库账户应遵循最小权限原则，仅分配必要的权限。\n\n### 5. WAF (Web应用防火墙)\n\nWAF可以识别并拦截SQL注入攻击。',
+      document:
+        '## SQL注入防御技术\n\n防御SQL注入攻击是web应用安全中的重要环节。以下是几种主要的防御技术：\n\n### 1. 参数化查询 (预编译语句)\n\n参数化查询是防御SQL注入的最有效方法之一。它将SQL语句与数据分开处理：\n\n```php\n// 不安全的方式\n$query = "SELECT * FROM users WHERE username = \'" + $username + "\'"; \n\n// 安全的方式（PHP PDO示例）\n$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");\n$stmt->execute([$username]);\n```\n\n### 2. ORM框架\n\nORM(Object-Relational Mapping)框架可以自动处理SQL查询，并实现参数化：\n\n```javascript\n// Node.js Sequelize示例\nUser.findOne({ where: { username: username } });\n```\n\n### 3. 输入验证与转义\n\n对用户输入进行验证和转义：\n\n```php\n// PHP示例\n$username = mysqli_real_escape_string($conn, $username);\n```\n\n### 4. 最小权限原则\n\n数据库账户应遵循最小权限原则，仅分配必要的权限。\n\n### 5. WAF (Web应用防火墙)\n\nWAF可以识别并拦截SQL注入攻击。',
       questions: [
         {
-          "id": 1,
-          "content": "防御SQL注入的最佳方法是什么？",
-          "score": 5,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "使用正则表达式过滤用户输入",
-            "使用参数化查询（预编译语句）",
-            "禁用错误显示",
-            "限制数据库连接数"
-          ]
+          id: 1,
+          content: '防御SQL注入的最佳方法是什么？',
+          score: 5,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['使用正则表达式过滤用户输入', '使用参数化查询（预编译语句）', '禁用错误显示', '限制数据库连接数']
         },
         {
-          "id": 2,
-          "content": "以下哪个不是有效的SQL注入防御措施？",
-          "score": 5,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "使用ORM框架",
-            "对用户输入进行白名单验证",
-            "简单地用replace()函数删除单引号",
-            "实施最小权限原则"
-          ]
+          id: 2,
+          content: '以下哪个不是有效的SQL注入防御措施？',
+          score: 5,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['使用ORM框架', '对用户输入进行白名单验证', '简单地用replace()函数删除单引号', '实施最小权限原则']
         }
       ]
     },
@@ -353,33 +277,24 @@ const experiment: Module = {
       name: '绕过WAF技术',
       description: '学习常见SQL注入过滤器绕过技术和编码绕过方法',
       score: 10,
-      document: '## WAF绕过技术\n\nWeb应用防火墙(WAF)通常会检测和阻止SQL注入攻击，但攻击者可能使用多种技术绕过这些防护机制。\n\n### 常见绕过技术\n\n1. **大小写混合**\n许多WAF只检查特定关键词的小写形式，使用大小写混合可能绕过检测：\n```sql\nSeLeCt * FrOm users\n```\n\n2. **注释符嵌入**\n在SQL关键词中插入注释：\n```sql\nSE/**/LECT * FR/**/OM users\n```\n\n3. **编码绕过**\n使用URL编码、十六进制编码或Unicode编码：\n```sql\nSELECT CHAR(0x73, 0x65, 0x63, 0x72, 0x65, 0x74)\n```\n\n4. **空白字符替代**\n使用制表符、换行符等替代空格：\n```sql\nSELECT*FROM[users]WHERE[id]=1\n```\n\n5. **等价函数替换**\n使用同等功能的不同表达方式：\n```sql\n\'1\'=\'1\' 可替换为 \'1\'LIKE\'1\'\n```\n\n了解这些技术有助于构建更强大的防御策略。',
+      document:
+        "## WAF绕过技术\n\nWeb应用防火墙(WAF)通常会检测和阻止SQL注入攻击，但攻击者可能使用多种技术绕过这些防护机制。\n\n### 常见绕过技术\n\n1. **大小写混合**\n许多WAF只检查特定关键词的小写形式，使用大小写混合可能绕过检测：\n```sql\nSeLeCt * FrOm users\n```\n\n2. **注释符嵌入**\n在SQL关键词中插入注释：\n```sql\nSE/**/LECT * FR/**/OM users\n```\n\n3. **编码绕过**\n使用URL编码、十六进制编码或Unicode编码：\n```sql\nSELECT CHAR(0x73, 0x65, 0x63, 0x72, 0x65, 0x74)\n```\n\n4. **空白字符替代**\n使用制表符、换行符等替代空格：\n```sql\nSELECT*FROM[users]WHERE[id]=1\n```\n\n5. **等价函数替换**\n使用同等功能的不同表达方式：\n```sql\n'1'='1' 可替换为 '1'LIKE'1'\n```\n\n了解这些技术有助于构建更强大的防御策略。",
       questions: [
         {
-          "id": 1,
-          "content": "以下哪种技术不能用于绕过WAF对SQL注入的检测？",
-          "score": 5,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "使用大小写混合",
-            "在关键词中插入注释",
-            "使用十六进制编码",
-            "直接清除浏览器缓存"
-          ]
+          id: 1,
+          content: '以下哪种技术不能用于绕过WAF对SQL注入的检测？',
+          score: 5,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['使用大小写混合', '在关键词中插入注释', '使用十六进制编码', '直接清除浏览器缓存']
         },
         {
-          "id": 2,
-          "content": "以下哪个SQL语句可能用于绕过WAF检测？",
-          "score": 5,
-          "requiresTarget": false,
-          "type": "multiple-choice",
-          "options": [
-            "SELECT * FROM users",
-            "SE/**/LECT * FROM users",
-            "select * from users",
-            "SELECT FROM users *"
-          ]
+          id: 2,
+          content: '以下哪个SQL语句可能用于绕过WAF检测？',
+          score: 5,
+          requiresTarget: false,
+          type: 'multiple-choice',
+          options: ['SELECT * FROM users', 'SE/**/LECT * FROM users', 'select * from users', 'SELECT FROM users *']
         }
       ]
     },
@@ -465,33 +380,28 @@ const experiment: Module = {
 - 发现漏洞要及时报告
 
 现在，开始你的实验吧！`,
-      "questions": [
+      questions: [
         {
-          "id": 1,
-          "content": "请描述SQL注入的基本原理 (在本前端模拟实验的上下文中)",
-          "score": 3,
-          "requiresTarget": false,
-          "type": "open-ended-without-answer"
+          id: 1,
+          content: '请描述SQL注入的基本原理 (在本前端模拟实验的上下文中)',
+          score: 3,
+          requiresTarget: false,
+          type: 'open-ended-without-answer'
         },
         {
-          "id": 2,
-          "content": "以下哪个payload可以成功绕过前端模拟的用户名验证，并至少显示 '用户存在!' 的结果？",
-          "score": 3,
-          "requiresTarget": false,
-          "type": "single-choice",
-          "options": [
-            "' OR '1'='1",
-            "testuser",
-            "'; DROP TABLE users; --",
-            "正常用户名"
-          ]
+          id: 2,
+          content: "以下哪个payload可以成功绕过前端模拟的用户名验证，并至少显示 '用户存在!' 的结果？",
+          score: 3,
+          requiresTarget: false,
+          type: 'single-choice',
+          options: ["' OR '1'='1", 'testuser', "'; DROP TABLE users; --", '正常用户名']
         },
         {
-          "id": 3,
-          "content": "请使用 `UNION SELECT` 类型的 payload，尝试获取模拟的 flag 值。请写出你使用的 payload 和最终获取的 flag 值。",
-          "score": 4,
-          "requiresTarget": false,
-          "type": "open-ended-with-answer"
+          id: 3,
+          content: '请使用 `UNION SELECT` 类型的 payload，尝试获取模拟的 flag 值。请写出你使用的 payload 和最终获取的 flag 值。',
+          score: 4,
+          requiresTarget: false,
+          type: 'open-ended-with-answer'
         }
       ]
     }
@@ -532,7 +442,7 @@ const toggleOperationMachine = async () => {
     isOperationLoading.value = true
 
     // 模拟启动延迟
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
     isOperationMachineRunning.value = true
     activeEnvironmentTab.value = 'operation'
@@ -552,7 +462,7 @@ const startTargetMachine = async () => {
     isTargetLoading.value = true
 
     // 模拟启动延迟
-    await new Promise(resolve => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 2000))
 
     // 设置靶机 URL 并在当前页面中显示
     targetMachineUrl.value = `/#/container/${experiment.targetMachine.id}`
@@ -578,8 +488,7 @@ const answers = ref<{ [key: number]: { [key: number]: string | string[] } }>({})
 experiment.taskPoints.forEach((x) => {
   answers.value[x.id] = {}
   x.questions.forEach((y) => {
-
-    answers.value[x.id][y.id] = y.type == "multiple-choice" ? [] : ""
+    answers.value[x.id][y.id] = y.type == 'multiple-choice' ? [] : ''
   })
 })
 watch(answers.value, (x) => {
@@ -603,18 +512,17 @@ const submitAnswer = (questionId: number) => {
 const calculatePoints = computed(() => {
   // 难度基础分：每星30分（5星最高150分）
   const difficultyPoints = experiment.difficulty * 30
-  
+
   // 时间加成：每小时10分（最长5小时，最高50分）
   const totalHours = experiment.taskPoints.reduce((total, task) => {
-    return total + task.score / 10  // 假设每10分的任务需要1小时
+    return total + task.score / 10 // 假设每10分的任务需要1小时
   }, 0)
   // 限制最大计算时长为5小时
   const timePoints = Math.min(Math.round(totalHours * 10), 50)
-  
+
   // 总分 = 难度分 + 时间分（自然限制在200分以内）
   return difficultyPoints + timePoints
 })
-
 
 // 添加页面状态控制，用于切换做题和题解讨论页面
 const currentTab = ref('practice') // 'practice'或'discussion'
@@ -622,11 +530,11 @@ const currentTab = ref('practice') // 'practice'或'discussion'
 // 计算查看题解所需积分
 const getSolutionCost = (difficulty: number) => {
   const costs = {
-    1: 40,   // 1星40分
-    2: 80,   // 2星80分
-    3: 140,  // 3星140分
-    4: 180,  // 4星180分
-    5: 250   // 5星250分
+    1: 40, // 1星40分
+    2: 80, // 2星80分
+    3: 140, // 3星140分
+    4: 180, // 4星180分
+    5: 250 // 5星250分
   }
   return costs[difficulty as keyof typeof costs]
 }
@@ -647,11 +555,11 @@ const viewDiscussion = () => {
     // 首次查看需要支付积分
     if (userPoints.value < solutionCost.value) {
       alert('积分不足，请先获取更多积分')
-    return
-  }
-    
+      return
+    }
+
     // 显示确认对话框
-  showCostModal.value = true
+    showCostModal.value = true
   } else {
     // 已经查看过，直接切换到讨论页面，不扣除积分
     currentTab.value = 'discussion'
@@ -662,7 +570,7 @@ const viewDiscussion = () => {
 const confirmViewDiscussion = () => {
   // 如果已查看过，不再扣费
   if (!hasViewedDiscussion.value) {
-  userPoints.value -= solutionCost.value
+    userPoints.value -= solutionCost.value
     hasViewedDiscussion.value = true // 标记为已查看
   }
   currentTab.value = 'discussion'
@@ -674,371 +582,375 @@ const discussions = [
   {
     id: 1,
     author: {
-      name: "王伟雪",
-      avatar: "/student6.png"
+      name: '王伟雪',
+      avatar: '/student6.png'
     },
-    content: "这道题的关键在于理解SQL注入的原理，我的解题思路是：\n1. 首先尝试最基本的单引号闭合\n2. 然后使用UNION SELECT语句\n3. 最后获取flag值",
-    createdAt: "2024-03-20 14:30",
+    content: '这道题的关键在于理解SQL注入的原理，我的解题思路是：\n1. 首先尝试最基本的单引号闭合\n2. 然后使用UNION SELECT语句\n3. 最后获取flag值',
+    createdAt: '2024-03-20 14:30',
     likes: 25
   },
   {
     id: 2,
     author: {
-      name: "徐建国",
-      avatar: "/student7.png"
+      name: '徐建国',
+      avatar: '/student7.png'
     },
-    content: "补充一下，在做这道题时要注意以下几点：\n- 字符型注入需要注意闭合\n- 使用注释符号抵消后面的SQL语句\n- 可以使用order by判断字段数",
-    createdAt: "2024-03-21 09:15",
+    content: '补充一下，在做这道题时要注意以下几点：\n- 字符型注入需要注意闭合\n- 使用注释符号抵消后面的SQL语句\n- 可以使用order by判断字段数',
+    createdAt: '2024-03-21 09:15',
     likes: 18
   },
   {
     id: 3,
     author: {
-      name: "林宗恒",
-      avatar: "/example.png"
+      name: '林宗恒',
+      avatar: '/example.png'
     },
-    content: "我使用了布尔盲注的方法解决这个问题，虽然花费时间长一些，但是更适合不能直接返回查询结果的情况。推荐参考《Web安全攻防》第三章的相关内容，对理解原理很有帮助。",
-    createdAt: "2024-03-21 10:45",
+    content: '我使用了布尔盲注的方法解决这个问题，虽然花费时间长一些，但是更适合不能直接返回查询结果的情况。推荐参考《Web安全攻防》第三章的相关内容，对理解原理很有帮助。',
+    createdAt: '2024-03-21 10:45',
     likes: 13
   },
   {
     id: 4,
     author: {
-      name: "赵建国",
-      avatar: "/student8.png"
+      name: '赵建国',
+      avatar: '/student8.png'
     },
     content: "看到大家的解法都很复杂，其实这道题有一个简单的解法：\n\n```sql\n' OR '1'='1' --\n```\n\n这个payload可以绕过大多数简单的验证，原理是OR后面的条件永远为真，加上注释符号，可以直接获取flag。",
-    createdAt: "2024-03-21 14:22",
+    createdAt: '2024-03-21 14:22',
     likes: 31
   },
   {
     id: 5,
     author: {
-      name: "陈敏",
-      avatar: "/student9.png"
+      name: '陈敏',
+      avatar: '/student9.png'
     },
-    content: "我写了一个Python脚本自动化提取flag，代码如下：\n\n```python\nimport requests\n\nurl = \"http://example.com/login\"\npayload = {\"username\": \"' UNION SELECT 1,2,flag FROM flags --\", \"password\": \"test\"}\n\nresponse = requests.post(url, data=payload)\nprint(response.text)\n```\n\n希望对大家有帮助！",
-    createdAt: "2024-03-22 08:35",
+    content:
+      '我写了一个Python脚本自动化提取flag，代码如下：\n\n```python\nimport requests\n\nurl = "http://example.com/login"\npayload = {"username": "\' UNION SELECT 1,2,flag FROM flags --", "password": "test"}\n\nresponse = requests.post(url, data=payload)\nprint(response.text)\n```\n\n希望对大家有帮助！',
+    createdAt: '2024-03-22 08:35',
     likes: 22
   },
   {
     id: 6,
     author: {
-      name: "徐杰晓薇",
-      avatar: "/student10.png"
+      name: '徐杰晓薇',
+      avatar: '/student10.png'
     },
-    content: "这个实验的关键是理解SQL查询的结构和注入点的位置。当你找到合适的注入点后，可以尝试使用不同的闭合方式，比如单引号、双引号或括号。我发现在这个实验中，使用单引号闭合最为有效。",
-    createdAt: "2024-03-22 11:40",
+    content: '这个实验的关键是理解SQL查询的结构和注入点的位置。当你找到合适的注入点后，可以尝试使用不同的闭合方式，比如单引号、双引号或括号。我发现在这个实验中，使用单引号闭合最为有效。',
+    createdAt: '2024-03-22 11:40',
     likes: 16
   },
   {
     id: 7,
     author: {
-      name: "徐航娜",
-      avatar: "/student11.png"
+      name: '徐航娜',
+      avatar: '/student11.png'
     },
-    content: "我一开始做这道题非常困难，但后来发现问题出在我对SQL语法的理解上。建议大家先看一下SQL的基础语法，特别是SELECT语句的结构，对解题会有很大帮助。",
-    createdAt: "2024-03-22 15:20",
+    content: '我一开始做这道题非常困难，但后来发现问题出在我对SQL语法的理解上。建议大家先看一下SQL的基础语法，特别是SELECT语句的结构，对解题会有很大帮助。',
+    createdAt: '2024-03-22 15:20',
     likes: 9
   },
   {
     id: 8,
     author: {
-      name: "周杰",
-      avatar: "/student12.png"
+      name: '周杰',
+      avatar: '/student12.png'
     },
     content: "我使用了时间盲注的方法，虽然效率不高，但是适用于没有直接回显的情况：\n\n```sql\n' OR IF(substr(flag,1,1)='f',sleep(3),0) --\n```\n\n通过控制延迟时间，可以逐位判断出flag的值。",
-    createdAt: "2024-03-23 09:05",
+    createdAt: '2024-03-23 09:05',
     likes: 11
   },
   {
     id: 9,
     author: {
-      name: "李娜",
-      avatar: "/student13.png"
+      name: '李娜',
+      avatar: '/student13.png'
     },
-    content: "我觉得做这类SQL注入题目，最重要的是要有一个系统的方法：\n1. 确定是否存在注入点\n2. 确定数据库类型\n3. 确定字段数\n4. 确定回显位置\n5. 利用注入获取数据\n\n按照这个流程，大部分SQL注入题目都能解决。",
-    createdAt: "2024-03-23 14:15",
+    content: '我觉得做这类SQL注入题目，最重要的是要有一个系统的方法：\n1. 确定是否存在注入点\n2. 确定数据库类型\n3. 确定字段数\n4. 确定回显位置\n5. 利用注入获取数据\n\n按照这个流程，大部分SQL注入题目都能解决。',
+    createdAt: '2024-03-23 14:15',
     likes: 27
   },
   {
     id: 10,
     author: {
-      name: "张伟",
-      avatar: "/student14.png"
+      name: '张伟',
+      avatar: '/student14.png'
     },
     content: "这道题的陷阱在于它会过滤一些常见的SQL关键词，比如SELECT。我通过大小写混合的方式绕过了过滤：\n\n```sql\n' UnIoN SeLeCt 1,2,flag FROM flags --\n```\n\n这种方法对于简单的字符串匹配过滤非常有效。",
-    createdAt: "2024-03-23 17:30",
+    createdAt: '2024-03-23 17:30',
     likes: 15
   },
   {
     id: 11,
     author: {
-      name: "王芳",
-      avatar: "/student15.png"
+      name: '王芳',
+      avatar: '/student15.png'
     },
     content: "我做这道题的时候发现它对于空格有过滤，可以使用/**/来代替空格：\n\n```sql\n'/**/UNION/**/SELECT/**/1,2,flag/**/FROM/**/flags--\n```\n\n这种注释符替代空格的技巧在绕过WAF时非常有用。",
-    createdAt: "2024-03-24 10:45",
+    createdAt: '2024-03-24 10:45',
     likes: 19
   },
   {
     id: 12,
     author: {
-      name: "刘洋",
-      avatar: "/student16.png"
+      name: '刘洋',
+      avatar: '/student16.png'
     },
-    content: "我建议初学者先从简单的单引号测试开始，看看系统是否有错误提示。有时候错误信息会包含数据库类型，表结构等关键信息，对解题非常有帮助。",
-    createdAt: "2024-03-24 13:20",
+    content: '我建议初学者先从简单的单引号测试开始，看看系统是否有错误提示。有时候错误信息会包含数据库类型，表结构等关键信息，对解题非常有帮助。',
+    createdAt: '2024-03-24 13:20',
     likes: 7
   },
   {
     id: 13,
     author: {
-      name: "陈静",
-      avatar: "/student17.png"
+      name: '陈静',
+      avatar: '/student17.png'
     },
     content: "除了常规的UNION SELECT方法，报错注入也是一个很好的选择，特别是在MySQL数据库上：\n\n```sql\n' AND extractvalue(1,concat(0x7e,(SELECT flag FROM flags),0x7e)) --\n```\n\n这个方法可以在没有直接回显的情况下获取数据。",
-    createdAt: "2024-03-24 16:55",
+    createdAt: '2024-03-24 16:55',
     likes: 14
   },
   {
     id: 14,
     author: {
-      name: "杨帆",
-      avatar: "/student18.png"
+      name: '杨帆',
+      avatar: '/student18.png'
     },
     content: "我在做这道题的时候发现，系统对一些特殊字符如单引号、双引号等有过滤，可以通过16进制编码绕过：\n\n```sql\n' UNION SELECT 1,2,0x73656372657420666C6167 --\n```\n\n其中0x73656372657420666C6167是'secret flag'的16进制表示。",
-    createdAt: "2024-03-25 09:10",
+    createdAt: '2024-03-25 09:10',
     likes: 16
   },
   {
     id: 15,
     author: {
-      name: "赵明",
-      avatar: "/student19.png"
+      name: '赵明',
+      avatar: '/student19.png'
     },
-    content: "对于这种SQL注入题目，我推荐使用SQLmap工具进行自动化测试，可以节省大量时间：\n\n```bash\nsqlmap -u \"http://example.com/login?id=1\" --dump\n```\n\n当然，在实际考试中可能不允许使用工具，但在练习时非常高效。",
-    createdAt: "2024-03-25 13:45",
+    content: '对于这种SQL注入题目，我推荐使用SQLmap工具进行自动化测试，可以节省大量时间：\n\n```bash\nsqlmap -u "http://example.com/login?id=1" --dump\n```\n\n当然，在实际考试中可能不允许使用工具，但在练习时非常高效。',
+    createdAt: '2024-03-25 13:45',
     likes: 21
   },
   {
     id: 16,
     author: {
-      name: "王伟雪",
-      avatar: "/student6.png"
+      name: '王伟雪',
+      avatar: '/student6.png'
     },
-    content: "针对这道题，我总结了SQL注入的一些防御措施：\n1. 使用参数化查询\n2. 输入验证和过滤\n3. 最小权限原则\n4. 使用ORM框架\n\n希望大家在学习注入技术的同时，也要学习如何防御。",
-    createdAt: "2024-03-25 16:30",
+    content: '针对这道题，我总结了SQL注入的一些防御措施：\n1. 使用参数化查询\n2. 输入验证和过滤\n3. 最小权限原则\n4. 使用ORM框架\n\n希望大家在学习注入技术的同时，也要学习如何防御。',
+    createdAt: '2024-03-25 16:30',
     likes: 28
   },
   {
     id: 17,
     author: {
-      name: "徐建国",
-      avatar: "/student7.png"
+      name: '徐建国',
+      avatar: '/student7.png'
     },
-    content: "在做这道题的时候，我遇到了一个问题：后端使用了预编译语句，但是在拼接ORDER BY子句时没有使用参数化查询，这就给了我们注入的机会。\n\n```sql\nid=1 ORDER BY (SELECT flag FROM flags)\n```\n\n通过这种方式，我成功获取了flag。",
-    createdAt: "2024-03-26 08:20",
+    content: '在做这道题的时候，我遇到了一个问题：后端使用了预编译语句，但是在拼接ORDER BY子句时没有使用参数化查询，这就给了我们注入的机会。\n\n```sql\nid=1 ORDER BY (SELECT flag FROM flags)\n```\n\n通过这种方式，我成功获取了flag。',
+    createdAt: '2024-03-26 08:20',
     likes: 17
   },
   {
     id: 18,
     author: {
-      name: "林宗恒",
-      avatar: "/example.png"
+      name: '林宗恒',
+      avatar: '/example.png'
     },
     content: "对于这类题目，了解SQL语法的优先级很重要。例如，AND的优先级高于OR，所以可以构造类似这样的payload：\n\n```sql\nusername=' OR 1=1 AND username='admin\n```\n\n这样就能以admin身份登录系统。",
-    createdAt: "2024-03-26 11:15",
+    createdAt: '2024-03-26 11:15',
     likes: 12
   },
   {
     id: 19,
     author: {
-      name: "赵建国",
-      avatar: "/student8.png"
+      name: '赵建国',
+      avatar: '/student8.png'
     },
-    content: "在SQL注入的学习过程中，我推荐大家搭建一个本地的靶场环境，比如DVWA或SQLi-labs，这样可以更深入地理解各种注入类型和防御措施。",
-    createdAt: "2024-03-26 14:40",
+    content: '在SQL注入的学习过程中，我推荐大家搭建一个本地的靶场环境，比如DVWA或SQLi-labs，这样可以更深入地理解各种注入类型和防御措施。',
+    createdAt: '2024-03-26 14:40',
     likes: 23
   },
   {
     id: 20,
     author: {
-      name: "陈敏",
-      avatar: "/student9.png"
+      name: '陈敏',
+      avatar: '/student9.png'
     },
     content: "我发现这道题的一个隐藏考点是堆叠注入，通过分号可以执行多条SQL语句：\n\n```sql\n'; DROP TABLE users; --\n```\n\n当然，在本实验环境中不会真的删除表，但这种技术在实际攻击中非常危险，也是我们需要防范的。",
-    createdAt: "2024-03-26 17:25",
+    createdAt: '2024-03-26 17:25',
     likes: 18
   },
   {
     id: 21,
     author: {
-      name: "徐杰晓薇",
-      avatar: "/student10.png"
+      name: '徐杰晓薇',
+      avatar: '/student10.png'
     },
-    content: "我认为学习SQL注入不仅要会技术，还要理解其背后的原理。SQL注入本质上是程序对用户输入的信任问题，这一点适用于所有的安全问题，值得我们深思。",
-    createdAt: "2024-03-27 09:30",
+    content: '我认为学习SQL注入不仅要会技术，还要理解其背后的原理。SQL注入本质上是程序对用户输入的信任问题，这一点适用于所有的安全问题，值得我们深思。',
+    createdAt: '2024-03-27 09:30',
     likes: 29
   },
   {
     id: 22,
     author: {
-      name: "徐航娜",
-      avatar: "/student11.png"
+      name: '徐航娜',
+      avatar: '/student11.png'
     },
     content: "这道题目我使用了sqlmap工具进行测试，发现了一个有趣的现象：系统对UNION关键词进行了过滤，但对UNION前面添加注释后就能绕过：\n\n```sql\n'/*!UNION*/ SELECT 1,2,flag FROM flags --\n```\n\n这是MySQL特有的注释语法，在注释中的代码仍然会被执行。",
-    createdAt: "2024-03-27 13:15",
+    createdAt: '2024-03-27 13:15',
     likes: 15
   },
   {
     id: 23,
     author: {
-      name: "周杰",
-      avatar: "/student12.png"
+      name: '周杰',
+      avatar: '/student12.png'
     },
     content: "在进行SQL注入测试时，合理利用回显位置非常重要。如果发现某个位置可以回显注入结果，就可以通过构造查询语句获取任意信息。比如在这道题中，第二个字段可以回显，所以可以用：\n\n```sql\n' UNION SELECT 1,database(),3 --\n```\n\n来获取当前数据库名。",
-    createdAt: "2024-03-27 16:50",
+    createdAt: '2024-03-27 16:50',
     likes: 11
   },
   {
     id: 24,
     author: {
-      name: "李娜",
-      avatar: "/student13.png"
+      name: '李娜',
+      avatar: '/student13.png'
     },
-    content: "我觉得学习SQL注入的一个好方法是阅读OWASP的SQL注入备忘单，上面有很多实用的技巧和payload，对应不同的数据库类型和场景。强烈推荐给初学者参考！",
-    createdAt: "2024-03-28 10:20",
+    content: '我觉得学习SQL注入的一个好方法是阅读OWASP的SQL注入备忘单，上面有很多实用的技巧和payload，对应不同的数据库类型和场景。强烈推荐给初学者参考！',
+    createdAt: '2024-03-28 10:20',
     likes: 26
   },
   {
     id: 25,
     author: {
-      name: "张伟",
-      avatar: "/student14.png"
+      name: '张伟',
+      avatar: '/student14.png'
     },
     content: "如果遇到过滤了很多关键词和特殊字符的情况，可以考虑使用ASCII编码绕过：\n\n```sql\n' UNION SELECT 1,2,ASCII(115) --\n```\n\n这样可以避开对字符的直接过滤。更复杂的情况可以使用CHAR()函数连接多个ASCII码。",
-    createdAt: "2024-03-28 13:45",
+    createdAt: '2024-03-28 13:45',
     likes: 14
   },
   {
     id: 26,
     author: {
-      name: "王芳",
-      avatar: "/student15.png"
+      name: '王芳',
+      avatar: '/student15.png'
     },
     content: "我发现在做SQL注入题目时，了解数据库的一些内置表和函数很有帮助。比如在MySQL中，information_schema库包含了所有表和列的信息，可以用来查找敏感表：\n\n```sql\n' UNION SELECT 1,TABLE_NAME,3 FROM information_schema.TABLES --\n```",
-    createdAt: "2024-03-28 16:30",
+    createdAt: '2024-03-28 16:30',
     likes: 19
   },
   {
     id: 27,
     author: {
-      name: "刘洋",
-      avatar: "/student16.png"
+      name: '刘洋',
+      avatar: '/student16.png'
     },
-    content: "我在解决这道题时，发现一个技巧：当你不知道表名和列名时，可以先查询information_schema.tables和information_schema.columns这两个表，获取数据库结构，再进行有针对性的注入。这是一个系统性的方法，适用于大多数SQL注入场景。",
-    createdAt: "2024-03-28 21:01",
+    content: '我在解决这道题时，发现一个技巧：当你不知道表名和列名时，可以先查询information_schema.tables和information_schema.columns这两个表，获取数据库结构，再进行有针对性的注入。这是一个系统性的方法，适用于大多数SQL注入场景。',
+    createdAt: '2024-03-28 21:01',
     likes: 12
   },
   {
     id: 28,
     author: {
-      name: "陈静",
-      avatar: "/student17.png"
+      name: '陈静',
+      avatar: '/student17.png'
     },
     content: "对于这种带有WAF的环境，可以尝试一些绕过技术，比如大小写混合、注释符号插入、等价替换等。我发现使用CHAR函数代替字符串，可以有效绕过对单引号的过滤：\n\n```sql\n' UNION SELECT 1,2,CHAR(102,108,97,103) --\n```\n\n其中CHAR(102,108,97,103)相当于'flag'。",
-    createdAt: "2024-03-29 09:12",
+    createdAt: '2024-03-29 09:12',
     likes: 17
   },
   {
     id: 29,
     author: {
-      name: "杨帆",
-      avatar: "/student18.png"
+      name: '杨帆',
+      avatar: '/student18.png'
     },
     content: "我想分享一个小技巧：在SQL注入中，如果你不确定查询返回的字段数量，可以使用ORDER BY子句来判断：\n\n```sql\n' ORDER BY 1 --\n' ORDER BY 2 --\n' ORDER BY 3 --\n```\n\n一直尝试递增数字，直到出现错误，就可以知道字段的数量了。",
-    createdAt: "2024-03-29 11:15",
+    createdAt: '2024-03-29 11:15',
     likes: 21
   },
   {
     id: 30,
     author: {
-      name: "赵明",
-      avatar: "/student19.png"
+      name: '赵明',
+      avatar: '/student19.png'
     },
-    content: "我发现这道题的一个难点是它使用了预编译语句，但在处理LIKE查询时，仍然用字符串拼接构造了通配符：\n\n```sql\nSELECT * FROM users WHERE username LIKE '%{input}%'\n```\n\n这种情况下，可以通过注入改变LIKE条件的含义，例如：\n\n```\n%' OR username LIKE 'admin\n```\n\n这会变成：\n```sql\nSELECT * FROM users WHERE username LIKE '%' OR username LIKE 'admin%'\n```",
-    createdAt: "2024-03-29 15:28",
+    content:
+      "我发现这道题的一个难点是它使用了预编译语句，但在处理LIKE查询时，仍然用字符串拼接构造了通配符：\n\n```sql\nSELECT * FROM users WHERE username LIKE '%{input}%'\n```\n\n这种情况下，可以通过注入改变LIKE条件的含义，例如：\n\n```\n%' OR username LIKE 'admin\n```\n\n这会变成：\n```sql\nSELECT * FROM users WHERE username LIKE '%' OR username LIKE 'admin%'\n```",
+    createdAt: '2024-03-29 15:28',
     likes: 18
   },
   {
     id: 31,
     author: {
-      name: "王伟雪",
-      avatar: "/student6.png"
+      name: '王伟雪',
+      avatar: '/student6.png'
     },
-    content: "在学习SQL注入的过程中，我觉得重要的是要理解SQL语句的语法结构。一个SQL语句包括SELECT、FROM、WHERE等子句，而注入就是利用语法的灵活性来改变原始查询的含义。理解了这一点，就能更有创造性地构造payload。",
-    createdAt: "2024-03-29 19:43",
+    content: '在学习SQL注入的过程中，我觉得重要的是要理解SQL语句的语法结构。一个SQL语句包括SELECT、FROM、WHERE等子句，而注入就是利用语法的灵活性来改变原始查询的含义。理解了这一点，就能更有创造性地构造payload。',
+    createdAt: '2024-03-29 19:43',
     likes: 23
   },
   {
     id: 32,
     author: {
-      name: "徐建国",
-      avatar: "/student7.png"
+      name: '徐建国',
+      avatar: '/student7.png'
     },
     content: "我在解决这类SQL注入题目时，总是先尝试一些简单的测试payload，例如：\n- `'` 或 `\"`：测试是否存在注入点\n- `' OR 1=1 --`：测试是否能绕过认证\n- `' UNION SELECT 1,2,3 --`：测试UNION注入\n\n通过这些基础测试，可以初步判断注入类型和可能的攻击向量。",
-    createdAt: "2024-03-30 08:09",
+    createdAt: '2024-03-30 08:09',
     likes: 19
   },
   {
     id: 33,
     author: {
-      name: "林宗恒",
-      avatar: "/example.png"
+      name: '林宗恒',
+      avatar: '/example.png'
     },
-    content: "我想谈谈SQL注入的防御措施，因为学习安全不仅是为了攻击，更是为了防御：\n\n1. 参数化查询是最有效的防御方法，它将SQL结构和数据分离\n2. 输入验证应该在服务器端进行，客户端验证容易被绕过\n3. 错误信息不应该直接返回给用户，应该记录在日志中\n4. 使用最小权限原则，数据库账户只应拥有必要的权限\n\n希望这些知识对同学们有所帮助！",
-    createdAt: "2024-03-30 11:24",
+    content:
+      '我想谈谈SQL注入的防御措施，因为学习安全不仅是为了攻击，更是为了防御：\n\n1. 参数化查询是最有效的防御方法，它将SQL结构和数据分离\n2. 输入验证应该在服务器端进行，客户端验证容易被绕过\n3. 错误信息不应该直接返回给用户，应该记录在日志中\n4. 使用最小权限原则，数据库账户只应拥有必要的权限\n\n希望这些知识对同学们有所帮助！',
+    createdAt: '2024-03-30 11:24',
     likes: 31
   },
   {
     id: 34,
     author: {
-      name: "赵建国",
-      avatar: "/student8.png"
+      name: '赵建国',
+      avatar: '/student8.png'
     },
-    content: "SQL注入的本质是代码注入的一种，其他类似的注入还有命令注入、XSS等。理解了一种注入的原理，对学习其他类型的注入也会有帮助。所有注入的共同点是：程序没有正确处理用户输入，导致输入被解释为代码执行。",
-    createdAt: "2024-03-30 14:21",
+    content: 'SQL注入的本质是代码注入的一种，其他类似的注入还有命令注入、XSS等。理解了一种注入的原理，对学习其他类型的注入也会有帮助。所有注入的共同点是：程序没有正确处理用户输入，导致输入被解释为代码执行。',
+    createdAt: '2024-03-30 14:21',
     likes: 25
   },
   {
     id: 35,
     author: {
-      name: "陈敏",
-      avatar: "/student9.png"
+      name: '陈敏',
+      avatar: '/student9.png'
     },
-    content: "针对这道题，我想补充一点：在实际场景中，有时候不同的数据库系统需要使用不同的注入技术。例如：\n\n- MySQL: `UNION SELECT 1,2,3`\n- Oracle: `UNION SELECT 1,2,3 FROM dual`\n- SQL Server: `UNION SELECT 1,2,3 --`\n- PostgreSQL: `UNION SELECT 1,2,3;`\n\n了解不同数据库的特性对SQL注入非常重要。",
-    createdAt: "2024-03-30 18:36",
+    content:
+      '针对这道题，我想补充一点：在实际场景中，有时候不同的数据库系统需要使用不同的注入技术。例如：\n\n- MySQL: `UNION SELECT 1,2,3`\n- Oracle: `UNION SELECT 1,2,3 FROM dual`\n- SQL Server: `UNION SELECT 1,2,3 --`\n- PostgreSQL: `UNION SELECT 1,2,3;`\n\n了解不同数据库的特性对SQL注入非常重要。',
+    createdAt: '2024-03-30 18:36',
     likes: 20
   },
   {
     id: 36,
     author: {
-      name: "徐杰晓薇",
-      avatar: "/student10.png"
+      name: '徐杰晓薇',
+      avatar: '/student10.png'
     },
-    content: "我刚开始学习SQL注入时，发现有些概念理解起来比较困难。后来我采用了一种方法：自己搭建环境，编写有漏洞的代码，然后尝试攻击它。这样不仅能深入理解漏洞原理，还能从开发者视角思考如何防御。强烈推荐大家尝试这种学习方法！",
-    createdAt: "2024-03-31 09:57",
+    content: '我刚开始学习SQL注入时，发现有些概念理解起来比较困难。后来我采用了一种方法：自己搭建环境，编写有漏洞的代码，然后尝试攻击它。这样不仅能深入理解漏洞原理，还能从开发者视角思考如何防御。强烈推荐大家尝试这种学习方法！',
+    createdAt: '2024-03-31 09:57',
     likes: 27
   },
   {
     id: 37,
     author: {
-      name: "徐航娜",
-      avatar: "/student11.png"
+      name: '徐航娜',
+      avatar: '/student11.png'
     },
-    content: "想分享一个经验：在做题时遇到困难，不要立即放弃或者查看答案，可以尝试分解问题。例如，先确定是否能注入，再确定数据库类型，然后尝试不同的注入方式。这种系统性的方法不仅适用于SQL注入，也适用于其他安全挑战。坚持独立思考，会让你的技能提升更快！",
-    createdAt: "2024-03-31 13:28",
+    content: '想分享一个经验：在做题时遇到困难，不要立即放弃或者查看答案，可以尝试分解问题。例如，先确定是否能注入，再确定数据库类型，然后尝试不同的注入方式。这种系统性的方法不仅适用于SQL注入，也适用于其他安全挑战。坚持独立思考，会让你的技能提升更快！',
+    createdAt: '2024-03-31 13:28',
     likes: 22
   }
 ]
@@ -1054,213 +966,184 @@ const openInNewWindow = (type: string) => {
 </script>
 
 <template>
-  <div class="container-fluid px-4 py-6 overflow-x-hidden">
-  <div class="flex">
-    <div class="flex-1 flex flex-col">
-      <!-- 导航栏 -->
-      <div class="bg-base-100 border-b border-base-300">
-        <div class="flex items-center gap-6 px-6 py-3">
-            <div 
-              class="flex items-center gap-2 cursor-pointer"
-              :class="currentTab === 'practice' ? 'text-primary font-semibold' : 'hover:text-primary transition-colors'"
-              @click="currentTab = 'practice'">
-            <i class="fas fa-code"></i>
+  <div class="container-fluid px-4 py-6 overflow-x-hidden h-screen flex flex-col">
+    <div class="flex">
+      <div class="w-half flex flex-col" :class="{ 'w-full': !isTargetMachineRunning }">
+        <!-- 导航栏 -->
+        <div class="bg-base-100 border-b border-base-300">
+          <div class="flex items-center gap-6 px-6 py-3">
+            <div class="flex items-center gap-2 cursor-pointer" :class="currentTab === 'practice' ? 'text-primary font-semibold' : 'hover:text-primary transition-colors'" @click="currentTab = 'practice'">
+              <i class="fas fa-code"></i>
               <span>做题</span>
-          </div>
-            <div 
-              class="flex items-center gap-2 cursor-pointer"
-              :class="currentTab === 'discussion' ? 'text-primary font-semibold' : 'hover:text-primary transition-colors'"
-              @click="viewDiscussion()">
-            <i class="fas fa-comments"></i>
-            <span>题解讨论</span>
-              <span v-if="!hasViewedDiscussion" class="badge badge-xs badge-primary ml-1">
-              {{ solutionCost }}分
-            </span>
+            </div>
+            <div class="flex items-center gap-2 cursor-pointer" :class="currentTab === 'discussion' ? 'text-primary font-semibold' : 'hover:text-primary transition-colors'" @click="viewDiscussion()">
+              <i class="fas fa-comments"></i>
+              <span>题解讨论</span>
+              <span v-if="!hasViewedDiscussion" class="badge badge-xs badge-primary ml-1"> {{ solutionCost }}分 </span>
+            </div>
           </div>
         </div>
-      </div>
 
         <!-- 做题页面 -->
         <div v-if="currentTab === 'practice'" class="flex-1 flex flex-col">
-        <!-- 顶部区域 -->
-        <div class="bg-base-200 p-4 shadow-lg space-y-4">
-          <!-- 标题和难度行 -->
-          <div class="flex justify-between items-center">
-            <div class="flex items-center gap-2">
-              <i class="fas fa-flask text-primary text-2xl"></i>
-              <h1 class="text-2xl font-bold">{{ experiment.name }}</h1>
-            </div>
-            <div class="flex items-center gap-4">
-              <!-- 添加积分显示 -->
-              <div class="flex items-center gap-2 text-secondary">
-                <i class="fas fa-coins"></i>
-                <span class="font-semibold">{{ calculatePoints }}积分</span>
+          <!-- 顶部区域 -->
+          <div class="bg-base-200 p-4 shadow-lg space-y-4 animate-slide-down">
+            <!-- 标题和难度行 -->
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <i class="fas fa-flask text-primary text-2xl"></i>
+                <h1 class="text-2xl font-bold">{{ experiment.name }}</h1>
               </div>
-              <!-- 原有的难度显示 -->
-              <div class="text-yellow-500">
-                <i class="fas fa-star mr-2"></i>
-                难度: {{ getDifficultyStars(experiment.difficulty) }}
-              </div>
-            </div>
-          </div>
-
-          <!-- 环境控制行 -->
-          <div class="flex justify-between items-center">
-            <!-- 靶机控制 -->
-            <div class="flex items-center gap-4">
-              <i class="fas fa-server text-info"></i>
-              <span>靶机环境</span>
-              <span class="badge badge-sm" :class="isTargetLoading ? 'badge-info' : 'badge-warning'">
-                {{ isTargetLoading ? '启动中' : '未启动' }}
-              </span>
-              <button class="btn btn-sm btn-primary" @click="startTargetMachine"
-                :disabled="!experiment.targetMachine?.id || isTargetLoading">
-                <span class="loading loading-spinner loading-xs" v-if="isTargetLoading"></span>
-                <i class="fas fa-play mr-1" v-else></i>
-                {{ isTargetLoading ? '正在启动靶机...' : '启动靶机' }}
-              </button>
-              <div v-if="isTargetLoading" class="text-sm text-info">
-                靶机环境正在准备中，请稍候...
+              <div class="flex items-center gap-4">
+                <!-- 添加积分显示 -->
+                <div class="flex items-center gap-2 text-secondary">
+                  <i class="fas fa-coins"></i>
+                  <span class="font-semibold">{{ calculatePoints }}积分</span>
+                </div>
+                <!-- 原有的难度显示 -->
+                <div class="text-yellow-500">
+                  <i class="fas fa-star mr-2"></i>
+                  难度: {{ getDifficultyStars(experiment.difficulty) }}
+                </div>
               </div>
             </div>
 
-            <!-- 操作环境控制 -->
-            <div class="flex items-center gap-4">
-              <i class="fas fa-desktop text-info"></i>
-              <span>操作环境</span>
-              <span class="badge badge-sm"
-                :class="isOperationLoading ? 'badge-info' : isOperationMachineRunning ? 'badge-success' : 'badge-warning'">
-                {{ isOperationLoading ? '启动中' : isOperationMachineRunning ? '运行中' : '未启动' }}
-              </span>
-              <button class="btn btn-sm" :class="isOperationMachineRunning ? 'btn-error' : 'btn-primary'"
-                @click="toggleOperationMachine" :disabled="isOperationLoading">
-                <span class="loading loading-spinner loading-xs" v-if="isOperationLoading"></span>
-                <i :class="isOperationMachineRunning ? 'fas fa-stop' : 'fas fa-play'" class="mr-1" v-else></i>
-                {{ isOperationLoading ? '正在启动...' : isOperationMachineRunning ? '关闭操作环境' : '启动操作环境' }}
-              </button>
-              <div v-if="isOperationLoading" class="text-sm text-info">
-                操作环境正在准备中，请稍候...
+            <!-- 环境控制行 -->
+            <div class="flex environment-controls justify-between" :class="{ 'flex-col gap-4': isTargetMachineRunning, 'items-center gap-4': !isTargetMachineRunning }">
+              <!-- 靶机控制 -->
+              <div class="flex items-center gap-4">
+                <i class="fas fa-server text-info"></i>
+                <span>靶机环境</span>
+                <span class="badge badge-sm" :class="isTargetLoading ? 'badge-info' : isTargetMachineRunning ? 'badge-success' : 'badge-warning'">
+                  {{ isTargetLoading ? '启动中' : isTargetMachineRunning ? '运行中' : '未启动' }}
+                </span>
+                <button class="btn btn-sm" :class="isTargetMachineRunning ? 'btn-error' : 'btn-primary'" @click="isTargetMachineRunning ? closeTargetMachine() : startTargetMachine()" :disabled="!experiment.targetMachine?.id || isTargetLoading">
+                  <span class="loading loading-spinner loading-xs" v-if="isTargetLoading"></span>
+                  <i :class="isTargetMachineRunning ? 'fas fa-stop' : 'fas fa-play'" class="mr-1" v-else></i>
+                  {{ isTargetLoading ? '正在启动靶机...' : isTargetMachineRunning ? '关闭靶机' : '启动靶机' }}
+                </button>
+                <div v-if="isTargetLoading" class="text-sm text-info">靶机环境正在准备中，请稍候...</div>
+              </div>
+
+              <!-- 操作环境控制 -->
+              <div class="flex items-center gap-4">
+                <i class="fas fa-desktop text-info"></i>
+                <span>操作环境</span>
+                <span class="badge badge-sm" :class="isOperationLoading ? 'badge-info' : isOperationMachineRunning ? 'badge-success' : 'badge-warning'">
+                  {{ isOperationLoading ? '启动中' : isOperationMachineRunning ? '运行中' : '未启动' }}
+                </span>
+                <button class="btn btn-sm" :class="isOperationMachineRunning ? 'btn-error' : 'btn-primary'" @click="toggleOperationMachine" :disabled="isOperationLoading">
+                  <span class="loading loading-spinner loading-xs" v-if="isOperationLoading"></span>
+                  <i :class="isOperationMachineRunning ? 'fas fa-stop' : 'fas fa-play'" class="mr-1" v-else></i>
+                  {{ isOperationLoading ? '正在启动...' : isOperationMachineRunning ? '关闭操作环境' : '启动操作环境' }}
+                </button>
+                <div v-if="isOperationLoading" class="text-sm text-info">操作环境正在准备中，请稍候...</div>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- 主要内容区域 -->
-        <div class="transition-all duration-300 p-4 overflow-y-auto flex-1 w-full">
-          <!-- 实验介绍 -->
-          <div class="card bg-base-100 shadow-xl mb-6">
-            <div class="card-body">
-              <h2 class="text-xl font-semibold mb-2">
-                <i class="fas fa-info-circle text-primary mr-2"></i>
-                实验介绍
-              </h2>
-              <p>{{ experiment.introduction }}</p>
+          <!-- 主要内容区域 -->
+          <div class="transition-all duration-300 p-4 overflow-y-auto flex-1 w-full">
+            <!-- 实验介绍 -->
+            <div class="card bg-base-100 shadow-xl mb-6 animate-slide-up">
+              <div class="card-body">
+                <h2 class="text-xl font-semibold mb-2">
+                  <i class="fas fa-info-circle text-primary mr-2"></i>
+                  实验介绍
+                </h2>
+                <p>{{ experiment.introduction }}</p>
+              </div>
             </div>
-          </div>
 
-          <!-- 任务点列表 -->
-          <div class="card bg-base-100 shadow-xl">
-            <div class="card-body">
-              <h2 class="text-xl font-semibold mb-4">
-                <i class="fas fa-tasks text-primary mr-2"></i>
-                任务点
-              </h2>
-              <div class="space-y-4">
-                <div v-for="task in experiment.taskPoints" :key="task.id"
-                  class="collapse collapse-arrow border-base-300 bg-base-200 border">
-                  <input type="checkbox" />
-                  <div class="collapse-title text-xl font-semibold flex items-center gap-2">
-                    <i class="fas fa-tasks"></i>
-                    {{ task.name }}
-                    <div class="badge badge-primary badge-lg">
-                      <span class="font-bold">{{ task.score }}</span>分
-                    </div>
-                  </div>
-                  <div class="collapse-content">
-                    <p>{{ task.description }}</p>
-
-                    <!-- 添加Markdown文档渲染 -->
-                    <div class="mt-4">
-                      <h4 class="font-semibold mb-2">任务说明</h4>
-                      <div class="card bg-base-100 p-4">
-                        <MarkdownRenderer :content="task.document" />
+            <!-- 任务点列表 -->
+            <div class="card bg-base-100 shadow-xl animate-slide-up">
+              <div class="card-body">
+                <h2 class="text-xl font-semibold mb-4">
+                  <i class="fas fa-tasks text-primary mr-2"></i>
+                  任务点
+                </h2>
+                <div class="space-y-4">
+                  <div v-for="task in experiment.taskPoints" :key="task.id" class="collapse collapse-arrow border-base-300 bg-base-200 border">
+                    <input type="checkbox" />
+                    <div class="collapse-title text-xl font-semibold flex items-center gap-2">
+                      <i class="fas fa-tasks"></i>
+                      {{ task.name }}
+                      <div class="badge badge-primary badge-lg">
+                        <span class="font-bold">{{ task.score }}</span
+                        >分
                       </div>
                     </div>
+                    <div class="collapse-content">
+                      <p>{{ task.description }}</p>
 
-                    <!-- 任务问题列表 -->
-                    <div class="mt-4 space-y-2">
-                      <div v-for="question in task.questions" :key="question.id" class="card bg-base-300">
-                        <div class="card-body">
-                          <div class="flex justify-between items-center">
-                            <p>{{ question.content }}</p>
-                            <span class="badge">{{ question.score }}分</span>
+                      <!-- 添加Markdown文档渲染 -->
+                      <div class="mt-4">
+                        <h4 class="font-semibold mb-2">任务说明</h4>
+                        <div class="card bg-base-100 p-4 w-full max-w-full overflow-x-auto">
+                          <div class="w-full prose prose-sm max-w-none break-words">
+                            <div class="markdown-content">
+                              <MarkdownRenderer :content="task.document" />
+                            </div>
                           </div>
-                          <div class="mt-2">
-                            <!-- 带答案的开放题 -->
-                            <div v-if="question.type === 'open-ended-with-answer'" class="space-y-2">
-                              <textarea v-model="answers[task.id][question.id]" placeholder="请输入答案"
-                                class="textarea textarea-bordered w-full h-24" />
-                              <div class="flex items-center gap-2">
-                                <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
-                                  检查答案
-                                </button>
-                                <span v-if="answerStatus[task.id][question.id] !== null" 
-                                  :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
-                                  class="flex items-center">
-                                  <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
-                                  {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
-                                </span>
-                              </div>
-                            </div>
+                        </div>
+                      </div>
 
-                            <!-- 无答案的开放题 -->
-                            <div v-else-if="question.type === 'open-ended-without-answer'" class="space-y-2">
-                              <textarea v-model="answers[task.id][question.id]" placeholder="请输入答案"
-                                class="textarea textarea-bordered w-full h-24" />
-                              <button @click="submitAnswer(question.id)" class="btn btn-primary">
-                                提交答案
-                              </button>
+                      <!-- 任务问题列表 -->
+                      <div class="mt-4 space-y-2">
+                        <div v-for="question in task.questions" :key="question.id" class="card bg-base-300">
+                          <div class="card-body">
+                            <div class="flex justify-between items-center">
+                              <p>{{ question.content }}</p>
+                              <span class="badge">{{ question.score }}分</span>
                             </div>
+                            <div class="mt-2">
+                              <!-- 带答案的开放题 -->
+                              <div v-if="question.type === 'open-ended-with-answer'" class="space-y-2">
+                                <textarea v-model="answers[task.id][question.id]" placeholder="请输入答案" class="textarea textarea-bordered w-full h-24" />
+                                <div class="flex items-center gap-2">
+                                  <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">检查答案</button>
+                                  <span v-if="answerStatus[task.id][question.id] !== null" :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'" class="flex items-center">
+                                    <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
+                                    {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
+                                  </span>
+                                </div>
+                              </div>
 
-                            <!-- 单选题 -->
-                            <div v-else-if="question.type === 'single-choice'" class="space-y-2">
-                              <div v-for="(option, index) in question.options" :key="index"
-                                class="flex items-center gap-2">
-                                <input type="radio" v-model="answers[task.id][question.id]" :name="'q' + question.id"
-                                  :value="option" class="radio radio-primary" />
-                                <span>{{ option }}</span>
+                              <!-- 无答案的开放题 -->
+                              <div v-else-if="question.type === 'open-ended-without-answer'" class="space-y-2">
+                                <textarea v-model="answers[task.id][question.id]" placeholder="请输入答案" class="textarea textarea-bordered w-full h-24" />
+                                <button @click="submitAnswer(question.id)" class="btn btn-primary">提交答案</button>
                               </div>
-                              <div class="flex items-center gap-2 mt-2">
-                                <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
-                                  检查答案
-                                </button>
-                                <span v-if="answerStatus[task.id][question.id] !== null" 
-                                  :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
-                                  class="flex items-center">
-                                  <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
-                                  {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
-                                </span>
-                              </div>
-                            </div>
 
-                            <!-- 多选题 -->
-                            <div v-else-if="question.type === 'multiple-choice'" class="space-y-2">
-                              <div v-for="(option, index) in question.options" :key="index"
-                                class="flex items-center gap-2">
-                                <input type="checkbox" v-model="answers[task.id][question.id]" :value="option"
-                                  class="checkbox checkbox-primary" />
-                                <span>{{ option }}</span>
+                              <!-- 单选题 -->
+                              <div v-else-if="question.type === 'single-choice'" class="space-y-2">
+                                <div v-for="(option, index) in question.options" :key="index" class="flex items-center gap-2">
+                                  <input type="radio" v-model="answers[task.id][question.id]" :name="'q' + question.id" :value="option" class="radio radio-primary" />
+                                  <span>{{ option }}</span>
+                                </div>
+                                <div class="flex items-center gap-2 mt-2">
+                                  <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">检查答案</button>
+                                  <span v-if="answerStatus[task.id][question.id] !== null" :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'" class="flex items-center">
+                                    <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
+                                    {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
+                                  </span>
+                                </div>
                               </div>
-                              <div class="flex items-center gap-2 mt-2">
-                                <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">
-                                  检查答案
-                                </button>
-                                <span v-if="answerStatus[task.id][question.id] !== null" 
-                                  :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'"
-                                  class="flex items-center">
-                                  <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
-                                  {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
-                                </span>
+
+                              <!-- 多选题 -->
+                              <div v-else-if="question.type === 'multiple-choice'" class="space-y-2">
+                                <div v-for="(option, index) in question.options" :key="index" class="flex items-center gap-2">
+                                  <input type="checkbox" v-model="answers[task.id][question.id]" :value="option" class="checkbox checkbox-primary" />
+                                  <span>{{ option }}</span>
+                                </div>
+                                <div class="flex items-center gap-2 mt-2">
+                                  <button @click="checkAnswer(task.id, question.id)" class="btn btn-primary">检查答案</button>
+                                  <span v-if="answerStatus[task.id][question.id] !== null" :class="answerStatus[task.id][question.id] ? 'text-success' : 'text-error'" class="flex items-center">
+                                    <i :class="answerStatus[task.id][question.id] ? 'fa-check' : 'fa-times'" class="fas mr-1"></i>
+                                    {{ answerStatus[task.id][question.id] ? '答案正确' : '答案错误' }}
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -1272,208 +1155,167 @@ const openInNewWindow = (type: string) => {
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-      <!-- 题解讨论页面 -->
-      <div v-if="currentTab === 'discussion'" class="flex-1 flex flex-col relative min-h-[70vh]">
-        <div class="bg-base-200 p-4 shadow-lg mb-4">
-          <div class="flex justify-between items-center">
-            <div class="flex items-center gap-2">
-              <i class="fas fa-comments text-primary text-2xl"></i>
-              <h1 class="text-2xl font-bold">题解讨论</h1>
-    </div>
-            <div class="flex items-center gap-2 text-secondary">
-              <i class="fas fa-coins"></i>
-              <span class="font-semibold">{{ userPoints }} 积分</span>
-            </div>
-          </div>
-        </div>
-        
-        <div class="flex-1 overflow-y-auto p-4 relative">
-          <!-- 讨论列表区域，设置最大高度和滚动 -->
-          <div class="discussion-list overflow-y-auto pb-24">
-            <div v-for="discussion in discussions" :key="discussion.id" class="mb-6">
-              <div class="flex items-start">
-                <div class="avatar">
-                  <div class="w-10 h-10 rounded-full bg-base-300 overflow-hidden">
-                    <img :src="discussion.author.avatar" :alt="discussion.author.name" class="w-full h-full object-cover">
-                  </div>
-                </div>
-                <div class="ml-3 flex-1">
-                  <div class="flex items-center">
-                    <span class="font-bold">{{ discussion.author.name }}</span>
-                    <span class="text-xs text-base-content/60 ml-2">{{ discussion.createdAt }}</span>
-                  </div>
-                  <div class="mt-2 text-sm break-words whitespace-pre-line" v-html="discussion.content"></div>
-                  <div class="mt-2 flex items-center">
-                    <button class="btn btn-ghost btn-xs">
-                      <i class="fas fa-thumbs-up mr-1"></i>
-                      <span>{{ discussion.likes }}</span>
-                    </button>
-                    <button class="btn btn-ghost btn-xs ml-2">
-                      <i class="fas fa-reply mr-1"></i>
-                      <span>回复</span>
-                    </button>
-                </div>
+        <!-- 题解讨论页面 -->
+        <div v-if="currentTab === 'discussion'" class="flex-1 flex flex-col relative min-h-[70vh]">
+          <div class="bg-base-200 p-4 shadow-lg animate-slide-down">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-2">
+                <i class="fas fa-comments text-primary text-2xl"></i>
+                <h1 class="text-2xl font-bold">题解讨论</h1>
+              </div>
+              <div class="flex items-center gap-2 text-secondary">
+                <i class="fas fa-coins"></i>
+                <span class="font-semibold">{{ userPoints }} 积分</span>
               </div>
             </div>
           </div>
-        </div>
 
-          <!-- 悬浮的讨论输入框 -->
-          <div class="discussion-input-fixed">
-            <div class="discussion-input-container">
-              <div class="flex items-start">
-                <div class="avatar">
-                  <div class="w-10 h-10 rounded-full bg-base-300 overflow-hidden">
-                    <img src="/example.png" alt="Your Avatar" class="w-full h-full object-cover">
+          <div class="flex-1 overflow-y-auto p-4 relative">
+            <!-- 讨论列表区域 -->
+            <div class="discussion-list overflow-y-auto pb-24">
+              <div v-for="discussion in discussions" :key="discussion.id" class="mb-6">
+                <div class="flex items-start">
+                  <div class="avatar">
+                    <div class="w-10 h-10 rounded-full bg-base-300 overflow-hidden">
+                      <img :src="discussion.author.avatar" :alt="discussion.author.name" class="w-full h-full object-cover" />
+                    </div>
                   </div>
-                </div>
-                <div class="ml-3 flex-1">
-                  <textarea 
-                    class="textarea textarea-bordered w-full" 
-                    rows="2" 
-                    placeholder="分享你的解题思路和见解..."></textarea>
-                  <div class="flex justify-start items-center mt-2">
-                    <button class="btn btn-primary btn-sm mr-2">
-                      <i class="fas fa-paper-plane mr-1"></i>
-                      发布
-                    </button>
-                    <div>
-                      <button class="btn btn-sm btn-circle btn-ghost">
-                        <i class="fas fa-image"></i>
+                  <div class="ml-3 flex-1" mb-2>
+                    <div class="flex items-center">
+                      <span class="font-bold">{{ discussion.author.name }}</span>
+                      <span class="text-xs text-base-content/60 ml-2">{{ discussion.createdAt }}</span>
+                    </div>
+                    <div class="mt-2 text-sm break-words whitespace-pre-line" v-html="discussion.content"></div>
+                    <div class="mt-2 flex items-center">
+                      <button class="btn btn-ghost btn-xs">
+                        <i class="fas fa-thumbs-up mr-1"></i>
+                        <span>{{ discussion.likes }}</span>
                       </button>
-                      <button class="btn btn-sm btn-circle btn-ghost ml-1">
-                        <i class="fas fa-code"></i>
-            </button>
-          </div>
-        </div>
-      </div>
+                      <button class="btn btn-ghost btn-xs ml-2">
+                        <i class="fas fa-reply mr-1"></i>
+                        <span>回复</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 悬浮的讨论输入框 -->
+            <div class="discussion-input-fixed" :style="{ right: isTargetMachineRunning ? '50%' : '0' }">
+              <div class="discussion-input-container" :style="{ maxWidth: isTargetMachineRunning ? '100%' : '100%' }">
+                <div class="flex items-start">
+                  <div class="avatar">
+                    <div class="w-10 h-10 rounded-full bg-base-300 overflow-hidden">
+                      <img src="/example.png" alt="Your Avatar" class="w-full h-full object-cover" />
+                    </div>
+                  </div>
+                  <div class="ml-3 flex-1">
+                    <textarea class="textarea textarea-bordered w-full" rows="2" placeholder="分享你的解题思路和见解..."></textarea>
+                    <div class="flex justify-start items-center mt-2">
+                      <button class="btn btn-primary btn-sm mr-2">
+                        <i class="fas fa-paper-plane mr-1"></i>
+                        发布
+                      </button>
+                      <div>
+                        <button class="btn btn-sm btn-circle btn-ghost">
+                          <i class="fas fa-image"></i>
+                        </button>
+                        <button class="btn btn-sm btn-circle btn-ghost ml-1">
+                          <i class="fas fa-code"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Environment Tab Interface -->
-    <div v-if="activeEnvironmentTab" class="w-[60%] bg-base-300 transition-all duration-300 border-l border-base-300 flex flex-col">
-      <!-- Browser-like Tab Headers -->
-      <div class="bg-base-200 flex items-center border-b border-base-300 p-1 gap-1">
-        <a 
-          v-if="isOperationMachineRunning" 
-          class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2"
-          :class="{ 'border-primary': activeEnvironmentTab === 'operation', 'border-transparent': activeEnvironmentTab !== 'operation' }"
-        >
-          <!-- Tab content -->
-          <div 
-            @click="activeEnvironmentTab = 'operation'"
-            class="flex items-center cursor-pointer"
-          >
-            <i class="fas fa-desktop mr-2 text-primary"></i>
-            <span :class="{ 'font-medium': activeEnvironmentTab === 'operation' }">操作环境</span>
-          </div>
-          
-          <!-- Action buttons -->
-          <div class="flex items-center ml-2">
-            <!-- Pop-out button -->
-            <button 
-              @click.stop="openInNewWindow('operation')" 
-              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1"
-              title="在新窗口打开"
-            >
-              <i class="fas fa-external-link-alt"></i>
-            </button>
-            
-            <!-- Close button -->
-            <button 
-              @click.stop="toggleOperationMachine" 
-              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs"
-              title="关闭"
-            >
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        </a>
-        
-        <a 
-          v-if="isTargetMachineRunning" 
-          class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2"
-          :class="{ 'border-primary': activeEnvironmentTab === 'target', 'border-transparent': activeEnvironmentTab !== 'target' }"
-        >
-          <!-- Tab content -->
-          <div 
-            @click="activeEnvironmentTab = 'target'"
-            class="flex items-center cursor-pointer"
-          >
-            <i class="fas fa-server mr-2 text-primary"></i>
-            <span :class="{ 'font-medium': activeEnvironmentTab === 'target' }">靶机环境</span>
-          </div>
-          
-          <!-- Action buttons -->
-          <div class="flex items-center ml-2">
-            <!-- Pop-out button -->
-            <button 
-              @click.stop="openInNewWindow('target')" 
-              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1"
-              title="在新窗口打开"
-            >
-              <i class="fas fa-external-link-alt"></i>
-            </button>
-            
-            <!-- Close button -->
-            <button 
-              @click.stop="closeTargetMachine" 
-              class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs"
-              title="关闭"
-            >
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
-        </a>
-        
-        <div class="flex-1"></div>
-      </div>
-      
-      <!-- Tab Content -->
-      <div class="flex-1">
-        <!-- Operation Environment -->
-        <iframe 
-          v-if="activeEnvironmentTab === 'operation'" 
-          src="http://127.0.0.1:8443" 
-          class="w-full h-full"
-        ></iframe>
-        
-        <!-- Target Machine -->
-        <iframe 
-          v-if="activeEnvironmentTab === 'target' && targetMachineUrl" 
-          :src="targetMachineUrl" 
-          class="w-full h-full"
-        ></iframe>
-      </div>
-    </div>
+      <!-- Environment Tab Interface -->
+      <Transition name="environment-tab">
+        <div v-if="activeEnvironmentTab" class="fixed right-0 top-0 w-[50%] h-screen bg-base-300 transition-all duration-300 border-l border-base-300 flex flex-col z-50">
+          <!-- Browser-like Tab Headers -->
+          <div class="bg-base-200 flex items-center border-b border-base-300 p-1 gap-1">
+            <a v-if="isOperationMachineRunning" class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2" :class="{ 'border-primary': activeEnvironmentTab === 'operation', 'border-transparent': activeEnvironmentTab !== 'operation' }">
+              <!-- Tab content -->
+              <div @click="activeEnvironmentTab = 'operation'" class="flex items-center cursor-pointer">
+                <i class="fas fa-desktop mr-2 text-primary"></i>
+                <span :class="{ 'font-medium': activeEnvironmentTab === 'operation' }">操作环境</span>
+              </div>
 
-    <!-- 积分确认弹窗 -->
-    <dialog :class="{'modal': true, 'modal-open': showCostModal}">
-      <div class="modal-box">
-          <h3 class="font-bold text-lg">确认查看题解</h3>
-          <p class="py-4">
-            确认使用 {{ solutionCost }} 积分查看题解讨论吗？
-            <span v-if="hasViewedDiscussion" class="text-success">
-              (您已经支付过，无需再次支付)
-            </span>
-          </p>
-          <div class="flex justify-between items-center mb-4 border-t border-b py-2 mt-2">
-            <span class="font-medium">当前积分余额:</span>
-            <span class="text-success font-bold">{{ userPoints }} 积分</span>
+              <!-- Action buttons -->
+              <div class="flex items-center ml-2">
+                <!-- Pop-out button -->
+                <button @click.stop="openInNewWindow('operation')" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1" title="在新窗口打开">
+                  <i class="fas fa-external-link-alt"></i>
+                </button>
+
+                <!-- Close button -->
+                <button @click.stop="toggleOperationMachine" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs" title="关闭">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </a>
+
+            <a v-if="isTargetMachineRunning" class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2" :class="{ 'border-primary': activeEnvironmentTab === 'target', 'border-transparent': activeEnvironmentTab !== 'target' }">
+              <!-- Tab content -->
+              <div @click="activeEnvironmentTab = 'target'" class="flex items-center cursor-pointer">
+                <i class="fas fa-server mr-2 text-primary"></i>
+                <span :class="{ 'font-medium': activeEnvironmentTab === 'target' }">靶机环境</span>
+              </div>
+
+              <!-- Action buttons -->
+              <div class="flex items-center ml-2">
+                <!-- Pop-out button -->
+                <button @click.stop="openInNewWindow('target')" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1" title="在新窗口打开">
+                  <i class="fas fa-external-link-alt"></i>
+                </button>
+
+                <!-- Close button -->
+                <button @click.stop="closeTargetMachine" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs" title="关闭">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </a>
+
+            <div class="flex-1"></div>
+          </div>
+
+          <!-- Tab Content -->
+          <div class="flex-1 overflow-hidden">
+            <!-- Operation Environment -->
+            <iframe v-if="activeEnvironmentTab === 'operation'" src="http://127.0.0.1:8443" class="w-full h-full"></iframe>
+
+            <!-- Target Machine -->
+            <iframe v-if="activeEnvironmentTab === 'target' && targetMachineUrl" :src="targetMachineUrl" class="w-full h-full"></iframe>
+          </div>
         </div>
-        <div class="modal-action">
-            <button class="btn" @click="showCostModal = false">取消</button>
-            <button class="btn btn-primary" @click="confirmViewDiscussion">确认</button>
-        </div>
-      </div>
-    </dialog>
+      </Transition>
+
+      <!-- 积分确认弹窗 -->
+      <Transition name="modal">
+        <dialog :class="{ modal: true, 'modal-open': showCostModal }">
+          <div class="modal-box">
+            <h3 class="font-bold text-lg">确认查看题解</h3>
+            <p class="py-4">
+              确认使用 {{ solutionCost }} 积分查看题解讨论吗？
+              <span v-if="hasViewedDiscussion" class="text-success"> (您已经支付过，无需再次支付) </span>
+            </p>
+            <div class="flex justify-between items-center mb-4 border-t border-b py-2 mt-2">
+              <span class="font-medium">当前积分余额:</span>
+              <span class="text-success font-bold">{{ userPoints }} 积分</span>
+            </div>
+            <div class="modal-action">
+              <button class="btn" @click="showCostModal = false">取消</button>
+              <button class="btn btn-primary" @click="confirmViewDiscussion">确认</button>
+            </div>
+          </div>
+        </dialog>
+      </Transition>
     </div>
   </div>
 </template>
@@ -1482,10 +1324,19 @@ const openInNewWindow = (type: string) => {
 .container-fluid {
   width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: -20px auto;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
-html, body {
+/* 隐藏 Webkit 浏览器的滚动条 */
+.container-fluid::-webkit-scrollbar {
+  display: none;
+}
+
+html,
+body {
   overflow-x: hidden;
   margin: 0;
   padding: 0;
@@ -1502,7 +1353,8 @@ html, body {
   background-color: var(--color-base-300, #1a1a2e);
   border-top: 2px solid var(--color-primary);
   box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.3);
-  z-index: 10;
+  z-index: 40;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .discussion-input-container {
@@ -1512,10 +1364,13 @@ html, body {
   border: 2px solid var(--color-primary);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   position: relative;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .discussion-input-container::before {
-  content: "发表你的题解";
+  content: '发表你的题解';
   position: absolute;
   top: -12px;
   left: 20px;
@@ -1532,5 +1387,297 @@ html, body {
   border-radius: 0.5rem;
   background-color: var(--color-base-100);
   margin-bottom: 100px; /* 为底部固定输入框留出更多空间 */
+}
+
+.animate-float {
+  animation: float 10s ease-in-out infinite;
+}
+
+.animate-slide-down {
+  animation: slideDown 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  opacity: 0;
+  animation: slideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-20px) rotate(10deg);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(50px);
+    opacity: 0;
+  }
+}
+
+/* 页面切换动画 */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  position: absolute;
+  width: 100%;
+}
+
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: scale(0.95);
+  filter: blur(10px);
+}
+
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+  filter: blur(10px);
+}
+
+.slide-fade-enter-to,
+.slide-fade-leave-from {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+/* 添加内容动画 */
+.content-enter-active,
+.content-leave-active {
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.content-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.content-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+/* 添加卡片动画 */
+.card {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 添加按钮动画 */
+.btn {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 添加讨论列表动画 */
+.discussion-list > div {
+  opacity: 0;
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+.discussion-list > div:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.discussion-list > div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.discussion-list > div:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.discussion-list > div:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.discussion-list > div:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.discussion-list > div:nth-child(n + 6) {
+  animation-delay: 0.6s;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 添加环境切换动画 */
+.environment-tab-enter-active,
+.environment-tab-leave-active {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.environment-tab-enter-from,
+.environment-tab-leave-to {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+/* 添加模态框动画 */
+.modal-enter-active,
+.modal-leave-active {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* 添加加载动画 */
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 环境控制按钮布局切换动画 */
+.environment-controls {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.environment-controls > div {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 当切换为垂直布局时的动画 */
+.environment-controls.flex-col > div {
+  transform-origin: top;
+  animation: slideDown 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* 当切换为水平布局时的动画 */
+.environment-controls:not(.flex-col) > div {
+  transform-origin: left;
+  animation: slideRight 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.markdown-content {
+  width: 100%;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.markdown-content :deep(pre) {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.markdown-content :deep(code) {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.markdown-content :deep(p) {
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+
+/* 移除之前的宽度调整样式 */
+.w-half {
+  width: 50%;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.w-full {
+  width: 100%;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 确保环境标签页的层级正确 */
+.fixed {
+  z-index: 50;
+}
+
+/* 当环境标签页打开时，调整讨论输入框的位置 */
+.fixed + .discussion-input-fixed {
+  right: 50%;
 }
 </style>
