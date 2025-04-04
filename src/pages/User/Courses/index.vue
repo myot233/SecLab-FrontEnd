@@ -233,54 +233,54 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="container-fluid px-4 py-6 overflow-x-hidden min-h-screen">
+  <div class="container-fluid px-4 py-5 overflow-x-hidden min-h-screen">
     <!-- 页面标题 -->
-    <div class="text-center mb-8" :class="{ 'animate-fade-in': isLoaded }">
-      <h1 class="text-4xl font-bold mb-2 bg-clip-text text-transparent 
+    <div class="text-center mb-6" :class="{ 'animate-fade-in': isLoaded }">
+      <h1 class="text-3xl font-bold mb-1 bg-clip-text text-transparent 
                  bg-gradient-to-r from-primary via-secondary to-accent">
         探索课程
       </h1>
-      <p class="text-base-content/70">发现精心设计的安全课程，开启你的学习之旅</p>
+      <p class="text-base-content/70 text-sm">发现精心设计的安全课程，开启你的学习之旅</p>
     </div>
 
     <!-- 统计卡片 -->
-    <div class="stats shadow w-full mb-8 bg-base-100 backdrop-blur-sm"
+    <div class="stats shadow w-full mb-6 bg-base-100 backdrop-blur-sm"
          :class="{ 'animate-slide-up': isLoaded }">
-      <div class="stat">
+      <div class="stat py-2">
         <div class="stat-figure text-primary">
-          <i class="fas fa-book-open text-3xl"></i>
+          <i class="fas fa-book-open text-2xl"></i>
         </div>
-        <div class="stat-title">总课程</div>
-        <div class="stat-value text-primary">{{ stats.total }}</div>
+        <div class="stat-title text-xs">总课程</div>
+        <div class="stat-value text-primary text-2xl">{{ stats.total }}</div>
       </div>
       
-      <div class="stat">
+      <div class="stat py-2">
         <div class="stat-figure text-info">
-          <i class="fas fa-spinner text-3xl"></i>
+          <i class="fas fa-spinner text-2xl"></i>
         </div>
-        <div class="stat-title">进行中</div>
-        <div class="stat-value text-info">{{ stats.inProgress }}</div>
+        <div class="stat-title text-xs">进行中</div>
+        <div class="stat-value text-info text-2xl">{{ stats.inProgress }}</div>
       </div>
       
-      <div class="stat">
+      <div class="stat py-2">
         <div class="stat-figure text-success">
-          <i class="fas fa-check-circle text-3xl"></i>
+          <i class="fas fa-check-circle text-2xl"></i>
         </div>
-        <div class="stat-title">已完成</div>
-        <div class="stat-value text-success">{{ stats.completed }}</div>
+        <div class="stat-title text-xs">已完成</div>
+        <div class="stat-value text-success text-2xl">{{ stats.completed }}</div>
       </div>
       
-      <div class="stat">
+      <div class="stat py-2">
         <div class="stat-figure text-warning">
-          <i class="fas fa-lock-open text-3xl"></i>
+          <i class="fas fa-lock-open text-2xl"></i>
         </div>
-        <div class="stat-title">可开始</div>
-        <div class="stat-value text-warning">{{ stats.available }}</div>
+        <div class="stat-title text-xs">可开始</div>
+        <div class="stat-value text-warning text-2xl">{{ stats.available }}</div>
       </div>
     </div>
 
     <!-- 搜索和筛选 -->
-    <div class="flex flex-col md:flex-row gap-4 mb-8"
+    <div class="flex flex-col md:flex-row gap-3 mb-6"
          :class="{ 'animate-slide-up': isLoaded }"
          style="animation-delay: 0.2s">
       <!-- 搜索框 -->
@@ -288,19 +288,19 @@ onMounted(async () => {
         <input 
           type="text" 
           placeholder="搜索课程..." 
-          class="input input-bordered w-full pl-10 pr-4 bg-base-100/70 focus:bg-base-100
+          class="input input-bordered input-sm w-full pl-8 pr-3 bg-base-100/70 focus:bg-base-100
                  transition-all duration-300 shadow-sm hover:shadow focus:shadow-md"
           v-model="searchQuery"
         >
-        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-base-content/50"></i>
+        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50 text-xs"></i>
       </div>
 
       <!-- 分类选择 -->
-      <div class="flex gap-2">
+      <div class="flex gap-1">
         <button 
           v-for="category in categories" 
           :key="category.id"
-          class="btn btn-ghost gap-2"
+          class="btn btn-ghost btn-sm gap-1"
           :class="{ 'btn-active': selectedCategory === category.id }"
           @click="selectedCategory = selectedCategory === category.id ? '' : category.id"
         >
@@ -311,7 +311,7 @@ onMounted(async () => {
     </div>
 
     <!-- 课程列表 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
          :class="{ 'animate-fade-in': isLoaded }"
          style="animation-delay: 0.3s">
       <template v-if="filteredCourses.length">
@@ -322,12 +322,12 @@ onMounted(async () => {
           <CourseOverView :course="course" />
         </div>
       </template>
-      <div v-else class="col-span-full text-center py-12">
-        <div class="text-6xl mb-4 text-base-content/30">
+      <div v-else class="col-span-full text-center py-8">
+        <div class="text-5xl mb-3 text-base-content/30">
           <i class="fas fa-search"></i>
         </div>
-        <h3 class="text-xl font-semibold mb-2">未找到匹配的课程</h3>
-        <p class="text-base-content/70">
+        <h3 class="text-lg font-semibold mb-2">未找到匹配的课程</h3>
+        <p class="text-base-content/70 text-sm">
           试试调整搜索条件
         </p>
       </div>
@@ -356,7 +356,7 @@ html, body {
 
 .animate-slide-up {
   opacity: 0;
-  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes fadeIn {
@@ -371,7 +371,7 @@ html, body {
 @keyframes slideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(15px);
   }
   to {
     opacity: 1;

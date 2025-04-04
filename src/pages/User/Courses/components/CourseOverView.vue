@@ -35,7 +35,7 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-500 group 
+  <div class="card bg-base-100 shadow-lg hover:shadow-xl transition-all duration-500 group 
               backdrop-blur-sm border border-base-200 hover:border-primary/20 h-full"
        @click="handleClick">
     <!-- 课程图片 -->
@@ -46,30 +46,30 @@ const handleClick = () => {
       <div class="absolute inset-0 bg-gradient-to-t from-base-100 to-transparent opacity-60"></div>
       
       <!-- 状态标签 -->
-      <div class="absolute top-4 right-4">
-        <div :class="['badge', 'badge-lg', statusConfig.class, 'gap-2']">
+      <div class="absolute top-3 right-3">
+        <div :class="['badge', 'badge-md', statusConfig.class, 'gap-1']">
           <i :class="['fas', statusConfig.icon]"></i>
           {{ statusConfig.text }}
         </div>
       </div>
     </figure>
 
-    <div class="card-body">
+    <div class="card-body p-3">
       <!-- 标题和难度 -->
-      <div class="flex justify-between items-start mb-2">
-        <h2 class="card-title text-xl group-hover:text-primary transition-colors">
+      <div class="flex justify-between items-start mb-1">
+        <h2 class="card-title text-lg group-hover:text-primary transition-colors">
           {{ course.name }}
         </h2>
-        <div class="text-yellow-500 text-sm" :title="`难度: ${course.difficulty}/5`">
+        <div class="text-yellow-500 text-xs" :title="`难度: ${course.difficulty}/5`">
           {{ getDifficultyStars(course.difficulty) }}
         </div>
       </div>
 
       <!-- 描述 -->
-      <p class="text-base-content/70 text-sm line-clamp-2">{{ course.description }}</p>
+      <p class="text-base-content/70 text-xs line-clamp-2">{{ course.description }}</p>
 
       <!-- 课程信息 -->
-      <div class="mt-4 flex flex-wrap gap-3 text-sm text-base-content/60">
+      <div class="mt-3 flex flex-wrap gap-2 text-xs text-base-content/60">
         <div class="flex items-center gap-1">
           <i class="fas fa-clock text-primary/70"></i>
           <span>{{ course.estimatedHours }}小时</span>
@@ -86,39 +86,39 @@ const handleClick = () => {
 
       <!-- 进度条 -->
       <div v-if="course.status === 'in-progress' && course.progress !== undefined" 
-           class="mt-4">
-        <div class="flex justify-between text-sm mb-1">
+           class="mt-3">
+        <div class="flex justify-between text-xs mb-1">
           <span class="text-base-content/70">学习进度</span>
           <span class="text-primary">{{ course.progress }}%</span>
         </div>
-        <div class="w-full bg-base-200 rounded-full h-2">
-          <div class="bg-primary h-2 rounded-full transition-all duration-300"
+        <div class="w-full bg-base-200 rounded-full h-1.5">
+          <div class="bg-primary h-1.5 rounded-full transition-all duration-300"
                :style="{ width: `${course.progress}%` }"></div>
         </div>
       </div>
 
       <!-- 讲师信息 -->
       <div v-if="course.instructor" 
-           class="mt-4 flex items-center gap-3 p-3 bg-base-200/50 rounded-lg">
+           class="mt-3 flex items-center gap-2 p-2 bg-base-200/50 rounded-lg">
         <img :src="course.instructor.avatar" 
              :alt="course.instructor.name"
-             class="w-10 h-10 rounded-full">
+             class="w-8 h-8 rounded-full">
         <div>
-          <div class="font-medium">{{ course.instructor.name }}</div>
-          <div class="text-sm text-base-content/60">{{ course.instructor.title }}</div>
+          <div class="font-medium text-sm">{{ course.instructor.name }}</div>
+          <div class="text-xs text-base-content/60">{{ course.instructor.title }}</div>
         </div>
       </div>
 
       <!-- 标签 -->
-      <div v-if="course.tags?.length" class="card-actions justify-start mt-4">
+      <div v-if="course.tags?.length" class="card-actions justify-start mt-3">
         <div v-for="tag in course.tags" 
              :key="tag" 
-             class="badge badge-outline">{{ tag }}</div>
+             class="badge badge-outline badge-sm">{{ tag }}</div>
       </div>
 
       <!-- 操作按钮 -->
-      <div class="card-actions justify-end mt-4">
-        <button class="btn btn-primary btn-sm gap-2 group-hover:scale-105 transition-transform">
+      <div class="card-actions justify-end mt-3">
+        <button class="btn btn-primary btn-xs gap-1 group-hover:scale-105 transition-transform">
           <span>{{ course.status === 'in-progress' ? '继续学习' : '开始学习' }}</span>
           <i class="fas fa-arrow-right"></i>
         </button>
@@ -135,7 +135,7 @@ const handleClick = () => {
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
 }
 
 /* 渐变边框效果 */
@@ -162,8 +162,8 @@ const handleClick = () => {
 }
 
 .badge:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 /* 进度条动画 */
