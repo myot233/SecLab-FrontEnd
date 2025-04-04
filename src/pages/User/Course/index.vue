@@ -245,7 +245,7 @@ onMounted(() => {
                 </div>
                 <div>
                   <div class="text-lg font-medium">讲师 #{{ course.instructor }}</div>
-                  <div class="text-sm text-base-content/70">安全学院教师</div>
+                  <div class="text-sm text-base-content/70">信息学院教师</div>
                   <div class="flex items-center gap-3 mt-1">
                     <div class="flex items-center text-yellow-500">
                       <i class="fas fa-star text-xs"></i>
@@ -253,7 +253,7 @@ onMounted(() => {
                     </div>
                     <div class="text-xs text-base-content/60">
                       <i class="fas fa-user-graduate"></i>
-                      <span class="ml-1">1000+ 学生</span>
+                      <span class="ml-1">100+ 学生</span>
                     </div>
                   </div>
                 </div>

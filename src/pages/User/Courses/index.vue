@@ -221,15 +221,54 @@ const courses: Ref<CourseOverViewType[]> = ref([])
 
 onMounted(async () => {
   try {
-    const res = await getCourseList()
-    courses.value = res
+    // 添加最多重试3次的逻辑
+    let retryCount = 0;
+    const maxRetries = 3;
+    
+    const fetchData = async () => {
+      try {
+        const response = await fetchCourseList();
+        if (response.message === 'success' && response.data && response.data.length > 0) {
+          return mapApiDataToViewData(response.data);
+        } else {
+          console.warn('API response not as expected:', response);
+          throw new Error('Invalid API response');
+        }
+      } catch (error) {
+        console.error(`API request failed (attempt ${retryCount + 1}/${maxRetries}):`, error);
+        if (retryCount < maxRetries - 1) {
+          retryCount++;
+          // 等待一段时间后重试
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return fetchData();
+        } else {
+          console.warn('Falling back to hardcoded data after max retries');
+          return getFallbackCourseList();
+        }
+      }
+    };
+    
+    courses.value = await fetchData();
+    
+    // 检查图片URL，确保它们可以加载
+    courses.value = courses.value.map(course => {
+      // 如果图片路径是本地硬编码路径且不存在，则使用默认图片
+      if (course.image.startsWith('/') && !course.image.startsWith('/images/view/')) {
+        // 为本地开发环境添加公共路径前缀
+        course.image = `${course.image}`;
+      }
+      return course;
+    });
+    
     setTimeout(() => {
-      isLoaded.value = true
-    }, 100)
+      isLoaded.value = true;
+    }, 100);
   } catch (error) {
-    console.error('Failed to fetch courses:', error)
+    console.error('Failed to initialize courses:', error);
+    courses.value = getFallbackCourseList();
+    isLoaded.value = true;
   }
-})
+});
 </script>
 
 <template>

@@ -27,7 +27,21 @@ export interface CourseSummaryDto {
     status: string;
 }
 
-export let image = (imageName: string) => IMAGE_URL + imageName;
+export let image = (imageName: string | null | undefined) => {
+    // 添加空值检查
+    if (!imageName) {
+        return '/default-course-image.png'; // 默认图片路径
+    }
+    
+    // 如果已经是完整URL，直接返回
+    if (imageName.startsWith('http://') || imageName.startsWith('https://')) {
+        return imageName;
+    }
+    
+    // 拼接后端图片URL
+    return IMAGE_URL + imageName;
+};
+
 export async function login(loginRequest: { userStudentNumber: string; userPassword: string; }): Promise<Result<{ 
     loginData: {
         userId: number; 

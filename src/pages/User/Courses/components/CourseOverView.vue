@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import type { CourseOverViewType } from './CourseOverView';
 import { useRouter } from 'vue-router';
 
@@ -8,6 +8,8 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
+const imageLoaded = ref(false);
+const imageError = ref(false);
 
 const statusConfig = computed(() => ({
   'in-progress': {
@@ -32,6 +34,14 @@ const getDifficultyStars = (difficulty: number) => '★'.repeat(difficulty) + '�
 const handleClick = () => {
   router.push(`/user/course/${props.course.id}`);
 };
+
+const handleImageLoad = () => {
+  imageLoaded.value = true;
+};
+
+const handleImageError = () => {
+  imageError.value = true;
+};
 </script>
 
 <template>
@@ -39,10 +49,24 @@ const handleClick = () => {
               backdrop-blur-sm border border-base-200 hover:border-primary/20 h-full"
        @click="handleClick">
     <!-- 课程图片 -->
-    <figure class="relative overflow-hidden aspect-video">
+    <figure class="relative overflow-hidden aspect-video bg-base-200">
+      <!-- 加载状态 -->
+      <div v-if="!imageLoaded && !imageError" class="absolute inset-0 flex justify-center items-center">
+        <span class="loading loading-spinner loading-md text-primary"></span>
+      </div>
+      
+      <!-- 图片错误占位 -->
+      <div v-if="imageError" class="absolute inset-0 flex flex-col justify-center items-center text-base-content/50">
+        <i class="fas fa-image text-3xl mb-2"></i>
+        <span class="text-sm">图片加载失败</span>
+      </div>
+      
       <img :src="course.image" 
            :alt="course.name"
-           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+           class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+           :class="{ 'opacity-0': !imageLoaded && !imageError, 'hidden': imageError }"
+           @load="handleImageLoad" 
+           @error="handleImageError">
       <div class="absolute inset-0 bg-gradient-to-t from-base-100 to-transparent opacity-60"></div>
       
       <!-- 状态标签 -->
