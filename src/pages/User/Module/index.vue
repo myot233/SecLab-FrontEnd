@@ -423,7 +423,7 @@ const isTargetLoading = ref(false)
 const isOperationLoading = ref(false)
 
 // 添加环境管理变量
-const activeEnvironmentTab = ref<string | null>(null)
+const activeEnvironmentTab = ref<'operation' | 'target' | null>(null);
 const targetMachineUrl = ref<string | null>(null)
 
 // 添加答案状态
@@ -963,12 +963,32 @@ const openInNewWindow = (type: string) => {
     window.open(targetMachineUrl.value, '_blank')
   }
 }
+
+// 添加以下变量和计算属性
+const isIframeVisible = computed(() => isOperationMachineRunning.value || isTargetMachineRunning.value);
+
+// 添加环境标签页的自动切换监听
+watch([isOperationMachineRunning, isTargetMachineRunning], ([newOpRunning, newTargetRunning]) => {
+  // 如果操作环境刚刚启动，并且没有活动的标签或靶机已关闭
+  if (newOpRunning && (!activeEnvironmentTab.value || activeEnvironmentTab.value === 'target' && !newTargetRunning)) {
+    activeEnvironmentTab.value = 'operation';
+  }
+  // 如果靶机刚刚启动，并且没有活动的标签或操作环境已关闭
+  else if (newTargetRunning && (!activeEnvironmentTab.value || activeEnvironmentTab.value === 'operation' && !newOpRunning)) {
+    activeEnvironmentTab.value = 'target';
+  }
+  // 如果两个环境都关闭了
+  else if (!newOpRunning && !newTargetRunning) {
+    activeEnvironmentTab.value = null;
+  }
+});
 </script>
 
 <template>
   <div class="container-fluid px-4 py-6 overflow-x-hidden h-screen flex flex-col">
     <div class="flex">
-      <div class="w-half flex flex-col" :class="{ 'w-full': !isTargetMachineRunning }">
+      <!-- 修改宽度控制，使用isIframeVisible来决定宽度 -->
+      <div class="flex flex-col" :class="{ 'w-half': isIframeVisible, 'w-full': !isIframeVisible }">
         <!-- 导航栏 -->
         <div class="bg-base-100 border-b border-base-300">
           <div class="flex items-center gap-6 px-6 py-3">
@@ -1235,67 +1255,71 @@ const openInNewWindow = (type: string) => {
         </div>
       </div>
 
-      <!-- Environment Tab Interface -->
-      <Transition name="environment-tab">
-        <div v-if="activeEnvironmentTab" class="fixed right-0 top-0 w-[50%] h-screen bg-base-300 transition-all duration-300 border-l border-base-300 flex flex-col z-50">
-          <!-- Browser-like Tab Headers -->
-          <div class="bg-base-200 flex items-center border-b border-base-300 p-1 gap-1">
-            <a v-if="isOperationMachineRunning" class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2" :class="{ 'border-primary': activeEnvironmentTab === 'operation', 'border-transparent': activeEnvironmentTab !== 'operation' }">
-              <!-- Tab content -->
-              <div @click="activeEnvironmentTab = 'operation'" class="flex items-center cursor-pointer">
-                <i class="fas fa-desktop mr-2 text-primary"></i>
-                <span :class="{ 'font-medium': activeEnvironmentTab === 'operation' }">操作环境</span>
-              </div>
+      <!-- 修改操作环境和靶机环境的iframe条件显示逻辑 -->
+      <div v-if="isIframeVisible" class="w-half fixed top-0 right-0 bottom-0 border-l border-base-300 bg-base-100 overflow-hidden">
+        <!-- 浏览器标签导航 -->
+        <div class="bg-base-200 flex items-center border-b border-base-300 p-1 gap-1">
+          <a v-if="isOperationMachineRunning" class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2" :class="{ 'border-primary': activeEnvironmentTab === 'operation', 'border-transparent': activeEnvironmentTab !== 'operation' }">
+            <!-- 标签内容 -->
+            <div @click="activeEnvironmentTab = 'operation'" class="flex items-center cursor-pointer">
+              <i class="fas fa-desktop mr-2 text-primary"></i>
+              <span :class="{ 'font-medium': activeEnvironmentTab === 'operation' }">操作环境</span>
+            </div>
 
-              <!-- Action buttons -->
-              <div class="flex items-center ml-2">
-                <!-- Pop-out button -->
-                <button @click.stop="openInNewWindow('operation')" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1" title="在新窗口打开">
-                  <i class="fas fa-external-link-alt"></i>
-                </button>
+            <!-- 操作按钮 -->
+            <div class="flex items-center ml-2">
+              <!-- 在新窗口打开按钮 -->
+              <button @click.stop="openInNewWindow('operation')" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1" title="在新窗口打开">
+                <i class="fas fa-external-link-alt"></i>
+              </button>
 
-                <!-- Close button -->
-                <button @click.stop="toggleOperationMachine" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs" title="关闭">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </a>
+              <!-- 关闭按钮 -->
+              <button @click.stop="toggleOperationMachine" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs" title="关闭">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </a>
 
-            <a v-if="isTargetMachineRunning" class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2" :class="{ 'border-primary': activeEnvironmentTab === 'target', 'border-transparent': activeEnvironmentTab !== 'target' }">
-              <!-- Tab content -->
-              <div @click="activeEnvironmentTab = 'target'" class="flex items-center cursor-pointer">
-                <i class="fas fa-server mr-2 text-primary"></i>
-                <span :class="{ 'font-medium': activeEnvironmentTab === 'target' }">靶机环境</span>
-              </div>
+          <a v-if="isTargetMachineRunning" class="flex items-center px-3 py-2 bg-base-100 rounded-t-lg relative border-b-2" :class="{ 'border-primary': activeEnvironmentTab === 'target', 'border-transparent': activeEnvironmentTab !== 'target' }">
+            <!-- 标签内容 -->
+            <div @click="activeEnvironmentTab = 'target'" class="flex items-center cursor-pointer">
+              <i class="fas fa-server mr-2 text-primary"></i>
+              <span :class="{ 'font-medium': activeEnvironmentTab === 'target' }">靶机环境</span>
+            </div>
 
-              <!-- Action buttons -->
-              <div class="flex items-center ml-2">
-                <!-- Pop-out button -->
-                <button @click.stop="openInNewWindow('target')" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1" title="在新窗口打开">
-                  <i class="fas fa-external-link-alt"></i>
-                </button>
+            <!-- 操作按钮 -->
+            <div class="flex items-center ml-2">
+              <!-- 在新窗口打开按钮 -->
+              <button @click.stop="openInNewWindow('target')" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs mr-1" title="在新窗口打开">
+                <i class="fas fa-external-link-alt"></i>
+              </button>
 
-                <!-- Close button -->
-                <button @click.stop="closeTargetMachine" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs" title="关闭">
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </a>
+              <!-- 关闭按钮 -->
+              <button @click.stop="closeTargetMachine" class="w-5 h-5 rounded-full flex items-center justify-center hover:bg-base-300 text-xs" title="关闭">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </a>
 
-            <div class="flex-1"></div>
-          </div>
-
-          <!-- Tab Content -->
-          <div class="flex-1 overflow-hidden">
-            <!-- Operation Environment -->
-            <iframe v-if="activeEnvironmentTab === 'operation'" src="http://127.0.0.1:8443" class="w-full h-full"></iframe>
-
-            <!-- Target Machine -->
-            <iframe v-if="activeEnvironmentTab === 'target' && targetMachineUrl" :src="targetMachineUrl" class="w-full h-full"></iframe>
-          </div>
+          <div class="flex-1"></div>
         </div>
-      </Transition>
 
+        <!-- 环境内容区域 -->
+        <div class="h-[calc(100%-43px)] overflow-hidden">
+          <!-- 操作环境iframe -->
+          <iframe v-if="activeEnvironmentTab === 'operation' && isOperationMachineRunning" 
+                  src="http://127.0.0.1:8443" 
+                  class="w-full h-full">
+          </iframe>
+          
+          <!-- 靶机iframe -->
+          <iframe v-if="activeEnvironmentTab === 'target' && isTargetMachineRunning && targetMachineUrl" 
+                  :src="targetMachineUrl" 
+                  class="w-full h-full">
+          </iframe>
+        </div>
+      </div>
+      
       <!-- 积分确认弹窗 -->
       <Transition name="modal">
         <dialog :class="{ modal: true, 'modal-open': showCostModal }">

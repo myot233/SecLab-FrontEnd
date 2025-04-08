@@ -239,8 +239,14 @@ onMounted(() => {
               </div>
               <div class="flex items-center gap-4 pl-2">
                 <div class="avatar">
-                  <div class="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center">
-                    <i class="fas fa-user text-xl text-primary"></i>
+                  <div class="w-16 h-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    <img 
+                      src="../../../../public/student11.png" 
+                      alt="讲师头像" 
+                      class="w-full h-full object-cover" 
+                      loading="lazy"
+                      onerror="this.src='/default-instructor.png'; this.onerror=null;"
+                    />
                   </div>
                 </div>
                 <div>
@@ -253,10 +259,33 @@ onMounted(() => {
                     </div>
                     <div class="text-xs text-base-content/60">
                       <i class="fas fa-user-graduate"></i>
-                      <span class="ml-1">100+ 学生</span>
+                      <span class="ml-1">99+ 学生</span>
+                    </div>
+                    <div 
+                      class="badge badge-sm" 
+                      :class="
+                        course.instructor === 1 ? 'badge-primary' : 
+                        course.instructor === 2 ? 'badge-secondary' :
+                        course.instructor === 3 ? 'badge-accent' :
+                        'badge-info'
+                      "
+                    >
+                      {{ 
+                        course.instructor === 1 ? '特聘教授' : 
+                        course.instructor === 2 ? '优秀教师' : 
+                        course.instructor === 3 ? '青年教师' : 
+                        '资深讲师' 
+                      }}
                     </div>
                   </div>
                 </div>
+              </div>
+              <!-- 添加讲师简介 -->
+              <div class="mt-3 pl-20 text-sm text-base-content/80">
+                <p v-if="course.instructor === 1">资深网络安全专家，拥有十五年以上行业经验，曾参与多项国家级网络安全项目。专注于Web应用安全和渗透测试领域，著有《网络安全实战指南》等多部专业书籍。</p>
+                <p v-else-if="course.instructor === 2">网络安全领域知名学者，主攻密码学和区块链安全，主持过多项省部级科研项目，在IEEE国际会议和期刊发表论文20余篇。</p>
+                <p v-else-if="course.instructor === 3">CTF竞赛冠军获得者，擅长二进制安全与逆向工程，曾在多家知名企业担任安全顾问，拥有CISSP、OSCP等多项专业认证。</p>
+                <p v-else>经验丰富的网络安全教育工作者，深入研究网络安全技术与应用，著有多篇学术论文和教学案例，致力于培养高素质网络安全人才。</p>
               </div>
             </div>
             
