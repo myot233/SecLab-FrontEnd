@@ -260,6 +260,80 @@ const inputField = ref<HTMLTextAreaElement | null>(null)
 const enableThinking = ref(false)
 const showThinking = ref(false)
 
+// 添加平台相关的背景信息
+const platformInfo = {
+  name: "SecLab安全实验平台",
+  description: "一个专注于网络安全教育的在线学习平台，提供理论学习和实践实验相结合的课程体系，支持多种类型的实验环境和互动学习方式。",
+  features: [
+    "提供网络安全、密码学、渗透测试等多领域课程",
+    "支持在线实验环境，可进行实际操作练习",
+    "课程分为模块化学习，每个模块包含理论知识和实验任务",
+    "提供CTF竞赛训练和模拟环境",
+    "支持团队协作和项目实践",
+    "实时排行榜系统，记录学习成果和积分",
+    "深度思考功能，展示AI分析过程",
+    "学习进度跟踪，自适应学习路径推荐"
+  ],
+  courses: [
+    {name: "网络安全基础", topics: ["安全基本概念", "网络协议安全", "Web安全入门", "密码学基础"]},
+    {name: "密码学原理", topics: ["对称加密", "非对称加密", "哈希算法", "数字签名", "密钥交换协议"]},
+    {name: "Web安全进阶", topics: ["XSS攻击", "CSRF攻击", "SQL注入", "文件上传漏洞", "命令注入"]}
+  ],
+  experimentModules: [
+    {id: 1, name: "SQL注入基础", type: "Web安全", difficulty: 2},
+    {id: 2, name: "数据库类型识别", type: "Web安全", difficulty: 2},
+    {id: 3, name: "注入点检测方法", type: "Web安全", difficulty: 3},
+    {id: 4, name: "理解SQL注入原理", type: "Web安全", difficulty: 3},
+    {id: 5, name: "SQL注入防御技术", type: "Web安全", difficulty: 4},
+    {id: 6, name: "绕过WAF技术", type: "Web安全", difficulty: 5},
+    {id: 7, name: "XSS跨站脚本攻击", type: "Web安全", difficulty: 3},
+    {id: 8, name: "CSRF跨站请求伪造", type: "Web安全", difficulty: 3},
+    {id: 9, name: "文件上传漏洞", type: "Web安全", difficulty: 4},
+    {id: 10, name: "密码学基础", type: "密码学", difficulty: 2},
+    {id: 11, name: "对称加密算法", type: "密码学", difficulty: 3},
+    {id: 12, name: "非对称加密算法", type: "密码学", difficulty: 4},
+    {id: 13, name: "哈希函数与数字签名", type: "密码学", difficulty: 3},
+    {id: 14, name: "网络嗅探", type: "网络安全", difficulty: 3},
+    {id: 15, name: "ARP欺骗", type: "网络安全", difficulty: 3},
+    {id: 16, name: "DNS劫持", type: "网络安全", difficulty: 4},
+    {id: 17, name: "DDoS攻击原理", type: "网络安全", difficulty: 4},
+    {id: 18, name: "防火墙配置", type: "网络安全", difficulty: 3},
+    {id: 19, name: "Linux系统加固", type: "系统安全", difficulty: 3},
+    {id: 20, name: "Windows系统加固", type: "系统安全", difficulty: 3},
+    {id: 21, name: "权限提升", type: "系统安全", difficulty: 4},
+    {id: 22, name: "缓冲区溢出", type: "系统安全", difficulty: 5},
+    {id: 23, name: "渗透测试方法论", type: "渗透测试", difficulty: 3},
+    {id: 24, name: "信息收集", type: "渗透测试", difficulty: 2},
+    {id: 25, name: "漏洞扫描", type: "渗透测试", difficulty: 3},
+    {id: 26, name: "漏洞利用", type: "渗透测试", difficulty: 4},
+    {id: 27, name: "后渗透与权限维持", type: "渗透测试", difficulty: 4},
+    {id: 28, name: "渗透测试报告", type: "渗透测试", difficulty: 2}
+  ],
+  scoreboard: {
+    description: "平台排行榜根据用户完成的实验任务和获得的总分进行排名",
+    rankingFactors: [
+      "总分：完成实验任务获得的分数总和",
+      "完成任务数：成功完成的实验任务数量",
+      "难度系数：难度更高的实验获得更多分数",
+      "时间系数：实验完成时间影响分数获取",
+      "创新性：解题方法的创新性会获得额外加分"
+    ],
+    timeRanges: ["周排行", "月排行", "总排行"],
+    filters: ["实验类型", "班级", "时间范围"]
+  },
+  learningEnv: {
+    description: "平台提供两种实验环境：操作环境和靶机环境",
+    operationEnv: "操作环境是学生进行实验操作的工作区，提供各种安全工具和软件",
+    targetEnv: "靶机环境是实验目标系统，包含特定的漏洞或安全问题供学生发现和利用"
+  },
+  questionTypes: [
+    "选择题：测试基础概念理解",
+    "开放题：需要学生提供详细解答",
+    "实操题：需要在环境中完成特定操作并获取结果"
+  ],
+  learningPath: "学习路径通常从基础安全概念开始，然后进入专项技术学习，建议按照由易到难的顺序完成实验。通常先完成基础实验模块，再尝试综合性实验，最后进行实战演练，形成完整的安全技能体系。"
+}
+
 // 监听enableThinking变化，同步更新showThinking
 watch(enableThinking, (newValue) => {
   showThinking.value = newValue
@@ -345,6 +419,150 @@ const scrollToBottom = () => {
   }
 }
 
+// 检测用户问题是否与平台相关
+const isPlatformRelatedQuestion = (question: string): boolean => {
+  const platformKeywords = [
+    "平台", "SecLab", "安全实验", "课程", "模块", "学习路径", "实验", "CTF", 
+    "怎么使用", "如何开始", "功能", "特点", "课程内容", "学习计划", "SecLab平台",
+    "安全学习", "实验环境", "账号", "注册", "登录", "学习进度", "证书", "成绩",
+    "积分", "排名", "排行榜", "实验任务", "操作环境", "靶机", "SQL注入", "XSS",
+    "Web安全", "网络安全", "密码学", "渗透测试", "系统安全", "学时", "难度",
+    "题解", "思考模式", "教师", "分数", "技能树", "实验报告", "练习"
+  ]
+  
+  // 转换为小写进行匹配
+  const lowercaseQuestion = question.toLowerCase()
+  return platformKeywords.some(keyword => 
+    lowercaseQuestion.includes(keyword.toLowerCase())
+  )
+}
+
+// 增强用户问题，添加平台相关上下文
+const enhanceUserQuestion = (question: string): string => {
+  if (!isPlatformRelatedQuestion(question)) {
+    // 如果不是平台相关问题，保持原样
+    return question
+  }
+  
+  // 为平台相关问题添加上下文
+  let enhancedPrompt = `关于SecLab安全实验平台的问题：${question}\n\n请根据以下SecLab平台详细信息回答：\n`;
+  
+  // 检查是否包含特定关键词，有针对性地添加相关上下文
+  const lowerQuestion = question.toLowerCase();
+  
+  // 添加课程相关信息
+  if (lowerQuestion.includes("课程") || lowerQuestion.includes("学习")) {
+    enhancedPrompt += "【课程信息】\n";
+    platformInfo.courses.forEach(course => {
+      enhancedPrompt += `- ${course.name}：${course.topics.join("、")}\n`;
+    });
+    enhancedPrompt += "\n";
+  }
+  
+  // 添加实验模块相关信息
+  if (lowerQuestion.includes("实验") || lowerQuestion.includes("模块") || 
+      lowerQuestion.includes("练习") || lowerQuestion.includes("sql") || 
+      lowerQuestion.includes("xss") || lowerQuestion.includes("安全")) {
+    enhancedPrompt += "【实验模块】\n平台提供28个实验模块，包括：\n";
+    const modules = platformInfo.experimentModules.map(m => `${m.name}(难度:${m.difficulty}星)`);
+    // 根据类型分组
+    const moduleTypes = [...new Set(platformInfo.experimentModules.map(m => m.type))];
+    moduleTypes.forEach(type => {
+      enhancedPrompt += `- ${type}领域：${platformInfo.experimentModules
+        .filter(m => m.type === type)
+        .map(m => m.name)
+        .join("、")}\n`;
+    });
+    enhancedPrompt += "\n";
+  }
+  
+  // 添加排行榜相关信息
+  if (lowerQuestion.includes("排行") || lowerQuestion.includes("排名") || 
+      lowerQuestion.includes("积分") || lowerQuestion.includes("分数") || 
+      lowerQuestion.includes("成绩") || lowerQuestion.includes("总分")) {
+    enhancedPrompt += "【排名系统】\n";
+    enhancedPrompt += `${platformInfo.scoreboard.description}\n`;
+    enhancedPrompt += "排名依据：\n";
+    enhancedPrompt += "- 排行榜主要根据用户的总分进行排名，总分越高排名越靠前\n";
+    enhancedPrompt += "- 总分来源于完成的实验任务，难度越高的实验获得的分数越多\n";
+    enhancedPrompt += "- 可按实验类型、班级和时间范围筛选排行榜\n";
+    enhancedPrompt += "\n";
+  }
+  
+  // 添加学习环境相关信息
+  if (lowerQuestion.includes("环境") || lowerQuestion.includes("靶机") || 
+      lowerQuestion.includes("操作") || lowerQuestion.includes("实验工具")) {
+    enhancedPrompt += "【学习环境】\n";
+    enhancedPrompt += `${platformInfo.learningEnv.description}\n`;
+    enhancedPrompt += `- 操作环境：${platformInfo.learningEnv.operationEnv}\n`;
+    enhancedPrompt += `- 靶机环境：${platformInfo.learningEnv.targetEnv}\n\n`;
+  }
+  
+  // 如果没有匹配到特定类别，添加平台概览
+  if (!enhancedPrompt.includes("【")) {
+    enhancedPrompt += "【平台概览】\n";
+    enhancedPrompt += `${platformInfo.description}\n\n`;
+    enhancedPrompt += "主要功能：\n";
+    platformInfo.features.slice(0, 5).forEach(feature => {
+      enhancedPrompt += `- ${feature}\n`;
+    });
+    enhancedPrompt += "\n";
+  }
+  
+  return enhancedPrompt;
+}
+
+// 构建更详细的系统提示词
+const getSystemPrompt = (): string => {
+  return `你是SecLab安全实验平台（${platformInfo.name}）的AI助手，专注于网络安全领域知识和平台使用指导。
+
+平台信息：
+${platformInfo.description}
+
+平台主要功能：
+${platformInfo.features.map(f => "- " + f).join("\n")}
+
+平台课程内容：
+${platformInfo.courses.map(c => `- ${c.name}：${c.topics.join("、")}`).join("\n")}
+
+平台实验模块：
+平台提供28个实验模块，涵盖Web安全、网络安全、密码学、系统安全和渗透测试五大领域。
+难度从1星(入门)到5星(专家级)不等，实验类型包括理论学习和实践操作。
+每个实验模块包含多个知识点和评分题目，完成后可获得相应积分。
+
+排行榜系统：
+${platformInfo.scoreboard.description}
+排名主要根据用户的总分进行排名，总分高的用户排名靠前。总分通过完成实验任务获得，难度高的实验可获得更多分数。
+支持按${platformInfo.scoreboard.timeRanges.join("、")}查看排名，可按${platformInfo.scoreboard.filters.join("、")}进行筛选。
+
+学习环境：
+${platformInfo.learningEnv.description}
+- 操作环境：${platformInfo.learningEnv.operationEnv}
+- 靶机环境：${platformInfo.learningEnv.targetEnv}
+
+题目类型：
+${platformInfo.questionTypes.join("\n")}
+
+学习路径：
+${platformInfo.learningPath}
+
+你的角色：
+1. 回答网络安全领域的专业问题，提供准确、专业的知识
+2. 指导用户如何使用SecLab平台及其功能
+3. 推荐合适的学习路径和课程内容
+4. 解答实验过程中遇到的问题
+5. 帮助用户理解网络安全概念和实验原理
+6. 解释平台积分和排名规则
+
+回答规则：
+- 当用户询问平台相关问题时，基于上述平台信息提供具体、准确的回答
+- 当用户询问网络安全知识时，提供专业、清晰的解释
+- 如不确定，请诚实地表明不知道，避免提供错误信息
+- 回答应使用专业且友好的语气，尽量简洁明了
+- 优先推荐平台上的学习资源和课程
+- 根据问题自然地引用相关实验模块，鼓励用户尝试相关实验`
+}
+
 // 调用OpenAI API
 const callOpenAI = async (userQuestion: string, messageIndex: number) => {
   if (!openai.apiKey) {
@@ -365,15 +583,24 @@ const callOpenAI = async (userQuestion: string, messageIndex: number) => {
     // 构建消息历史
     const messageHistory = messages.value
       .slice(0, messageIndex)
-      .map(msg => ({
-        role: msg.role,
-        content: msg.content
-      }))
+      .map(msg => {
+        if (msg.role === 'user') {
+          // 向用户消息添加平台相关上下文
+          return {
+            role: msg.role,
+            content: isPlatformRelatedQuestion(msg.content) ? enhanceUserQuestion(msg.content) : msg.content
+          }
+        }
+        return {
+          role: msg.role,
+          content: msg.content
+        }
+      })
     
-    // 添加系统消息
+    // 添加增强的系统消息
     messageHistory.unshift({
       role: 'system',
-      content: '你是SecLab安全实验平台的AI助手，专注于网络安全领域知识。你擅长解答安全相关问题，提供安全学习指导，并协助用户理解安全概念和实验。回答要专业、准确，如不确定，请诚实地说不知道。'
+      content: getSystemPrompt()
     } as any)
 
     // 构建请求参数
@@ -429,6 +656,7 @@ const callOpenAI = async (userQuestion: string, messageIndex: number) => {
 const handleSendMessage = () => {
   if (!inputMessage.value.trim() || isLoading.value) return
 
+  // 在消息界面显示原始用户输入
   const newMessage: Message = {
     role: 'user',
     content: inputMessage.value,
@@ -457,7 +685,7 @@ const handleSendMessage = () => {
   setTimeout(scrollToBottom, 100)
   setTimeout(scrollToBottom, 300)
   
-  // 调用OpenAI API
+  // 调用OpenAI API - 传入原始问题，增强会在API调用中进行
   callOpenAI(userQuestion, responseIndex)
     .finally(() => {
       isLoading.value = false
